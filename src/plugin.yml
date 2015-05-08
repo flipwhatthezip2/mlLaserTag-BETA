@@ -1,0 +1,7 @@
+name: mlLaserTag
+author: ReadySetPawn
+main: ml.lasertag.minigame.Core
+version: 0.1
+commands:
+  lasertag:
+    description: Main command for lasertag.
