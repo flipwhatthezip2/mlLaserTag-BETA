@@ -2,6 +2,7 @@ package ml.lasertag.minigame.Mechanics;
 
 import ml.lasertag.minigame.Core;
 import ml.lasertag.minigame.GameManager.Arena;
+import ml.lasertag.minigame.api.Feature;
 import ml.lasertag.minigame.game.Teams;
 import net.minecraft.server.v1_8_R2.EnumParticle;
 import net.minecraft.server.v1_8_R2.PacketPlayOutWorldParticles;
@@ -28,6 +29,7 @@ public class LaserGun implements Listener {
 
  public ArrayList<Player> cantShoot = new ArrayList<Player>();
  public int coolDown = 20;
+ public int livesRemaining;
 
  public LaserGun(Core core){
   this.core = core;
@@ -130,8 +132,10 @@ public class LaserGun implements Listener {
  }
 
  public void awardKill(Player victim, Player killer){
-  //TODO broadcast death message
-  //TODO send player msg stating how many lives are left
+  livesRemaining = victim.getLevel();
+  Bukkit.getServer().broadcastMessage(Core.warning + "§l" +victim.getName() + " §chas felt the deadly wrath of §l" + killer.getName() + "§c.");
+  victim.sendMessage(Core.warning + "You have §l" + livesRemaining + " §clives remaining.");
+  Feature.sendTitle(victim, 5, 200, 5, "§4§lYOU DIED!", "§cYou have §l" + livesRemaining + " §cremaining lives.");
 
 
   if (victim.getLevel() != 0){
@@ -140,7 +144,8 @@ public class LaserGun implements Listener {
   }
 
   else {
-   //TODO send player message saying they're out of the game
+   victim.sendMessage(Core.warning + "You have §lNO §clives remaining. You are out for this game.");
+   Feature.sendTitle(victim, 5, 200, 5, "§4§lYOUR OUT!", "§cYou do not have any lives left.");
   }
  }
 

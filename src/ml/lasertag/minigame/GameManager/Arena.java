@@ -60,13 +60,13 @@ public class Arena {
 
  public void startCountdown(){
   this.arenaState = ArenaState.COUNTDOWN;
-  this.broadcastMessage("INSERT STARTING MESSAGE");
+  this.broadcastMessage(Core.success + "The game will begin shortly!");
 
   countDownRunnable = new BukkitRunnable(){
 
    @Override
    public void run(){
-    broadcastMessage(Core.info + "Game Starting In: §c§l" + currentCountDownStage);
+    broadcastMessage(Core.warning + "Game starting in: §l" + currentCountDownStage);
     currentCountDownStage--;
    }
 
@@ -77,13 +77,13 @@ public class Arena {
  public void cancelCountdown(){
   Bukkit.getScheduler().cancelTask(countDownRunnable.getTaskId());
   currentCountDownStage = countDownTime;
-  this.broadcastMessage("INSERT COUNTDOWN CANCELLED MESSAGE");
+  this.broadcastMessage(Core.warning + "Game countdown has been halted.");
  }
 
  public void startGame(){
   this.pvp = true;
   this.arenaState = ArenaState.IN_GAME;
-  this.broadcastMessage("INSERT START GAME MESSAGE");
+  this.broadcastMessage(Core.success + "The game has be§lgun§a!");
   //TODO teleport all player's to their team's spawn
  }
 
@@ -91,7 +91,7 @@ public class Arena {
   this.pvp = false;
   this.arenaState = ArenaState.RESTARTING;
   this.laserGun.resetCooldowns();
-  this.broadcastMessage("INSERT END GAME MESSAGE");
+  this.broadcastMessage(Core.success + "The game has ended!");
   for (Player p : players) p.teleport(Bukkit.getWorld("Lobby").getSpawnLocation());
   this.players.clear();
   this.arenaState = ArenaState.WAITING;
