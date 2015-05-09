@@ -69,6 +69,7 @@ public class LaserTag implements CommandExecutor {
    sender.sendMessage(Core.infoList + "/lasertag arena minPlayer [arena] [minPlayers] §8- §7Sets min players.");
    sender.sendMessage(Core.infoList + "/lasertag arena setYellowSpawn [arena] §8- §7Sets spawn.");
    sender.sendMessage(Core.infoList + "/lasertag arena setGreenSpawn [arena] §8- §7Sets spawn.");
+   return;
   }
 
   else if (args.length == 3 || args.length == 4){
