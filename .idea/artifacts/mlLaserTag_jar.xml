@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="mlLaserTag.jar">
+    <output-path>$USER_HOME$/Desktop/Camerons Testing Server/plugins</output-path>
+    <root id="archive" name="mlLaserTag.jar">
+      <element id="module-output" name="mlLaserTag" />
+    </root>
+  </artifact>
+</component>
