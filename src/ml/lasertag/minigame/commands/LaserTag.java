@@ -80,12 +80,17 @@ public class LaserTag implements CommandExecutor {
    }
   }
 
-  if (!arenasFile.getArenaNames().contains(args[2])){
-   sender.sendMessage(Core.warning + "Invaild arena name. Is it created?");
-   return;
-  }
-
   if (args[1].equalsIgnoreCase("create")){
+
+   if (args.length != 3){
+    sender.sendMessage(Core.warning + "Invalid argument amount");
+    return;
+   }
+
+   if (arenasFile.getArenaNames().contains(args[2])){
+    sender.sendMessage(Core.warning + "Invaild arena name. Is it created?");
+    return;
+   }
 
    if (Bukkit.getWorld(args[3]) == null){
     sender.sendMessage(Core.warning + "Invaild world name. Make sure you input the correct world name.");
