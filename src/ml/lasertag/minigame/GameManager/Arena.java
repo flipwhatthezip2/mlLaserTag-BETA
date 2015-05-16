@@ -2,8 +2,10 @@ package ml.lasertag.minigame.GameManager;
 
 import ml.lasertag.minigame.Core;
 import ml.lasertag.minigame.Mechanics.LaserGun;
+import ml.lasertag.minigame.game.TEAM;
 import ml.lasertag.minigame.game.Teams;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -23,6 +25,7 @@ public class Arena {
  private Teams teams;
  private BukkitTask countDownRunnable;
  private ItemStack gun = new ItemStack(Material.IRON_BARDING);
+ private Teams teamManager;
 
  private int countDownTime = 5;
  private int countDown = 100;
@@ -35,6 +38,7 @@ public class Arena {
   this.properties = properties;
   this.arenaState = ArenaState.WAITING;
   this.laserGun = laserGun;
+  this.teamManager = new Teams(this);
   this.teams = new Teams(this);
  }
 
@@ -56,6 +60,17 @@ public class Arena {
 
  public void removePlayer(Player player){
   players.remove(player);
+ }
+
+ public Location getSpawn(TEAM team){
+  if (team == TEAM.GREEN) return core.getArenasFile().getGreenSpawn(properties.getArenaName());
+  return core.getArenasFile().getYellowSpawn(properties.getArenaName());
+ }
+
+ public void spawnPlayers(){
+  for (Player p : players){
+   p.teleport(Arena.getArena(p).getSpawn(Teams.getTeam(p)));
+  }
  }
 
  public void startCountdown(){
@@ -84,7 +99,7 @@ public class Arena {
   this.pvp = true;
   this.arenaState = ArenaState.IN_GAME;
   this.broadcastMessage(Core.success + "The game has be§lgun§a!");
-  //TODO teleport all player's to their team's spawn
+  this.spawnPlayers();
  }
 
  public void endGame(){
