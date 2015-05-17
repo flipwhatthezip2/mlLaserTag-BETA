@@ -65,12 +65,7 @@ public class ArenasFile {
  }
 
  public void loadArenas(){
-  Bukkit.getServer().getLogger().info("I'M BEING CALLED");
-
-  //if (arenasFile.getStringList("Arenas") == null) return;
-  Bukkit.getServer().getLogger().info(arenasFile.getStringList("Arenas").size() + "");
   for (String arenaName : arenasFile.getStringList("Arenas")){
-   Bukkit.getServer().getLogger().info(arenaName);
    ArenaProperties properties =
            new ArenaProperties(Bukkit.getWorld(arenasFile.getString(arenaName + ".World")),
                    arenasFile.getInt("Arenas." + arenaName + ".MinPlayers"),
@@ -79,8 +74,6 @@ public class ArenasFile {
 
    arenas.add(new Arena(properties, core.getLaserGun()));
    arenaNames.add(arenaName);
-
-   Bukkit.getServer().getLogger().info(arenaName);
   }
  }
 

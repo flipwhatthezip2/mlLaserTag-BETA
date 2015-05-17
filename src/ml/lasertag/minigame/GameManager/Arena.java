@@ -157,7 +157,9 @@ public class Arena {
  }
 
  public static Arena getArena(String string){
-  for (Arena a : core.getArenasFile().getArenas())
+  for (Arena a : core.
+          getArenasFile().
+          getArenas())
    if (a.getProperties().getArenaName().equalsIgnoreCase(string)) return a;
   return null;
  }
