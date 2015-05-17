@@ -33,14 +33,13 @@ my (Cameron Fletcher)'s permission.
 public class ArenaSelector implements Listener {
 
     Core core;
+    public static Inventory arenaSelectorMenu = Bukkit.createInventory(null, 27, "§4§lLASERTAG! §8Pick an Arena");
+
 
     public ArenaSelector(Core core){
         this.core = core;
-    }
+        this.displayArenas();
 
-    // FLIP's Area:
-    public static Inventory arenaSelectorMenu = Bukkit.createInventory(null, 27, "§4§lLASERTAG! §8Pick an Arena");
-    {
         ItemStack itemStack = new ItemStack(Material.STAINED_GLASS_PANE);
         ItemMeta itemMeta = itemStack.getItemMeta();
         itemMeta.setDisplayName("§cHow to play:");
@@ -49,16 +48,13 @@ public class ArenaSelector implements Listener {
         itemMeta.setLore(lore);
         itemStack.setItemMeta(itemMeta);
         arenaSelectorMenu.setItem(26, itemStack);
-        this.displayArenas();
     }
 
     public void displayArenas(){
 
         int index = 0;
 
-        for (Arena arena : core.
-                getArenasFile().
-                getArenas()){
+        for (Arena arena : core.getArenasFile().getArenas()){
 
             ItemStack item = new ItemStack(Material.POTION);
             ItemMeta im = item.getItemMeta();
@@ -66,10 +62,10 @@ public class ArenaSelector implements Listener {
             im.setDisplayName(arena.getProperties().getArenaName());
 
             im.setLore(Arrays.asList("Players: " + arena.getPlayers().size() + "/" + arena.getProperties().getMaximumPlayers(),
-                                    "ArenaState: " + arena.getArenaState().toString(),
-                                    "Map: " + arena.getProperties().getWorld().getName(),
+                    "ArenaState: " + arena.getArenaState().toString(),
+                    "Map: " + arena.getProperties().getWorld().getName(),
                     "Players Needed: " + (arena.getPlayers().size() <= arena.getProperties().getMinimumPlayers() ?
-                    (arena.getProperties().getMinimumPlayers() - arena.getPlayers().size()) : "0")));
+                            (arena.getProperties().getMinimumPlayers() - arena.getPlayers().size()) : "0")));
 
             item.setItemMeta(im);
             arenaSelectorMenu.setItem(index, item);
