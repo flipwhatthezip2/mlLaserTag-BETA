@@ -150,7 +150,7 @@ public class LaserGun implements Listener {
       Feature.sendTitle(victim, 5, 200, 5, "", "");
      }
 
-     if (victim.getLevel() == 0){
+     if (victim.getLevel() <= 0){
       victim.spigot().respawn();
       victim.setHealth(20D);
       victim.teleport(Arena.getArena(core, victim).getSpawn(Teams.getTeam(victim)));
