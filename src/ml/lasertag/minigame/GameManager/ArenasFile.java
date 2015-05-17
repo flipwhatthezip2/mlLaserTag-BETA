@@ -75,6 +75,8 @@ public class ArenasFile {
 
    arenas.add(new Arena(properties, core.getLaserGun()));
    arenaNames.add(arenaName);
+
+   Bukkit.broadcastMessage(arenaName);
   }
  }
 
