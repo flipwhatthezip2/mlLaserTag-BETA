@@ -21,7 +21,6 @@ import ml.lasertag.minigame.Mechanics.LaserGun;
 import ml.lasertag.minigame.Mechanics.PlayerChat;
 import ml.lasertag.minigame.Mechanics.PlayerJoin;
 import ml.lasertag.minigame.game.GameStatus;
-import ml.lasertag.minigame.Mechanics.PlayerMove;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -68,7 +67,6 @@ public class Core extends JavaPlugin {
   Bukkit.getPluginManager().registerEvents(this.laserGun = new LaserGun(this), this);
   Bukkit.getPluginManager().registerEvents(new PlayerJoin(), this);
   Bukkit.getPluginManager().registerEvents(new PlayerChat(), this);
-  Bukkit.getPluginManager().registerEvents(new PlayerMove(), this);
   Bukkit.getPluginManager().registerEvents(new ArenaSelector(this), this);
  }
 }
