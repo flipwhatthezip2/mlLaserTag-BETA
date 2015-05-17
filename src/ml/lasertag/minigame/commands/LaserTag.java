@@ -83,7 +83,7 @@ public class LaserTag implements CommandExecutor {
 
   Player player = (Player) sender;
 
-  if (args.length != 2){
+  if (args.length != 1){
    sender.sendMessage(Core.warning + "Invalid argument amount");
    return;
   }
