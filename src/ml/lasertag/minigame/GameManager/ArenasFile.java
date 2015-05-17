@@ -63,6 +63,7 @@ public class ArenasFile {
  }
 
  public void loadArenas(){
+  Bukkit.broadcastMessage("I'M BEING CALLED");
 
   //if (arenasFile.getStringList("Arenas") == null) return;
   Bukkit.broadcastMessage(arenasFile.getStringList("Arenas").size() + "");
