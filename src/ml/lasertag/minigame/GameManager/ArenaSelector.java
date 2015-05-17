@@ -32,7 +32,9 @@ public class ArenaSelector implements org.bukkit.event.Listener{
     // READY's Area:
     @EventHandler
     public void onRightClick(PlayerInteractEntityEvent e){
-
+        if (e.getRightClicked().getCustomName() != null && e.getRightClicked().getCustomName().equalsIgnoreCase("ArenaSelector")){
+            //TODO open inventory
+        }
     }
 
 

@@ -22,7 +22,9 @@ import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Villager;
 
 public class LaserTag implements CommandExecutor {
 
@@ -45,7 +47,31 @@ public class LaserTag implements CommandExecutor {
   else if (args[0].equalsIgnoreCase("announce")){lasertagAnnounce(sender); return false;}
   else if (args[0].equalsIgnoreCase("join")){tryJoining(sender, args);}
   else if (args[0].equalsIgnoreCase("leave")){tryLeaving(sender, args);}
+  else if (args[0].equalsIgnoreCase("spawnArenaSelector")) {trySpawningArenaSelector(sender, args);}
   return false;
+ }
+
+ public void trySpawningArenaSelector(CommandSender sender, String[] args){
+  if (!sender.isOp()){
+   sender.sendMessage(Core.warning + "You don't have permission to do this");
+   return;
+  }
+
+  if (!(sender instanceof Player)){
+   sender.sendMessage(Core.warning + "Only players can spawn ArenaSelector NPC's");
+  }
+
+  Player player = (Player) sender;
+
+  Bukkit.dispatchCommand(sender, "summon Villager ~ ~ ~ {NoAI:1}");
+
+  for (LivingEntity e : player.getWorld().getLivingEntities()) {
+   if (e instanceof Villager && e.getLocation() == player.getLocation()) {
+    e.setCustomName("ArenaSelector");
+    e.setCustomNameVisible(true);
+  }
+  }
+
  }
 
  public void tryJoining(CommandSender sender, String[] args){
