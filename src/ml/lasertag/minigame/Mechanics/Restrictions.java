@@ -3,6 +3,7 @@ package ml.lasertag.minigame.Mechanics;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -42,6 +43,11 @@ public class Restrictions implements org.bukkit.event.Listener{
  @EventHandler
  public void onPlayerDamage(EntityDamageEvent e){
   if (e.getEntity() instanceof Player && e.getCause() == EntityDamageEvent.DamageCause.FALL) e.setCancelled(true);
+ }
+
+ @EventHandler
+ public void onEntityDamage(EntityDamageByEntityEvent e){
+  e.setCancelled(true);
  }
 
 }
