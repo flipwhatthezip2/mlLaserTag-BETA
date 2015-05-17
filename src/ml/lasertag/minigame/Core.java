@@ -63,6 +63,7 @@ public class Core extends JavaPlugin {
   return this.laserGun;
  }
 
+
  private void registerEvents() {
   Bukkit.getPluginManager().registerEvents(this.laserGun = new LaserGun(this), this);
   Bukkit.getPluginManager().registerEvents(new PlayerJoin(), this);
