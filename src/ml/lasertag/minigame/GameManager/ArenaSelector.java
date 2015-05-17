@@ -56,7 +56,7 @@ public class ArenaSelector implements Listener {
     public void displayArenas(){
 
         for (ItemStack item : arenaSelectorMenu.getContents()){
-            if (item.getType() != Material.STAINED_GLASS_PANE) arenaSelectorMenu.remove(item);
+            if (item != null && item.getType() != Material.STAINED_GLASS_PANE) arenaSelectorMenu.remove(item);
         }
 
         int index = 0;
