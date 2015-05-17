@@ -40,7 +40,7 @@ public class ArenaInteractEvent extends Event {
         return handlerList;
     }
 
-    public static enum ArenaAction {
+    public enum ArenaAction {
         JOIN, LEAVE;
     }
 }

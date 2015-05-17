@@ -2,12 +2,14 @@ package ml.lasertag.minigame.GameManager;
 
 import ml.lasertag.minigame.Core;
 import ml.lasertag.minigame.events.ArenaInteractEvent;
+import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -53,6 +55,10 @@ public class ArenaSelector implements Listener {
 
     public void displayArenas(){
 
+        for (ItemStack item : arenaSelectorMenu.getContents()){
+            if (item.getType() != Material.STAINED_GLASS_PANE) arenaSelectorMenu.remove(item);
+        }
+
         int index = 0;
 
         for (Arena arena : core.getArenasFile().getArenas()){
@@ -60,7 +66,7 @@ public class ArenaSelector implements Listener {
             ItemStack item = new ItemStack(Material.POTION);
             ItemMeta im = item.getItemMeta();
 
-            im.setDisplayName("Arena #" + (index + 1));
+            im.setDisplayName(arena.getProperties().getArenaName());
 
             im.setLore(Arrays.asList("Players: " + arena.getPlayers().size() + "/" + arena.getProperties().getMaximumPlayers(),
                     "ArenaState: " + arena.getArenaState().toString(),
@@ -79,6 +85,23 @@ public class ArenaSelector implements Listener {
     @EventHandler
     public void onArenaInteract(ArenaInteractEvent e){
         this.displayArenas();
+    }
+
+    @EventHandler
+    public void onArenaClick(InventoryClickEvent e){
+        if (e.getWhoClicked() instanceof Player){
+            Player player = (Player) e.getWhoClicked();
+
+            if (Arena.getArena(core, player) == null){
+
+                ItemStack item = e.getCurrentItem();
+
+                if (item.getType() == Material.POTION){
+                    Bukkit.dispatchCommand(player, "lasertag join " + ChatColor.stripColor(item.getItemMeta().getDisplayName()));
+                }
+
+            }
+        }
     }
 
     // READY's Area:
