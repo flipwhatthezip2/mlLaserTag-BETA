@@ -61,7 +61,7 @@ public class ArenaSelector implements org.bukkit.event.Listener{
 
         e.setCancelled(true);
 
-        if (entity.getCustomName().equalsIgnoreCase("§4§lLASERTAG §8- §cSelect an arena!")){
+        if (entity.getCustomName() != null && entity.getCustomName().equalsIgnoreCase("§4§lLASERTAG §8- §cSelect an arena!")){
             if (p.getItemInHand() != null && p.getItemInHand().getType() == Material.BLAZE_ROD && p.isOp()){
                 entity.remove();
                 p.sendMessage(Core.success + "Removed ArenaSelector NPC");
