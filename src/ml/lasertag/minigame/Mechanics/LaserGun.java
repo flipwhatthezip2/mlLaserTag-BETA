@@ -71,7 +71,7 @@ public class LaserGun implements Listener {
   }
 
 
-  for (double a = 0; a < range; a+= 0.1){
+  for (double a = 0; a < range; a+= 0.05){
 
    double r = Teams.getTeam(player).getColor().getRed();
    double g = Teams.getTeam(player).getColor().getGreen();
@@ -82,7 +82,7 @@ public class LaserGun implements Listener {
    if (loc.getBlock().getType() != Material.AIR) return;
 
    for (Player e : list){
-    if (!e.isDead() && e != player && e.getGameMode() != GameMode.ADVENTURE){
+    if (!e.isDead() && e != player && e.getGameMode() != GameMode.ADVENTURE && Arena.getArena(core, e) != null){
      if (e.getLocation().toVector().distance(loc.toVector()) <= 1.5){
       damage(e, player);
      }
@@ -148,10 +148,12 @@ public class LaserGun implements Listener {
      if (Arena.getArena(core, victim) == null){
       victim.spigot().respawn();
       victim.setGameMode(GameMode.ADVENTURE);
+      Feature.sendTitle(victim, 5, 200, 5, "", "");
      }
 
      if (victim.getLevel() == 0){
       victim.spigot().respawn();
+      victim.setHealth(20D);
       victim.teleport(Arena.getArena(core, victim).getSpawn(Teams.getTeam(victim)));
      }
     }
