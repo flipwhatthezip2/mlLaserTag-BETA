@@ -169,8 +169,8 @@ public class Arena {
  }
 
  public static void leaveArena(Core core, Arena arena, Player player){
-  arena.removePlayer(player);
   arena.broadcastMessage(Core.info + player.getName() + " has left the game");
+  arena.removePlayer(player);
  }
 
  public enum ArenaState {
