@@ -25,7 +25,6 @@ public class Arena {
  private Teams teams;
  private BukkitTask countDownRunnable;
  private ItemStack gun = new ItemStack(Material.IRON_BARDING);
- private Teams teamManager;
  private boolean canJoin = true;
 
  private int countDownTime = 5;
@@ -40,7 +39,6 @@ public class Arena {
   this.properties = properties;
   this.arenaState = ArenaState.WAITING;
   this.laserGun = laserGun;
-  this.teamManager = new Teams(this);
   this.teams = new Teams(this);
  }
 
@@ -66,13 +64,13 @@ public class Arena {
 
  public void addPlayer(Player player){
   players.add(player);
-  teamManager.addPlayer(player, teamManager.pickTeam(player));
+  teams.addPlayer(player, teams.pickTeam(player));
   player.teleport(getSpawn(Teams.getTeam(player)));
  }
 
  public void removePlayer(Player player){
   players.remove(player);
-  teamManager.removePlayer(player, Teams.getTeam(player));
+  teams.removePlayer(player, Teams.getTeam(player));
  }
 
  public Location getSpawn(TEAM team){
