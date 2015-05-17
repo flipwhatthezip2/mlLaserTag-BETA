@@ -62,7 +62,7 @@ public class Restrictions implements Listener {
         e.setCancelled(true);
         Player p = (Player) e.getWhoClicked();
         Inventory inventory = e.getClickedInventory();
-        if (inventory.getName().equalsIgnoreCase(ArenaSelector.arenaSelectorMenu.getName())){
+        if (inventory.getName().equalsIgnoreCase("§4§lLASERTAG! §8Pick an Arena")){
             if (e.getCurrentItem() != null){
                 if (e.getCurrentItem().getType() == Material.STAINED_GLASS_PANE){
                     p.sendMessage(Core.warning + "How to play §lLASERTAG!§c:");
