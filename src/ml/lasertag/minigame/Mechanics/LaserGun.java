@@ -148,12 +148,15 @@ public class LaserGun implements Listener {
       victim.spigot().respawn();
       victim.setGameMode(GameMode.ADVENTURE);
       Feature.sendTitle(victim, 5, 200, 5, "", "");
+      this.cancel();
      }
 
      if (victim.getLevel() <= 0){
+      victim.setGameMode(GameMode.ADVENTURE);
       victim.spigot().respawn();
       victim.setHealth(20D);
       victim.teleport(Arena.getArena(core, victim).getSpawn(Teams.getTeam(victim)));
+      this.cancel();
      }
     }
 
