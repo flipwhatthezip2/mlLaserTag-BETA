@@ -52,7 +52,7 @@ public class LaserTag implements CommandExecutor {
 
   if (!(sender instanceof Player)){
    sender.sendMessage(Core.warning + "Only players can join arenas");
-   return;
+    return;
   }
 
   if (args.length != 2){
