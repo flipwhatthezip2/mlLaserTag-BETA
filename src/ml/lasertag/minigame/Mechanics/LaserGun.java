@@ -133,7 +133,6 @@ public class LaserGun implements Listener {
   }, 2L);
  }
 
-
  public void awardKill(final Player victim, Player killer){
   Bukkit.getServer().broadcastMessage(Core.warning + "§l" + victim.getName() + " §chas felt the deadly wrath of §l" + killer.getName() + "§c.");
   victim.setGameMode(GameMode.SPECTATOR);
