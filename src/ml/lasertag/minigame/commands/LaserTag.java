@@ -43,10 +43,61 @@ public class LaserTag implements CommandExecutor {
   else if (args[0].equalsIgnoreCase("debug")){lasertagdebug(sender); return false;}
   else if (args[0].equalsIgnoreCase("arena")){lasertagarena(sender, args); return false;}
   else if (args[0].equalsIgnoreCase("announce")){lasertagAnnounce(sender); return false;}
+  else if (args[0].equalsIgnoreCase("join")){tryJoining(sender, args);}
+  else if (args[0].equalsIgnoreCase("leave")){tryLeaving(sender, args);}
   return false;
  }
 
- public void lasertagAnnounce(CommandSender sender){
+ public void tryJoining(CommandSender sender, String[] args){
+
+  if (!(sender instanceof Player)){
+   sender.sendMessage(Core.warning + "Only players can join arenas");
+   return;
+  }
+
+  if (args.length != 2){
+   sender.sendMessage(Core.warning + "Invalid argument amount");
+   return;
+  }
+
+  if (!arenasFile.getArenaNames().contains(args[1])){
+   sender.sendMessage(Core.warning + "Specified arena does not exist");
+   return;
+  }
+
+  if (!Arena.getArena(args[1]).getCanJoin()){
+   sender.sendMessage(Core.warning + "Specified arena is currently not joinable");
+   return;
+  }
+
+  Arena.joinArena(Arena.getArena(args[1]), (Player) sender);
+
+ }
+
+ public void tryLeaving(CommandSender sender, String[] args){
+
+  if (!(sender instanceof Player)){
+   sender.sendMessage(Core.warning + "Only players can leave arenas");
+   return;
+  }
+
+  Player player = (Player) sender;
+
+  if (args.length != 2){
+   sender.sendMessage(Core.warning + "Invalid argument amount");
+   return;
+  }
+
+  if (Arena.getArena(player) == null){
+   sender.sendMessage(Core.warning + "You're not in an arena");
+   return;
+  }
+
+  Arena.leaveArena(Arena.getArena(args[1]), (Player) sender);
+
+ }
+
+ public void lasertagAnnounce(CommandSender sender) {
   Bukkit.getServer().broadcastMessage("§e" + sender.getName() + "§8: §f§lStarting a new round! §fCome join me!");
  }
  public void lasertag(CommandSender sender){
@@ -92,7 +143,7 @@ public class LaserTag implements CommandExecutor {
     return;
    }
 
-   if (Bukkit.getWorld(args[3]) == null){
+   if (Bukkit.getWorld(args[2]) == null){
     sender.sendMessage(Core.warning + "Invaild world name. Make sure you input the correct world name.");
     return;
    }

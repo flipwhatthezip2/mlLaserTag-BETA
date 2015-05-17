@@ -27,6 +27,11 @@ public class Teams {
   else greenTeam.remove(player);
  }
 
+ public TEAM pickTeam(Player player){
+  if (yellowTeam.size() > greenTeam.size()) return TEAM.GREEN;
+  return TEAM.YELLOW;
+ }
+
  public static TEAM getTeam(Player player){
   if (yellowTeam.contains(player)) return TEAM.YELLOW;
   return TEAM.GREEN;

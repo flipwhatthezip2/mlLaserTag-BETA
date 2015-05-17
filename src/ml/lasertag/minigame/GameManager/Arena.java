@@ -26,6 +26,7 @@ public class Arena {
  private BukkitTask countDownRunnable;
  private ItemStack gun = new ItemStack(Material.IRON_BARDING);
  private Teams teamManager;
+ private boolean canJoin = true;
 
  private int countDownTime = 5;
  private int countDown = 100;
@@ -54,12 +55,23 @@ public class Arena {
   return this.pvp;
  }
 
+ public void setCanJoin(boolean canJoin){
+  this.canJoin = canJoin;
+ }
+
+ public boolean getCanJoin(){
+  return this.canJoin;
+ }
+
  public void addPlayer(Player player){
   players.add(player);
+  teamManager.addPlayer(player, teamManager.pickTeam(player));
+  player.teleport(getSpawn(Teams.getTeam(player)));
  }
 
  public void removePlayer(Player player){
   players.remove(player);
+  teamManager.removePlayer(player, Teams.getTeam(player));
  }
 
  public Location getSpawn(TEAM team){
@@ -104,13 +116,28 @@ public class Arena {
 
  public void endGame(){
   this.pvp = false;
+  this.emptyInventories();
   this.arenaState = ArenaState.RESTARTING;
   this.laserGun.resetCooldowns();
   this.broadcastMessage(Core.success + "The game has ended!");
+  this.emptyPlayerList();
   for (Player p : players) p.teleport(Bukkit.getWorld("Lobby").getSpawnLocation());
-  this.players.clear();
   this.arenaState = ArenaState.WAITING;
  }
+
+ public void emptyPlayerList() {
+  for (Player player : players) {
+   this.removePlayer(player);
+  }
+ }
+
+  public void emptyInventories(){
+  for (Player player : players){
+   player.getInventory().clear();
+   player.updateInventory();
+  }
+ }
+
 
  public void distributeKits(){
   for (Player p : players){
@@ -133,6 +160,16 @@ public class Arena {
   for (Arena a : core.getArenasFile().getArenas())
    if (a.getProperties().getArenaName().equalsIgnoreCase(string)) return a;
   return null;
+ }
+
+ public static void joinArena(Arena arena, Player player){
+  arena.addPlayer(player);
+  arena.broadcastMessage(Core.info + player.getName() + " has joined the game");
+ }
+
+ public static void leaveArena(Arena arena, Player player){
+  arena.removePlayer(player);
+  arena.broadcastMessage(Core.info + player.getName() + " has left the game");
  }
 
  public enum ArenaState {
