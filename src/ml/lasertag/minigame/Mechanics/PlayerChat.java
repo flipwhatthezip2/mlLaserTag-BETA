@@ -14,16 +14,19 @@ package ml.lasertag.minigame.Mechanics;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 public class PlayerChat implements Listener{
 
- public void PlayerChat(AsyncPlayerChatEvent e){
-  String message = e.getMessage();
-  for (Player p : Bukkit.getOnlinePlayers()){
-   p.sendMessage("§e" + e.getPlayer() + "§8: §7" + message);
-  }
- }
+    @EventHandler
+    public void PlayerChat(AsyncPlayerChatEvent e){
+        String message = e.getMessage();
+        e.setCancelled(true);
+        for (Player p : Bukkit.getOnlinePlayers()){
+            p.sendMessage("§e" + e.getPlayer().getName() + "§8: §7" + message);
+        }
+    }
 
 }
