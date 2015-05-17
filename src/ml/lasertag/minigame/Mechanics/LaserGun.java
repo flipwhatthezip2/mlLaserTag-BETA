@@ -154,6 +154,7 @@ public class LaserGun implements Listener {
       victim.spigot().respawn();
       victim.setHealth(20D);
       victim.teleport(Arena.getArena(core, victim).getSpawn(Teams.getTeam(victim)));
+      Feature.sendTitle(victim, 5, 200, 5, "", "");
       this.cancel();
      }
     }
