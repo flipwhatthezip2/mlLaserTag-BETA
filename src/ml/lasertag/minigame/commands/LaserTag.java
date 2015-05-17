@@ -148,14 +148,14 @@ public class LaserTag implements CommandExecutor {
     return;
    }
 
-   World world = Bukkit.getWorld(args[3]);
+   World world = Bukkit.getWorld(args[2]);
 
    ArenaProperties ap = new ArenaProperties(world, 4, 12, args[2]);
    Arena arena = new Arena(ap, core.getLaserGun());
    core.getArenasFile().addArena(arena);
 
    sender.sendMessage(Core.success + "Successfully created the arena: §l" + args[2] + "§a!");
-   sender.sendMessage(Core.success + "To make the arena vaild please configure!");
+   sender.sendMessage(Core.success + "To make the arena valid please configure!");
   }
 
   else if (args[1].equalsIgnoreCase("delete")){
