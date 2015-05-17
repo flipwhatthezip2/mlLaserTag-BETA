@@ -67,7 +67,7 @@ public class LaserTag implements CommandExecutor {
 
   for (LivingEntity e : player.getWorld().getLivingEntities()) {
    if (e instanceof Villager && e.getLocation() == player.getLocation()) {
-    e.setCustomName("ArenaSelector");
+    e.setCustomName("§4§lLASERTAG §8- §cSelect an arena!");
     e.setCustomNameVisible(true);
   }
   }
