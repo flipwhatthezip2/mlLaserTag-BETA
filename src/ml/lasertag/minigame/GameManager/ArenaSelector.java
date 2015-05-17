@@ -6,12 +6,14 @@ import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /*
@@ -28,7 +30,7 @@ to be edited/ copied without
 my (Cameron Fletcher)'s permission.
 
 */
-public class ArenaSelector implements org.bukkit.event.Listener{
+public class ArenaSelector implements Listener {
 
     Core core;
 
@@ -47,6 +49,32 @@ public class ArenaSelector implements org.bukkit.event.Listener{
         itemMeta.setLore(lore);
         itemStack.setItemMeta(itemMeta);
         arenaSelectorMenu.setItem(26, itemStack);
+        this.displayArenas();
+    }
+
+    public void displayArenas(){
+
+        int index = 0;
+
+        for (Arena arena : core.getArenasFile().getArenas()){
+
+            ItemStack item = new ItemStack(Material.POTION);
+            ItemMeta im = item.getItemMeta();
+
+            im.setDisplayName(arena.getProperties().getArenaName());
+
+            im.setLore(Arrays.asList("Players: " + arena.getPlayers().size() + "/" + arena.getProperties().getMaximumPlayers(),
+                                    "ArenaState: " + arena.getArenaState().toString(),
+                                    "Map: " + arena.getProperties().getWorld().getName(),
+                    "Players Needed: " + (arena.getPlayers().size() <= arena.getProperties().getMinimumPlayers() ?
+                    (arena.getProperties().getMinimumPlayers() - arena.getPlayers().size()) : "0")));
+
+            item.setItemMeta(im);
+            arenaSelectorMenu.setItem(index, item);
+
+            index++;
+        }
+
     }
 
     // READY's Area:

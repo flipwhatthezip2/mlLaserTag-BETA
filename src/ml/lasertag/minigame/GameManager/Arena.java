@@ -79,6 +79,10 @@ public class Arena {
   player.setGameMode(GameMode.ADVENTURE);
  }
 
+ public ArenaState getArenaState(){
+  return this.arenaState;
+ }
+
  public Location getSpawn(TEAM team){
   if (team == TEAM.GREEN) return core.getArenasFile().getGreenSpawn(properties.getArenaName());
   return core.getArenasFile().getYellowSpawn(properties.getArenaName());
