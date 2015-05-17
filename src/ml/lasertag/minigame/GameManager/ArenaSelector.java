@@ -3,6 +3,8 @@ package ml.lasertag.minigame.GameManager;
 import ml.lasertag.minigame.Core;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.inventory.Inventory;
@@ -45,13 +47,20 @@ public class ArenaSelector implements org.bukkit.event.Listener{
         lore.add("§7Both teams have associated colors, §2§lGREEN §7and §e§lYELLOW§7");
         lore.add("§7The objective of the game is to destroy the other teams §bbeacon");
         lore.add("§7When you hit the other teams beacon it will disable all their lasers for §b5 seconds");
-        lore.add("§7Hitting the beacon 4 times will cause it to loose one life");
+        lore.add("§7Hitting the beacon §b4 times §7will cause it to loose one life");
+        lore.add("§7Killing the other teams players will weaken that teams beacon.");
+        itemMeta.setLore(lore);
+        itemStack.setItemMeta(itemMeta);
     }
 
     // READY's Area:
     @EventHandler
     public void onRightClick(PlayerInteractEntityEvent e){
-
+        Player p = e.getPlayer();
+        Entity entity = e.getRightClicked();
+        if (entity.getCustomName().equalsIgnoreCase("§4§lLASERTAG §8- §cSelect an arena!")){
+            p.openInventory(arenaSelectorMenu);
+        }
     }
 
 
