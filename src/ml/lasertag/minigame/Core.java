@@ -39,7 +39,7 @@ public class Core extends JavaPlugin {
  public static GameStatus currentState;
 
  public void onEnable(){
-  Bukkit.getServer().broadcastMessage("ENABLED");
+  Bukkit.getServer().getLogger().info("ENABLED");
   Bukkit.getServer().getLogger().info(">> Minigame 'LaserTag' is successfully running on: " + Bukkit.getServerName());
 
   this.arenasFile = new ArenasFile(this);
