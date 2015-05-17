@@ -45,7 +45,10 @@ public class ArenasFile {
  }
 
  public void addArena(Arena arena){
-  arenasFile.set("Arenas", arena.getProperties().getArenaName());
+  arenas.add(arena);
+  arenaNames.add(arena.getProperties().getArenaName());
+
+  arenasFile.set("Arenas", arenaNames);
 
   String arenaName = arena.getProperties().getArenaName();
 
@@ -54,9 +57,6 @@ public class ArenasFile {
   arenasFile.set(arenaName + ".MaxPlayers", arena.getProperties().getMaximumPlayers());
   arenasFile.set(arenaName + ".GreenSpawn", null);
   arenasFile.set(arenaName + ".YellowSpawn", null);
-
-  arenas.add(arena);
-  arenaNames.add(arena.getProperties().getArenaName());
 
   this.setGreenSpawn(arena.getProperties().getArenaName(), arena.getProperties().getWorld().getSpawnLocation());
   this.setYellowSpawn(arena.getProperties().getArenaName(), arena.getProperties().getWorld().getSpawnLocation());
@@ -85,10 +85,11 @@ public class ArenasFile {
  }
 
  public void deleteArena(Arena arena){
-  arenasFile.set("Arenas." + arena.getProperties().getArenaName(), null);
-  arenasFile.set(arena.getProperties().getArenaName(), null);
   arenas.remove(arena);
   arenaNames.remove(arena.getProperties().getArenaName());
+
+  arenasFile.set("Arenas." + arena.getProperties().getArenaName(), arenaNames);
+  arenasFile.set(arena.getProperties().getArenaName(), null);
 
   this.save();
  }
