@@ -63,7 +63,7 @@ public class ArenaSelector implements Listener {
 
         for (Arena arena : core.getArenasFile().getArenas()){
 
-            ItemStack item = new ItemStack(Material.POTION);
+            ItemStack item = new ItemStack(arena.getCanJoin() ? Material.SUGAR : Material.REDSTONE);
             ItemMeta im = item.getItemMeta();
 
             im.setDisplayName(arena.getProperties().getArenaName());
