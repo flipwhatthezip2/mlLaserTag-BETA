@@ -1,6 +1,7 @@
 package ml.lasertag.minigame.GameManager;
 
 import ml.lasertag.minigame.Core;
+import ml.lasertag.minigame.events.ArenaInteractEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
@@ -59,7 +60,7 @@ public class ArenaSelector implements Listener {
             ItemStack item = new ItemStack(Material.POTION);
             ItemMeta im = item.getItemMeta();
 
-            im.setDisplayName(arena.getProperties().getArenaName());
+            im.setDisplayName("Arena #" + (index + 1));
 
             im.setLore(Arrays.asList("Players: " + arena.getPlayers().size() + "/" + arena.getProperties().getMaximumPlayers(),
                     "ArenaState: " + arena.getArenaState().toString(),
@@ -75,6 +76,11 @@ public class ArenaSelector implements Listener {
 
     }
 
+    @EventHandler
+    public void onArenaInteract(ArenaInteractEvent e){
+        this.displayArenas();
+    }
+
     // READY's Area:
     @EventHandler
     public void onRightClick(PlayerInteractEntityEvent e){
@@ -83,7 +89,7 @@ public class ArenaSelector implements Listener {
 
         e.setCancelled(true);
 
-        if (entity.getCustomName().equalsIgnoreCase("§4§lLASERTAG §8- §cSelect an arena!")){
+        if (entity.getCustomName() != null && entity.getCustomName().equalsIgnoreCase("§4§lLASERTAG §8- §cSelect an arena!")){
             if (p.getItemInHand() != null && p.getItemInHand().getType() == Material.BLAZE_ROD && p.isOp()){
                 entity.remove();
                 p.sendMessage(Core.success + "Removed ArenaSelector NPC");

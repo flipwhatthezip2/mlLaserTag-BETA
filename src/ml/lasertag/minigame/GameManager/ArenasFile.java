@@ -68,8 +68,8 @@ public class ArenasFile {
   for (String arenaName : arenasFile.getStringList("Arenas")){
    ArenaProperties properties =
            new ArenaProperties(Bukkit.getWorld(arenasFile.getString(arenaName + ".World")),
-                   arenasFile.getInt("Arenas." + arenaName + ".MinPlayers"),
-                   arenasFile.getInt("Arenas." + arenaName + ".MaxPlayers"),
+                   arenasFile.getInt(arenaName + ".MinPlayers"),
+                   arenasFile.getInt(arenaName + ".MaxPlayers"),
                    arenaName);
 
    arenas.add(new Arena(core, properties, core.getLaserGun()));

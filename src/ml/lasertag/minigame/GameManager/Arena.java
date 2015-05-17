@@ -2,6 +2,7 @@ package ml.lasertag.minigame.GameManager;
 
 import ml.lasertag.minigame.Core;
 import ml.lasertag.minigame.Mechanics.LaserGun;
+import ml.lasertag.minigame.events.ArenaInteractEvent;
 import ml.lasertag.minigame.game.TEAM;
 import ml.lasertag.minigame.game.Teams;
 import org.bukkit.Bukkit;
@@ -176,11 +177,13 @@ public class Arena {
  public static void joinArena(Core core, Arena arena, Player player){
   arena.addPlayer(player);
   arena.broadcastMessage(Core.success + "§l" + player.getName() + " §ahas joined the game!");
+  Bukkit.getPluginManager().callEvent(new ArenaInteractEvent(player, ArenaInteractEvent.ArenaAction.JOIN, arena));
  }
 
  public static void leaveArena(Core core, Arena arena, Player player){
-     arena.broadcastMessage(Core.warning + "§l" + player.getName() + " §chas left the game!");
+  arena.broadcastMessage(Core.warning + "§l" + player.getName() + " §chas left the game!");
   arena.removePlayer(player);
+  Bukkit.getPluginManager().callEvent(new ArenaInteractEvent(player, ArenaInteractEvent.ArenaAction.LEAVE, arena));
  }
 
  public enum ArenaState {
