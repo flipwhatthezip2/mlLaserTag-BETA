@@ -37,7 +37,7 @@ public class ArenaSelector implements org.bukkit.event.Listener{
     }
 
     // FLIP's Area:
-    public Inventory arenaSelectorMenu = Bukkit.createInventory(null, 27, "§4§lLASERTAG! §8Pick an Arena");
+    public static Inventory arenaSelectorMenu = Bukkit.createInventory(null, 27, "§4§lLASERTAG! §8Pick an Arena");
     {
         ItemStack itemStack = new ItemStack(Material.STAINED_GLASS_PANE);
         ItemMeta itemMeta = itemStack.getItemMeta();
