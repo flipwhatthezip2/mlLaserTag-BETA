@@ -128,7 +128,7 @@ public class LaserGun implements Listener {
     fw.detonate();
    }
 
-  }, 10L);
+  }, 2L);
  }
 
  public void awardKill(Player victim, Player killer){

@@ -72,6 +72,7 @@ public class Arena {
  public void removePlayer(Player player){
   players.remove(player);
   teams.removePlayer(player, Teams.getTeam(player));
+  player.getInventory().clear();
  }
 
  public Location getSpawn(TEAM team){
