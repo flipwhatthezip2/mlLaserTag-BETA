@@ -131,22 +131,20 @@ public class LaserGun implements Listener {
   }, 2L);
  }
 
- public void awardKill(Player victim, Player killer){
-  livesRemaining = victim.getLevel();
-  Bukkit.getServer().broadcastMessage(Core.warning + "§l" +victim.getName() + " §chas felt the deadly wrath of §l" + killer.getName() + "§c.");
-  victim.sendMessage(Core.warning + "You have §l" + livesRemaining + " §clives remaining.");
-  Feature.sendTitle(victim, 5, 200, 5, "§4§lYOU DIED!", "§cYou have §l" + livesRemaining + " §cremaining lives.");
+ public void awardKill(final Player victim, Player killer){
+  Bukkit.getServer().broadcastMessage(Core.warning + "§l" + victim.getName() + " §chas felt the deadly wrath of §l" + killer.getName() + "§c.");
+  Feature.sendTitle(victim, 5, 200, 5, "§4§lYOU DIED!", "You will respawn in 10 seconds");
+  victim.setGameMode(GameMode.SPECTATOR);
 
+  new BukkitRunnable(){
 
-  if (victim.getLevel() != 0){
-   victim.spigot().respawn();
-   victim.setLevel(victim.getLevel() - 1);
-  }
+    public void run(){
+     victim.spigot().respawn();
+     victim.teleport(Arena.getArena(core, victim).getSpawn(Teams.getTeam(victim)));
+     victim.setGameMode(GameMode.ADVENTURE);
+    }
 
-  else {
-   victim.sendMessage(Core.warning + "You have §lNO §clives remaining. You are out for this game.");
-   Feature.sendTitle(victim, 5, 200, 5, "§4§lYOUR OUT!", "§cYou do not have any lives left.");
-  }
+  }.runTaskLater(core, 200);
  }
 
 }
