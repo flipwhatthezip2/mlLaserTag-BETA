@@ -46,11 +46,12 @@ public class ArenaSelector implements org.bukkit.event.Listener{
         lore.add("§7When you first join a game you are put one of 2 teams");
         lore.add("§7Both teams have associated colors, §2§lGREEN §7and §e§lYELLOW§7");
         lore.add("§7The objective of the game is to destroy the other teams §bbeacon");
-        lore.add("§7When you hit the other teams beacon it will disable all their lasers for §b5 seconds");
-        lore.add("§7Hitting the beacon §b4 times §7will cause it to loose one life");
+        lore.add("§7When you hit the other teams beacon it will disable all lasers.");
+        lore.add("§7Hit the beacon §b4 times §7for it to loose one life");
         lore.add("§7Killing the other teams players will weaken that teams beacon.");
         itemMeta.setLore(lore);
         itemStack.setItemMeta(itemMeta);
+        arenaSelectorMenu.setItem(26, itemStack);
     }
 
     // READY's Area:
@@ -61,7 +62,7 @@ public class ArenaSelector implements org.bukkit.event.Listener{
 
         e.setCancelled(true);
 
-        if (entity.getCustomName() != null && entity.getCustomName().equalsIgnoreCase("§4§lLASERTAG §8- §cSelect an arena!")){
+        if (entity.getCustomName().equalsIgnoreCase("§4§lLASERTAG §8- §cSelect an arena!")){
             if (p.getItemInHand() != null && p.getItemInHand().getType() == Material.BLAZE_ROD && p.isOp()){
                 entity.remove();
                 p.sendMessage(Core.success + "Removed ArenaSelector NPC");

@@ -168,11 +168,11 @@ public class Arena {
 
  public static void joinArena(Core core, Arena arena, Player player){
   arena.addPlayer(player);
-  arena.broadcastMessage(Core.info + player.getName() + " has joined the game");
+  arena.broadcastMessage(Core.success + "§l" + player.getName() + " §ahas joined the game!");
  }
 
  public static void leaveArena(Core core, Arena arena, Player player){
-  arena.broadcastMessage(Core.info + player.getName() + " has left the game");
+     arena.broadcastMessage(Core.warning + "§l" + player.getName() + " §chas left the game!");
   arena.removePlayer(player);
  }
 
