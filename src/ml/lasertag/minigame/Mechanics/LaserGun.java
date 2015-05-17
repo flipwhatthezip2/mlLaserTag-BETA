@@ -79,8 +79,10 @@ public class LaserGun implements Listener {
 
    Location loc = l.add(l.getDirection().multiply(a));
 
+   if (loc.getBlock().getType() != Material.AIR) return;
+
    for (Player e : list){
-    if (!e.isDead() && e != player){
+    if (!e.isDead() && e != player && e.getGameMode() != GameMode.ADVENTURE){
      if (e.getLocation().toVector().distance(loc.toVector()) <= 1.5){
       damage(e, player);
      }
@@ -134,18 +136,27 @@ public class LaserGun implements Listener {
 
  public void awardKill(final Player victim, Player killer){
   Bukkit.getServer().broadcastMessage(Core.warning + "§l" + victim.getName() + " §chas felt the deadly wrath of §l" + killer.getName() + "§c.");
-  Feature.sendTitle(victim, 5, 200, 5, "§4§lYOU DIED!", "You will respawn in 10 seconds");
   victim.setGameMode(GameMode.SPECTATOR);
+  victim.setLevel(10);
 
   new BukkitRunnable(){
 
     public void run(){
-     victim.spigot().respawn();
-     victim.teleport(Arena.getArena(core, victim).getSpawn(Teams.getTeam(victim)));
-     victim.setGameMode(GameMode.ADVENTURE);
+     Feature.sendTitle(victim, 5, 200, 5, "§4§lYOU DIED!", "You will respawn in " + victim.getLevel() + " seconds");
+     victim.setLevel(victim.getLevel() - 1);
+
+     if (Arena.getArena(core, victim) == null){
+      victim.spigot().respawn();
+      victim.setGameMode(GameMode.ADVENTURE);
+     }
+
+     if (victim.getLevel() == 0){
+      victim.spigot().respawn();
+      victim.teleport(Arena.getArena(core, victim).getSpawn(Teams.getTeam(victim)));
+     }
     }
 
-  }.runTaskLater(core, 200);
+  }.runTaskTimer(core, 0, 20);
  }
 
 }

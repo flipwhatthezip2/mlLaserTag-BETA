@@ -5,6 +5,7 @@ import ml.lasertag.minigame.Mechanics.LaserGun;
 import ml.lasertag.minigame.game.TEAM;
 import ml.lasertag.minigame.game.Teams;
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -67,6 +68,7 @@ public class Arena {
   teams.addPlayer(player, teams.pickTeam(player));
   player.teleport(getSpawn(Teams.getTeam(player)));
   TEAM.setUniform(player);
+  player.getInventory().setItem(0, gun);
  }
 
  public void removePlayer(Player player){
@@ -74,6 +76,7 @@ public class Arena {
   teams.removePlayer(player, Teams.getTeam(player));
   player.getInventory().clear();
   player.getInventory().setArmorContents(null);
+  player.setGameMode(GameMode.ADVENTURE);
  }
 
  public Location getSpawn(TEAM team){
