@@ -14,14 +14,14 @@ package ml.lasertag.minigame;
 
 
 import ml.lasertag.minigame.GameManager.ArenasFile;
-import ml.lasertag.minigame.commands.LaserTag;
 import ml.lasertag.minigame.Mechanics.LaserGun;
 import ml.lasertag.minigame.Mechanics.PlayerChat;
 import ml.lasertag.minigame.Mechanics.PlayerJoin;
+import ml.lasertag.minigame.api.Feature;
+import ml.lasertag.minigame.commands.LaserTag;
 import ml.lasertag.minigame.game.GameStatus;
-import ml.lasertag.minigame.Mechanics.PlayerMove;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class Core extends JavaPlugin {
@@ -44,11 +44,18 @@ public class Core extends JavaPlugin {
   this.arenasFile = new ArenasFile(this);
   this.arenasFile.loadArenas();
 
-  Bukkit.getServer().getLogger().info(ChatColor.GREEN + "-Successfully initialize arenas-");
+  Bukkit.getServer().getLogger().info("Successfully initialize arenas");
 
+     Bukkit.getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
+         @Override
+         public void run() {
+             for (Player allPlayers : Bukkit.getServer().getOnlinePlayers()){
+                 Feature.sendActionBar(allPlayers, "§cPlaying on §lLASERTAG! §cA §6§lMineLegends §coriginal gamemode!");
+             }
+         }
+     }, 20, 20);
 
   registerEvents();
-  // TODO: Add code...
 
   getCommand("lasertag").setExecutor(new LaserTag(this, arenasFile));
  }
@@ -65,6 +72,5 @@ public class Core extends JavaPlugin {
   Bukkit.getPluginManager().registerEvents(this.laserGun = new LaserGun(this), this);
   Bukkit.getPluginManager().registerEvents(new PlayerJoin(), this);
   Bukkit.getPluginManager().registerEvents(new PlayerChat(), this);
-  Bukkit.getPluginManager().registerEvents(new PlayerMove(), this);
  }
 }

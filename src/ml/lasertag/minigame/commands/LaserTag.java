@@ -23,9 +23,7 @@ import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.Villager;
 
 public class LaserTag implements CommandExecutor {
 
@@ -63,8 +61,6 @@ public class LaserTag implements CommandExecutor {
   }
 
   Player player = (Player) sender;
-
-  Bukkit.dispatchCommand(sender, "summon Villager ~ ~ ~ {NoAI:1}");
 
   ArenaSelectorVillager.spawnEntity(new ArenaSelectorVillager(player.getWorld()), player.getLocation());
   }

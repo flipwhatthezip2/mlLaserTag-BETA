@@ -37,7 +37,7 @@ public class ArenaSelector implements org.bukkit.event.Listener{
     }
 
     // FLIP's Area:
-    public Inventory arenaSelectorMenu = Bukkit.createInventory(null, 27, "§4§lLASERTAG! §8Select an arena...");
+    public static Inventory arenaSelectorMenu = Bukkit.createInventory(null, 27, "§4§lLASERTAG! §8Select an arena...");
     {
         ItemStack itemStack = new ItemStack(Material.STAINED_GLASS_PANE);
         ItemMeta itemMeta = itemStack.getItemMeta();
@@ -51,6 +51,7 @@ public class ArenaSelector implements org.bukkit.event.Listener{
         lore.add("§7Killing the other teams players will weaken that teams beacon.");
         itemMeta.setLore(lore);
         itemStack.setItemMeta(itemMeta);
+        arenaSelectorMenu.setItem(0, itemStack);
     }
 
     // READY's Area:
