@@ -63,12 +63,12 @@ public class ArenasFile {
  }
 
  public void loadArenas(){
-  Bukkit.broadcastMessage("I'M BEING CALLED");
+  Bukkit.getServer().broadcastMessage("I'M BEING CALLED");
 
   //if (arenasFile.getStringList("Arenas") == null) return;
-  Bukkit.broadcastMessage(arenasFile.getStringList("Arenas").size() + "");
+  Bukkit.getServer().broadcastMessage(arenasFile.getStringList("Arenas").size() + "");
   for (String arenaName : arenasFile.getStringList("Arenas")){
-   Bukkit.broadcastMessage(arenaName);
+   Bukkit.getServer().broadcastMessage(arenaName);
    ArenaProperties properties =
            new ArenaProperties(Bukkit.getWorld(arenasFile.getString("Arenas." + arenaName + ".World")),
                    arenasFile.getInt("Arenas." + arenaName + ".MinPlayers"),
@@ -78,7 +78,7 @@ public class ArenasFile {
    arenas.add(new Arena(properties, core.getLaserGun()));
    arenaNames.add(arenaName);
 
-   Bukkit.broadcastMessage(arenaName);
+   Bukkit.getServer().broadcastMessage(arenaName);
   }
  }
 
