@@ -65,8 +65,9 @@ public class ArenasFile {
  public void loadArenas(){
 
   //if (arenasFile.getStringList("Arenas") == null) return;
-
+  Bukkit.broadcastMessage(arenasFile.getStringList("Arenas").size() + "");
   for (String arenaName : arenasFile.getStringList("Arenas")){
+   Bukkit.broadcastMessage(arenaName);
    ArenaProperties properties =
            new ArenaProperties(Bukkit.getWorld(arenasFile.getString("Arenas." + arenaName + ".World")),
                    arenasFile.getInt("Arenas." + arenaName + ".MinPlayers"),
