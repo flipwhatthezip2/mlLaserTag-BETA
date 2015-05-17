@@ -65,6 +65,11 @@ public class LaserTag implements CommandExecutor {
    return;
   }
 
+  if (Arena.getArena(core, (Player) sender) != null){
+   sender.sendMessage(Core.warning + "You're already in an arena");
+   return;
+  }
+
   if (!Arena.getArena(core, args[1]).getCanJoin()){
    sender.sendMessage(Core.warning + "Specified arena is currently not joinable");
    return;
