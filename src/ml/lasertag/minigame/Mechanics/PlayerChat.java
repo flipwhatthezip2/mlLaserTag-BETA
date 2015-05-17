@@ -24,7 +24,7 @@ public class PlayerChat implements Listener{
     public void PlayerChat(AsyncPlayerChatEvent e){
         String message = e.getMessage();
         for (Player p : Bukkit.getOnlinePlayers()){
-            p.sendMessage("§e" + e.getPlayer() + "§8: §7" + message);
+            p.sendMessage("§e" + e.getPlayer().getName() + "§8: §7" + message);
         }
     }
 
