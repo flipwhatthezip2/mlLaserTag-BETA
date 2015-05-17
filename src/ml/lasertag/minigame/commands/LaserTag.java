@@ -17,6 +17,7 @@ import ml.lasertag.minigame.Core;
 import ml.lasertag.minigame.GameManager.Arena;
 import ml.lasertag.minigame.GameManager.ArenaProperties;
 import ml.lasertag.minigame.GameManager.ArenasFile;
+import ml.lasertag.minigame.mobCreator.ArenaSelectorVillager;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.command.Command;
@@ -65,14 +66,8 @@ public class LaserTag implements CommandExecutor {
 
   Bukkit.dispatchCommand(sender, "summon Villager ~ ~ ~ {NoAI:1}");
 
-  for (LivingEntity e : player.getWorld().getLivingEntities()) {
-   if (e instanceof Villager && e.getLocation() == player.getLocation()) {
-    e.setCustomName("§4§lLASERTAG §8- §cSelect an arena!");
-    e.setCustomNameVisible(true);
+  ArenaSelectorVillager.spawnEntity(new ArenaSelectorVillager(player.getWorld()), player.getLocation());
   }
-  }
-
- }
 
  public void tryJoining(CommandSender sender, String[] args){
 
