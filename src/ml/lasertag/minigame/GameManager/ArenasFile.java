@@ -45,7 +45,9 @@ public class ArenasFile {
  }
 
  public void addArena(Arena arena){
-  String arenaName = "Arenas." + arena.getProperties().getArenaName();
+  arenasFile.set("Arenas", arena.getProperties().getArenaName());
+
+  String arenaName = arena.getProperties().getArenaName();
 
   arenasFile.set(arenaName + ".World", arena.getProperties().getWorld().getName());
   arenasFile.set(arenaName + ".MinPlayers", arena.getProperties().getMinimumPlayers());
@@ -66,24 +68,25 @@ public class ArenasFile {
   Bukkit.getServer().getLogger().info("I'M BEING CALLED");
 
   //if (arenasFile.getStringList("Arenas") == null) return;
-  Bukkit.getServer().getLogger().info(arenasFile.getList("Arenas").size() + "");
-  for (Object arenaName : arenasFile.getList("Arenas")){
-   Bukkit.getServer().getLogger().info((String) arenaName);
+  Bukkit.getServer().getLogger().info(arenasFile.getStringList("Arenas").size() + "");
+  for (String arenaName : arenasFile.getStringList("Arenas")){
+   Bukkit.getServer().getLogger().info(arenaName);
    ArenaProperties properties =
-           new ArenaProperties(Bukkit.getWorld(arenasFile.getString("Arenas." + (String)arenaName + ".World")),
-                   arenasFile.getInt("Arenas." + (String)arenaName + ".MinPlayers"),
-                   arenasFile.getInt("Arenas." + (String)arenaName + ".MaxPlayers"),
-                   (String)arenaName);
+           new ArenaProperties(Bukkit.getWorld(arenasFile.getString(arenaName + ".World")),
+                   arenasFile.getInt("Arenas." + arenaName + ".MinPlayers"),
+                   arenasFile.getInt("Arenas." + arenaName + ".MaxPlayers"),
+                   arenaName);
 
    arenas.add(new Arena(properties, core.getLaserGun()));
-   arenaNames.add((String)arenaName);
+   arenaNames.add(arenaName);
 
-   Bukkit.getServer().getLogger().info((String)arenaName);
+   Bukkit.getServer().getLogger().info(arenaName);
   }
  }
 
  public void deleteArena(Arena arena){
   arenasFile.set("Arenas." + arena.getProperties().getArenaName(), null);
+  arenasFile.set(arena.getProperties().getArenaName(), null);
   arenas.remove(arena);
   arenaNames.remove(arena.getProperties().getArenaName());
 
@@ -91,21 +94,21 @@ public class ArenasFile {
  }
 
  public int getMinimumPlayers(String arenaName){
-  return arenasFile.getInt("Arenas." + arenaName + ".MinPlayers");
+  return arenasFile.getInt(arenaName + ".MinPlayers");
  }
 
  public int getMaximumPlayers(String arenaName){
-  return arenasFile.getInt("Arenas." + arenaName + ".MaxPlayers");
+  return arenasFile.getInt(arenaName + ".MaxPlayers");
  }
 
  public void setGreenSpawn(String arenaName, Location loc){
-  arenasFile.set("Arenas." + arenaName + ".GreenSpawn", loc.getBlockX() + ", " + loc.getBlockY() + ", " + loc.getBlockZ());
+  arenasFile.set(arenaName + ".GreenSpawn", loc.getBlockX() + ", " + loc.getBlockY() + ", " + loc.getBlockZ());
 
   this.save();
  }
 
  public void setYellowSpawn(String arenaName, Location loc){
-  arenasFile.set("Arenas." + arenaName + ".YellowSpawn", loc.getBlockX() + ", " + loc.getBlockY() + ", " + loc.getBlockZ());
+  arenasFile.set(arenaName + ".YellowSpawn", loc.getBlockX() + ", " + loc.getBlockY() + ", " + loc.getBlockZ());
 
   this.save();
  }
@@ -113,9 +116,9 @@ public class ArenasFile {
  public Location getGreenSpawn(String arenaName){
 
   World world = Bukkit.getWorld(arenasFile.getString(arenaName + ".World"));
-  int x = Integer.parseInt(arenasFile.get("Arenas." + arenaName + ".GreenSpawn").toString().split(", ")[0]);
-  int y = Integer.parseInt(arenasFile.get("Arenas." + arenaName + ".GreenSpawn").toString().split(", ")[1]);
-  int z = Integer.parseInt(arenasFile.get("Arenas." + arenaName + ".GreenSpawn").toString().split(", ")[2]);
+  int x = Integer.parseInt(arenasFile.get(arenaName + ".GreenSpawn").toString().split(", ")[0]);
+  int y = Integer.parseInt(arenasFile.get(arenaName + ".GreenSpawn").toString().split(", ")[1]);
+  int z = Integer.parseInt(arenasFile.get(arenaName + ".GreenSpawn").toString().split(", ")[2]);
 
   return new Location(world, x, y, z);
  }
@@ -123,9 +126,9 @@ public class ArenasFile {
  public Location getYellowSpawn(String arenaName){
 
   World world = Bukkit.getWorld(arenasFile.getString(arenaName + ".World"));
-  int x = Integer.parseInt(arenasFile.get("Arenas." + arenaName + ".YellowSpawn").toString().split(", ")[0]);
-  int y = Integer.parseInt(arenasFile.get("Arenas." + arenaName + ".YellowSpawn").toString().split(", ")[1]);
-  int z = Integer.parseInt(arenasFile.get("Arenas." + arenaName + ".YellowSpawn").toString().split(", ")[2]);
+  int x = Integer.parseInt(arenasFile.get(arenaName + ".YellowSpawn").toString().split(", ")[0]);
+  int y = Integer.parseInt(arenasFile.get(arenaName + ".YellowSpawn").toString().split(", ")[1]);
+  int z = Integer.parseInt(arenasFile.get(arenaName + ".YellowSpawn").toString().split(", ")[2]);
 
   return new Location(world, x, y, z);
  }
