@@ -65,12 +65,12 @@ public class LaserTag implements CommandExecutor {
    return;
   }
 
-  if (!Arena.getArena(args[1]).getCanJoin()){
+  if (!Arena.getArena(core, args[1]).getCanJoin()){
    sender.sendMessage(Core.warning + "Specified arena is currently not joinable");
    return;
   }
 
-  Arena.joinArena(Arena.getArena(args[1]), (Player) sender);
+  Arena.joinArena(core, Arena.getArena(core, args[1]), (Player) sender);
 
  }
 
@@ -88,12 +88,12 @@ public class LaserTag implements CommandExecutor {
    return;
   }
 
-  if (Arena.getArena(player) == null){
+  if (Arena.getArena(core, player) == null){
    sender.sendMessage(Core.warning + "You're not in an arena");
    return;
   }
 
-  Arena.leaveArena(Arena.getArena(args[1]), (Player) sender);
+  Arena.leaveArena(core, Arena.getArena(core, player), player);
 
  }
 
@@ -151,7 +151,7 @@ public class LaserTag implements CommandExecutor {
    World world = Bukkit.getWorld(args[2]);
 
    ArenaProperties ap = new ArenaProperties(world, 4, 12, args[2]);
-   Arena arena = new Arena(ap, core.getLaserGun());
+   Arena arena = new Arena(core, ap, core.getLaserGun());
    core.getArenasFile().addArena(arena);
 
    sender.sendMessage(Core.success + "Successfully created the arena: §l" + args[2] + "§a!");
@@ -159,7 +159,7 @@ public class LaserTag implements CommandExecutor {
   }
 
   else if (args[1].equalsIgnoreCase("delete")){
-   core.getArenasFile().deleteArena(Arena.getArena(args[2]));
+   core.getArenasFile().deleteArena(Arena.getArena(core, args[2]));
    sender.sendMessage(Core.success + "Successfully deleted the arena: §l" + args[2] + "§a!");
   }
 
@@ -172,7 +172,7 @@ public class LaserTag implements CommandExecutor {
     return;
    }
 
-   ArenaProperties ap = Arena.getArena(args[2]).getProperties();
+   ArenaProperties ap = Arena.getArena(core, args[2]).getProperties();
 
    if (args[1].equalsIgnoreCase("minPlayers")){
     ap.setMinimumPlayers(Integer.parseInt(args[3]));
