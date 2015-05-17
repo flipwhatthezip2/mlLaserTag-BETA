@@ -64,7 +64,7 @@ public class ArenasFile {
 
  public void loadArenas(){
 
-  if (arenasFile.getStringList("Arenas") == null) return;
+  //if (arenasFile.getStringList("Arenas") == null) return;
 
   for (String arenaName : arenasFile.getStringList("Arenas")){
    ArenaProperties properties =
