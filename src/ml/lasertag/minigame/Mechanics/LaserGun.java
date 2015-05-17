@@ -46,13 +46,11 @@ public class LaserGun implements Listener {
           Arena.getArena(core, e.getPlayer()).isPvpEnabled()){
    shootLaser(e.getPlayer());
    cantShoot.add(e.getPlayer());
-   e.getPlayer().setLevel(0);
    new BukkitRunnable(){
 
     @Override
     public void run(){
      cantShoot.remove(e.getPlayer());
-     e.getPlayer().setLevel(1);
     }
 
    }.runTaskLater(core, coolDown);
@@ -64,7 +62,7 @@ public class LaserGun implements Listener {
   List<Player> list = player.getWorld().getPlayers();
   Location l = player.getEyeLocation();
 
-  int range = 50;
+  int range = 25;
 
   for (org.bukkit.entity.Entity e : player.getWorld().getLivingEntities()){
    if (e.getLocation().toVector().distance(l.toVector()) >= range) list.remove(e);
@@ -82,7 +80,7 @@ public class LaserGun implements Listener {
    if (loc.getBlock().getType() != Material.AIR) return;
 
    for (Player e : list){
-    if (!e.isDead() && e != player && e.getGameMode() != GameMode.ADVENTURE && Arena.getArena(core, e) != null){
+    if (!e.isDead() && e != player && e.getGameMode() == GameMode.ADVENTURE && Arena.getArena(core, e) != null){
      if (e.getLocation().toVector().distance(loc.toVector()) <= 1.5){
       damage(e, player);
      }
