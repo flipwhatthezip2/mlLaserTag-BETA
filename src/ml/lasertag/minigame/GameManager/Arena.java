@@ -31,7 +31,7 @@ public class Arena {
  private int countDown = 100;
  private int currentCountDownStage = 5;
 
- private boolean pvp = false;
+ private boolean pvp = true;
 
 
  public Arena(Core core, ArenaProperties properties, LaserGun laserGun){
@@ -66,6 +66,7 @@ public class Arena {
   players.add(player);
   teams.addPlayer(player, teams.pickTeam(player));
   player.teleport(getSpawn(Teams.getTeam(player)));
+  TEAM.setUniform(player);
  }
 
  public void removePlayer(Player player){
@@ -140,7 +141,9 @@ public class Arena {
 
  public void distributeKits(){
   for (Player p : players){
-   p.getInventory().setItem(0, gun); p.updateInventory();
+   TEAM.setUniform(p);
+   p.getInventory().setItem(0, gun);
+   p.updateInventory();
   }
  }
 

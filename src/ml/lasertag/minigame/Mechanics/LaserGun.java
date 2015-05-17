@@ -73,9 +73,9 @@ public class LaserGun implements Listener {
 
   for (double a = 0; a < range; a+= 0.1){
 
-   double r = Teams.getTeam(player).getLaserColor().getRed();
-   double g = Teams.getTeam(player).getLaserColor().getGreen();
-   double b = Teams.getTeam(player).getLaserColor().getBlue();
+   double r = Teams.getTeam(player).getColor().getRed();
+   double g = Teams.getTeam(player).getColor().getGreen();
+   double b = Teams.getTeam(player).getColor().getBlue();
 
    Location loc = l.add(l.getDirection().multiply(a));
 
@@ -115,9 +115,9 @@ public class LaserGun implements Listener {
   FireworkMeta fwm = fw.getFireworkMeta();
 
   fwm.addEffect(FireworkEffect.builder().withColor(Color.fromRGB(
-          Teams.getTeam(player).getLaserColor().getRed(),
-          Teams.getTeam(player).getLaserColor().getGreen(),
-          Teams.getTeam(player).getLaserColor().getBlue())).build());
+          Teams.getTeam(player).getColor().getRed(),
+          Teams.getTeam(player).getColor().getGreen(),
+          Teams.getTeam(player).getColor().getBlue())).build());
 
   fw.setFireworkMeta(fwm);
 

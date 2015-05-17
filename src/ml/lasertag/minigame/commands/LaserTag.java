@@ -18,6 +18,7 @@ import ml.lasertag.minigame.GameManager.Arena;
 import ml.lasertag.minigame.GameManager.ArenaProperties;
 import ml.lasertag.minigame.GameManager.ArenasFile;
 import ml.lasertag.minigame.mobCreator.ArenaSelectorVillager;
+import ml.lasertag.minigame.mobCreator.EntityTypes;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.command.Command;
@@ -62,7 +63,7 @@ public class LaserTag implements CommandExecutor {
 
   Player player = (Player) sender;
 
-  ArenaSelectorVillager.spawnEntity(new ArenaSelectorVillager(player.getWorld()), player.getLocation());
+  EntityTypes.spawnEntity(new ArenaSelectorVillager(player.getWorld()), player.getLocation());
   }
 
  public void tryJoining(CommandSender sender, String[] args){
@@ -187,10 +188,15 @@ public class LaserTag implements CommandExecutor {
 
   else if (args[1].equalsIgnoreCase("minPlayers") || args[1].equalsIgnoreCase("maxPlayers")){
 
+   if (args.length != 4){
+    sender.sendMessage(Core.warning + "Invalid argument amount");
+    return;
+   }
+
    try {
     Integer.parseInt(args[3]);
    } catch (NumberFormatException e){
-    sender.sendMessage(Core.warning + "3rd argument is an invaild integer.");
+    sender.sendMessage(Core.warning + "4th argument is an invaild integer.");
     return;
    }
 
@@ -215,6 +221,16 @@ public class LaserTag implements CommandExecutor {
    }
 
    Player player = (Player) sender;
+
+   if (args.length != 3){
+    sender.sendMessage(Core.warning + "Invalid argument amount");
+    return;
+   }
+
+   if (!arenasFile.getArenaNames().contains(args[2])){
+    sender.sendMessage(Core.warning + "Specified arena does not exist");
+    return;
+   }
 
    if (args[1].equalsIgnoreCase("setYellowSpawn")){
     core.getArenasFile().setYellowSpawn(args[2], player.getLocation());

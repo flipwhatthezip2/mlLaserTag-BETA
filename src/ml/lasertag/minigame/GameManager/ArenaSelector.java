@@ -37,7 +37,7 @@ public class ArenaSelector implements org.bukkit.event.Listener{
     }
 
     // FLIP's Area:
-    public static Inventory arenaSelectorMenu = Bukkit.createInventory(null, 27, "§4§lLASERTAG! §8Select an arena...");
+    public Inventory arenaSelectorMenu = Bukkit.createInventory(null, 27, "§4§lLASERTAG! §8Pick an Arena");
     {
         ItemStack itemStack = new ItemStack(Material.STAINED_GLASS_PANE);
         ItemMeta itemMeta = itemStack.getItemMeta();
@@ -51,7 +51,6 @@ public class ArenaSelector implements org.bukkit.event.Listener{
         lore.add("§7Killing the other teams players will weaken that teams beacon.");
         itemMeta.setLore(lore);
         itemStack.setItemMeta(itemMeta);
-        arenaSelectorMenu.setItem(0, itemStack);
     }
 
     // READY's Area:
@@ -59,7 +58,15 @@ public class ArenaSelector implements org.bukkit.event.Listener{
     public void onRightClick(PlayerInteractEntityEvent e){
         Player p = e.getPlayer();
         Entity entity = e.getRightClicked();
+
+        e.setCancelled(true);
+
         if (entity.getCustomName().equalsIgnoreCase("§4§lLASERTAG §8- §cSelect an arena!")){
+            if (p.getItemInHand() != null && p.getItemInHand().getType() == Material.BLAZE_ROD && p.isOp()){
+                entity.remove();
+                p.sendMessage(Core.success + "Removed ArenaSelector NPC");
+                return;
+            }
             p.openInventory(arenaSelectorMenu);
         }
     }
