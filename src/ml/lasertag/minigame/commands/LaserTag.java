@@ -64,8 +64,6 @@ public class LaserTag implements CommandExecutor {
 
   Player player = (Player) sender;
 
-  Bukkit.dispatchCommand(sender, "summon Villager ~ ~ ~ {NoAI:1}");
-
   ArenaSelectorVillager.spawnEntity(new ArenaSelectorVillager(player.getWorld()), player.getLocation());
   }
 
