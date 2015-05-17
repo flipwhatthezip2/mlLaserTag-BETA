@@ -25,6 +25,11 @@ public class ArenaSelectorVillager extends EntityVillager{
         return true;
     }
 
+    @Override
+    public void move(double d0, double d1, double d2){
+        return;
+    }
+
     public static void spawnEntity(Entity entity, Location loc){
         entity.setLocation(loc.getX(), loc.getY(), loc.getZ(), loc.getYaw(), loc.getPitch());
         (((CraftWorld) loc.getWorld())).getHandle().addEntity(entity);
