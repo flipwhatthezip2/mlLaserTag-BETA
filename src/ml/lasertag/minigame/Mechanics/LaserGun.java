@@ -9,19 +9,16 @@ import net.minecraft.server.v1_8_R2.PacketPlayOutWorldParticles;
 import org.bukkit.*;
 import org.bukkit.craftbukkit.v1_8_R2.entity.CraftPlayer;
 import org.bukkit.entity.Firework;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class LaserGun implements Listener {
 
@@ -133,7 +130,7 @@ public class LaserGun implements Listener {
 
  public void awardKill(Player victim, Player killer){
   livesRemaining = victim.getLevel();
-  Bukkit.getServer().broadcastMessage(Core.warning + "§l" +victim.getName() + " §chas felt the deadly wrath of §l" + killer.getName() + "§c.");
+  Bukkit.getServer().broadcastMessage(Core.warning + "§l" +victim.getName() + " §cbeen shot by §l" + killer.getName() + "§c.");
   victim.sendMessage(Core.warning + "You have §l" + livesRemaining + " §clives remaining.");
   Feature.sendTitle(victim, 5, 200, 5, "§4§lYOU DIED!", "§cYou have §l" + livesRemaining + " §cremaining lives.");
 
@@ -145,7 +142,7 @@ public class LaserGun implements Listener {
 
   else {
    victim.sendMessage(Core.warning + "You have §lNO §clives remaining. You are out for this game.");
-   Feature.sendTitle(victim, 5, 200, 5, "§4§lYOUR OUT!", "§cYou do not have any lives left.");
+   Feature.sendTitle(victim, 5, 200, 5, "§4§lYOU'RE OUT!", "§cYou do not have any lives left.");
   }
  }
 
