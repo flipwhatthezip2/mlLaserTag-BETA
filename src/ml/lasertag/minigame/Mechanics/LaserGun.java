@@ -42,8 +42,8 @@ public class LaserGun implements Listener {
  @EventHandler
  public void onShoot(final PlayerInteractEvent e){
   if (e.getAction() == Action.RIGHT_CLICK_AIR && e.getPlayer().getItemInHand().getType() == Material.IRON_BARDING
-          && !cantShoot.contains(e.getPlayer()) && Arena.getArena(e.getPlayer()) != null &&
-          Arena.getArena(e.getPlayer()).isPvpEnabled()){
+          && !cantShoot.contains(e.getPlayer()) && Arena.getArena(core, e.getPlayer()) != null &&
+          Arena.getArena(core, e.getPlayer()).isPvpEnabled()){
    shootLaser(e.getPlayer());
    cantShoot.add(e.getPlayer());
    e.getPlayer().setLevel(0);

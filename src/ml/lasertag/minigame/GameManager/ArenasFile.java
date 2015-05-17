@@ -72,7 +72,7 @@ public class ArenasFile {
                    arenasFile.getInt("Arenas." + arenaName + ".MaxPlayers"),
                    arenaName);
 
-   arenas.add(new Arena(properties, core.getLaserGun()));
+   arenas.add(new Arena(core, properties, core.getLaserGun()));
    arenaNames.add(arenaName);
   }
  }

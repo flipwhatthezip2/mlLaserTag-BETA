@@ -35,7 +35,8 @@ public class Arena {
  private boolean pvp = false;
 
 
- public Arena(ArenaProperties properties, LaserGun laserGun){
+ public Arena(Core core, ArenaProperties properties, LaserGun laserGun){
+  this.core = core;
   this.properties = properties;
   this.arenaState = ArenaState.WAITING;
   this.laserGun = laserGun;
@@ -81,7 +82,7 @@ public class Arena {
 
  public void spawnPlayers(){
   for (Player p : players){
-   p.teleport(Arena.getArena(p).getSpawn(Teams.getTeam(p)));
+   p.teleport(Arena.getArena(core, p).getSpawn(Teams.getTeam(p)));
   }
  }
 
@@ -151,25 +152,23 @@ public class Arena {
   }
  }
 
- public static Arena getArena(Player player){
+ public static Arena getArena(Core core, Player player){
   for (Arena a : core.getArenasFile().getArenas()) if (a.getPlayers().contains(player)) return a;
   return null;
  }
 
- public static Arena getArena(String string){
-  for (Arena a : core.
-          getArenasFile().
-          getArenas())
+ public static Arena getArena(Core core, String string){
+  for (Arena a : core.getArenasFile().getArenas())
    if (a.getProperties().getArenaName().equalsIgnoreCase(string)) return a;
   return null;
  }
 
- public static void joinArena(Arena arena, Player player){
+ public static void joinArena(Core core, Arena arena, Player player){
   arena.addPlayer(player);
   arena.broadcastMessage(Core.info + player.getName() + " has joined the game");
  }
 
- public static void leaveArena(Arena arena, Player player){
+ public static void leaveArena(Core core, Arena arena, Player player){
   arena.removePlayer(player);
   arena.broadcastMessage(Core.info + player.getName() + " has left the game");
  }

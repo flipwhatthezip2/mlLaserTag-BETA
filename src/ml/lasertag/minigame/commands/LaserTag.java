@@ -60,10 +60,6 @@ public class LaserTag implements CommandExecutor {
    return;
   }
 
-  for (String string : arenasFile.getArenaNames()){
-   sender.sendMessage(string);
-  }
-
   if (!arenasFile.getArenaNames().contains(args[1])){
    sender.sendMessage(Core.warning + "Specified arena does not exist");
    return;
