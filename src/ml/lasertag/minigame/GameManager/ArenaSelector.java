@@ -56,7 +56,9 @@ public class ArenaSelector implements Listener {
 
         int index = 0;
 
-        for (Arena arena : core.getArenasFile().getArenas()){
+        for (Arena arena : core.
+                getArenasFile().
+                getArenas()){
 
             ItemStack item = new ItemStack(Material.POTION);
             ItemMeta im = item.getItemMeta();
