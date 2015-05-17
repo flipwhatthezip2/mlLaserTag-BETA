@@ -9,19 +9,16 @@ import net.minecraft.server.v1_8_R2.PacketPlayOutWorldParticles;
 import org.bukkit.*;
 import org.bukkit.craftbukkit.v1_8_R2.entity.CraftPlayer;
 import org.bukkit.entity.Firework;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class LaserGun implements Listener {
 
@@ -79,10 +76,8 @@ public class LaserGun implements Listener {
 
    Location loc = l.add(l.getDirection().multiply(a));
 
-   if (loc.getBlock().getType() != Material.AIR) return;
-
    for (Player e : list){
-    if (!e.isDead() && e != player && e.getGameMode() != GameMode.ADVENTURE){
+    if (!e.isDead() && e != player){
      if (e.getLocation().toVector().distance(loc.toVector()) <= 1.5){
       damage(e, player);
      }
@@ -135,28 +130,19 @@ public class LaserGun implements Listener {
 
 
  public void awardKill(final Player victim, Player killer){
-  Bukkit.getServer().broadcastMessage(Core.warning + "§l" + victim.getName() + " §chas felt the deadly wrath of §l" + killer.getName() + "§c.");
+  Bukkit.getServer().broadcastMessage(Core.warning + "§l" + victim.getName() + " §chas been shot by §l" + killer.getName() + "§c.");
+  Feature.sendTitle(victim, 5, 200, 5, "§4§lYOU DIED!", "§cRespawning in 10 seconds...");
   victim.setGameMode(GameMode.SPECTATOR);
-  victim.setLevel(10);
 
   new BukkitRunnable(){
 
     public void run(){
-     Feature.sendTitle(victim, 5, 200, 5, "§4§lYOU DIED!", "You will respawn in " + victim.getLevel() + " seconds");
-     victim.setLevel(victim.getLevel() - 1);
-
-     if (Arena.getArena(core, victim) == null){
-      victim.spigot().respawn();
-      victim.setGameMode(GameMode.ADVENTURE);
-     }
-
-     if (victim.getLevel() == 0){
-      victim.spigot().respawn();
-      victim.teleport(Arena.getArena(core, victim).getSpawn(Teams.getTeam(victim)));
-     }
+     victim.spigot().respawn();
+     victim.teleport(Arena.getArena(core, victim).getSpawn(Teams.getTeam(victim)));
+     victim.setGameMode(GameMode.ADVENTURE);
     }
 
-  }.runTaskTimer(core, 0, 20);
+  }.runTaskLater(core, 200);
  }
 
 }
