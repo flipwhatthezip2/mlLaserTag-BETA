@@ -16,7 +16,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /*
@@ -66,13 +65,14 @@ public class ArenaSelector implements Listener {
             ItemStack item = new ItemStack(arena.getCanJoin() ? Material.SUGAR : Material.REDSTONE);
             ItemMeta im = item.getItemMeta();
 
-            im.setDisplayName(arena.getProperties().getArenaName());
-
-            im.setLore(Arrays.asList("Players: " + arena.getPlayers().size() + "/" + arena.getProperties().getMaximumPlayers(),
-                    "ArenaState: " + arena.getArenaState().toString(),
-                    "Map: " + arena.getProperties().getWorld().getName(),
-                    "Players Needed: " + (arena.getPlayers().size() <= arena.getProperties().getMinimumPlayers() ?
-                            (arena.getProperties().getMinimumPlayers() - arena.getPlayers().size()) : "0")));
+            im.setDisplayName("§4§l"  + arena.getProperties().getArenaName());
+            List<String> lore = new ArrayList<>();
+            lore.add("§cPlayers: §f" + arena.getPlayers().size() + "§7/§f" + arena.getProperties().getMaximumPlayers());
+            lore.add("§cArena Status: §f" + arena.getArenaState().toString());
+            lore.add("§cMap Name: §f" + arena.getProperties().getWorld().getName());
+            lore.add("§cPlayers Needed: §f" + (arena.getPlayers().size() <= arena.getProperties().getMinimumPlayers() ?
+                    (arena.getProperties().getMinimumPlayers() - arena.getPlayers().size()) : "0"));
+            im.setLore(lore);
 
             item.setItemMeta(im);
             arenaSelectorMenu.setItem(index, item);
