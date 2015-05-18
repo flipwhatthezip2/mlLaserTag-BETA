@@ -2,6 +2,7 @@ package ml.lasertag.minigame.GameManager;
 
 import ml.lasertag.minigame.Core;
 import ml.lasertag.minigame.Mechanics.LaserGun;
+import ml.lasertag.minigame.Mechanics.LaserTagBeacon;
 import ml.lasertag.minigame.events.ArenaInteractEvent;
 import ml.lasertag.minigame.game.TEAM;
 import ml.lasertag.minigame.game.Teams;
@@ -9,6 +10,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.entity.EnderCrystal;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -33,6 +36,9 @@ public class Arena {
  private int countDown = 100;
  private int currentCountDownStage = 5;
 
+ private LaserTagBeacon yellowBeacon;
+ private LaserTagBeacon greenBeacon;
+
  private boolean pvp = true;
 
 
@@ -42,6 +48,10 @@ public class Arena {
   this.arenaState = ArenaState.WAITING;
   this.laserGun = laserGun;
   this.teams = new Teams(this);
+
+  this.yellowBeacon = new LaserTagBeacon(core, this, TEAM.YELLOW);
+  this.greenBeacon = new LaserTagBeacon(core, this, TEAM.GREEN);
+
  }
 
  public ArenaProperties getProperties(){

@@ -87,7 +87,6 @@ public class ArenaSelector implements Listener {
         this.displayArenas();
     }
 
-
     @EventHandler
     public void onArenaClick(InventoryClickEvent e){
         if (e.getWhoClicked() instanceof Player){

@@ -1,6 +1,7 @@
 package ml.lasertag.minigame.GameManager;
 
 import ml.lasertag.minigame.Core;
+import ml.lasertag.minigame.game.TEAM;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -107,6 +108,18 @@ public class ArenasFile {
   this.save();
  }
 
+ public void setGreenBeacon(String arenaName, Location loc){
+  arenasFile.set(arenaName + ".GreenBeacon", loc.getBlockX() + ", " + loc.getBlockY() + ", " + loc.getBlockZ());
+
+  this.save();
+ }
+
+ public void setYellowBeacon(String arenaName, Location loc){
+  arenasFile.set(arenaName + ".YellowBeacon", loc.getBlockX() + ", " + loc.getBlockY() + ", " + loc.getBlockZ());
+
+  this.save();
+ }
+
  public Location getGreenSpawn(String arenaName){
 
   World world = Bukkit.getWorld(arenasFile.getString(arenaName + ".World"));
@@ -125,6 +138,31 @@ public class ArenasFile {
   int z = Integer.parseInt(arenasFile.get(arenaName + ".YellowSpawn").toString().split(", ")[2]);
 
   return new Location(world, x, y, z);
+ }
+
+ public Location getGreenBeacon(String arenaName){
+
+  World world = Bukkit.getWorld(arenasFile.getString(arenaName + ".World"));
+  int x = Integer.parseInt(arenasFile.get(arenaName + ".GreenBeacon").toString().split(", ")[0]);
+  int y = Integer.parseInt(arenasFile.get(arenaName + ".GreenBeacon").toString().split(", ")[1]);
+  int z = Integer.parseInt(arenasFile.get(arenaName + ".GreenBeacon").toString().split(", ")[2]);
+
+  return new Location(world, x, y, z);
+ }
+
+ public Location getYellowBeacon(String arenaName){
+
+  World world = Bukkit.getWorld(arenasFile.getString(arenaName + ".World"));
+  int x = Integer.parseInt(arenasFile.get(arenaName + ".YellowBeacon").toString().split(", ")[0]);
+  int y = Integer.parseInt(arenasFile.get(arenaName + ".YellowBeacon").toString().split(", ")[1]);
+  int z = Integer.parseInt(arenasFile.get(arenaName + ".YellowBeacon").toString().split(", ")[2]);
+
+  return new Location(world, x, y, z);
+ }
+
+ public Location getBeacon(String arenaName, TEAM team){
+  if (team == TEAM.YELLOW) return this.getYellowBeacon(arenaName);
+  return this.getGreenBeacon(arenaName);
  }
 
  public void save(){

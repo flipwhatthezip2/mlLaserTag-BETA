@@ -243,6 +243,35 @@ public class LaserTag implements CommandExecutor {
    }
   }
 
+  else if (args[1].equalsIgnoreCase("setYellowBeacon") || args[1].equalsIgnoreCase("setGreenBeacon")){
+   if (!(sender instanceof Player)){
+    sender.sendMessage(Core.warning + "Beacon setting failed. You must be ingame to set a spawn!");
+    return;
+   }
+
+   Player player = (Player) sender;
+
+   if (args.length != 3){
+    sender.sendMessage(Core.warning + "Invalid argument amount");
+    return;
+   }
+
+   if (!arenasFile.getArenaNames().contains(args[2])){
+    sender.sendMessage(Core.warning + "Specified arena does not exist");
+    return;
+   }
+
+   if (args[1].equalsIgnoreCase("setYellowBeacon")){
+    core.getArenasFile().setYellowBeacon(args[2], player.getLocation());
+    sender.sendMessage(Core.success + "Successfully set the §e§lYELLOW §abeacon!");
+   }
+
+   if (args[1].equalsIgnoreCase("setGreenBeacon")){
+    core.getArenasFile().setGreenBeacon(args[2], player.getLocation());
+    sender.sendMessage(Core.success + "Successfully set the §2§lGREEN §abeacon!");
+   }
+  }
+
  }
  public void lasertaghelp(CommandSender sender){
   sender.sendMessage(Core.info + "Commands for §c§lLASERTAG§e:");
