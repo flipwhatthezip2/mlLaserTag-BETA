@@ -48,10 +48,9 @@ public class Arena {
   this.arenaState = ArenaState.WAITING;
   this.laserGun = laserGun;
   this.teams = new Teams(this);
+  this.intializeBeacons();
 
-  this.yellowBeacon = new LaserTagBeacon(core, this, TEAM.YELLOW);
-  this.greenBeacon = new LaserTagBeacon(core, this, TEAM.GREEN);
-
+  Bukkit.getPluginManager().callEvent(new ArenaInteractEvent(ArenaInteractEvent.ArenaAction.CREATE, this));
  }
 
  public ArenaProperties getProperties(){
@@ -72,6 +71,17 @@ public class Arena {
 
  public boolean getCanJoin(){
   return this.canJoin;
+ }
+
+ public void intializeBeacons(){
+  if (core.getArenasFile().getYellowBeacon(properties.getArenaName()) == null ||
+          core.getArenasFile().getGreenBeacon(properties.getArenaName()) == null){
+   Bukkit.getServer().getLogger().info("PLEASE CONFIGURE BEACONS FOR " + properties.getArenaName());
+   return;
+  }
+
+  this.yellowBeacon = new LaserTagBeacon(core, this, TEAM.YELLOW);
+  this.greenBeacon = new LaserTagBeacon(core, this, TEAM.GREEN);
  }
 
  public void addPlayer(Player player){
@@ -135,6 +145,9 @@ public class Arena {
   this.broadcastMessage(Core.success + "The game has be§lgun§a!");
   this.spawnPlayers();
   this.canJoin = false;
+
+  this.yellowBeacon = new LaserTagBeacon(core, this, TEAM.YELLOW);
+  this.greenBeacon = new LaserTagBeacon(core, this, TEAM.GREEN);
  }
 
  public void endGame(){
@@ -191,13 +204,13 @@ public class Arena {
  public static void joinArena(Core core, Arena arena, Player player){
   arena.addPlayer(player);
   arena.broadcastMessage(Core.success + "§l" + player.getName() + " §ahas joined the game!");
-  Bukkit.getPluginManager().callEvent(new ArenaInteractEvent(player, ArenaInteractEvent.ArenaAction.JOIN, arena));
+  Bukkit.getPluginManager().callEvent(new ArenaInteractEvent(ArenaInteractEvent.ArenaAction.JOIN, arena));
  }
 
  public static void leaveArena(Core core, Arena arena, Player player){
   arena.broadcastMessage(Core.warning + "§l" + player.getName() + " §chas left the game!");
   arena.removePlayer(player);
-  Bukkit.getPluginManager().callEvent(new ArenaInteractEvent(player, ArenaInteractEvent.ArenaAction.LEAVE, arena));
+  Bukkit.getPluginManager().callEvent(new ArenaInteractEvent(ArenaInteractEvent.ArenaAction.LEAVE, arena));
  }
 
  public enum ArenaState {

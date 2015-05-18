@@ -38,248 +38,264 @@ public class LaserTag implements CommandExecutor {
 
  @Override
  public boolean onCommand(CommandSender sender, Command cmd, String string, String[] args) {
-  if (cmd.getName().equalsIgnoreCase("lasertag") && args.length == 0){
-   lasertag(sender);
+  if (cmd.getName().equalsIgnoreCase("lasertag") && args.length == 0) {
+      lasertag(sender);
   }
-  else if (args[0].equalsIgnoreCase("help")){lasertaghelp(sender); return false;}
-  else if (args[0].equalsIgnoreCase("debug")){lasertagdebug(sender); return false;}
-  else if (args[0].equalsIgnoreCase("arena")){lasertagarena(sender, args); return false;}
-  else if (args[0].equalsIgnoreCase("announce")){lasertagAnnounce(sender); return false;}
-  else if (args[0].equalsIgnoreCase("join")){tryJoining(sender, args);}
-  else if (args[0].equalsIgnoreCase("leave")){tryLeaving(sender, args);}
-  else if (args[0].equalsIgnoreCase("spawnArenaSelector")) {trySpawningArenaSelector(sender, args);}
+  else if (args[0].equalsIgnoreCase("help")) lasertaghelp(sender);
+  else if (args[0].equalsIgnoreCase("debug")) lasertagdebug(sender);
+  else if (args[0].equalsIgnoreCase("arena")) lasertagarena(sender, args);
+  else if (args[0].equalsIgnoreCase("announce")) lasertagAnnounce(sender);
+  else if (args[0].equalsIgnoreCase("join")) tryJoining(sender, args);
+  else if (args[0].equalsIgnoreCase("leave")) tryLeaving(sender, args);
+  else if (args[0].equalsIgnoreCase("spawnArenaSelector")) trySpawningArenaSelector(sender, args);
+  else if (args[0].equalsIgnoreCase("reload")) tryReloading(sender);
   return false;
  }
+    public void tryReloading(CommandSender sender){
+        if (!sender.isOp()){
+            sender.sendMessage(Core.warning + "You don't have permission to reload the server");
+            return;
+        }
 
- public void trySpawningArenaSelector(CommandSender sender, String[] args){
-  if (!sender.isOp()){
-   sender.sendMessage(Core.warning + "You don't have permission to do this");
-   return;
-  }
+        core.customReload();
+        sender.sendMessage(Core.success + "Reloading...");
+    }
 
-  if (!(sender instanceof Player)){
-   sender.sendMessage(Core.warning + "Only players can spawn ArenaSelector NPC's");
-  }
+    public void trySpawningArenaSelector(CommandSender sender, String[] args){
+      if (!sender.isOp()){
+       sender.sendMessage(Core.warning + "You don't have permission to do this");
+       return;
+      }
 
-  Player player = (Player) sender;
+      if (!(sender instanceof Player)){
+       sender.sendMessage(Core.warning + "Only players can spawn ArenaSelector NPC's");
+      }
 
-  EntityTypes.spawnEntity(new ArenaSelectorVillager(player.getWorld()), player.getLocation());
-  }
+      Player player = (Player) sender;
 
- public void tryJoining(CommandSender sender, String[] args){
+      EntityTypes.spawnEntity(new ArenaSelectorVillager(player.getWorld()), player.getLocation());
+      }
 
-  if (!(sender instanceof Player)){
-   sender.sendMessage(Core.warning + "Only players can join arenas");
-    return;
-  }
+     public void tryJoining(CommandSender sender, String[] args){
 
-  if (args.length != 2){
-   sender.sendMessage(Core.warning + "Invalid argument amount");
-   return;
-  }
+      if (!(sender instanceof Player)){
+       sender.sendMessage(Core.warning + "Only players can join arenas");
+        return;
+      }
 
-  if (!arenasFile.getArenaNames().contains(args[1])){
-   sender.sendMessage(Core.warning + "Specified arena does not exist");
-   return;
-  }
+      if (args.length != 2){
+       sender.sendMessage(Core.warning + "Invalid argument amount");
+       return;
+      }
 
-  if (Arena.getArena(core, (Player) sender) != null){
-   sender.sendMessage(Core.warning + "You're already in an arena");
-   return;
-  }
+      if (!arenasFile.getArenaNames().contains(args[1])){
+       sender.sendMessage(Core.warning + "Specified arena does not exist");
+       return;
+      }
 
-  if (!Arena.getArena(core, args[1]).getCanJoin()){
-   sender.sendMessage(Core.warning + "Specified arena is currently not joinable");
-   return;
-  }
+      if (Arena.getArena(core, (Player) sender) != null){
+       sender.sendMessage(Core.warning + "You're already in an arena");
+       return;
+      }
 
-  Arena.joinArena(core, Arena.getArena(core, args[1]), (Player) sender);
+      if (!Arena.getArena(core, args[1]).getCanJoin()){
+       sender.sendMessage(Core.warning + "Specified arena is currently not joinable");
+       return;
+      }
 
- }
+      Arena.joinArena(core, Arena.getArena(core, args[1]), (Player) sender);
 
- public void tryLeaving(CommandSender sender, String[] args){
+     }
 
-  if (!(sender instanceof Player)){
-   sender.sendMessage(Core.warning + "Only players can leave arenas");
-   return;
-  }
+     public void tryLeaving(CommandSender sender, String[] args){
 
-  Player player = (Player) sender;
+      if (!(sender instanceof Player)){
+       sender.sendMessage(Core.warning + "Only players can leave arenas");
+       return;
+      }
 
-  if (args.length != 1){
-   sender.sendMessage(Core.warning + "Invalid argument amount");
-   return;
-  }
+      Player player = (Player) sender;
 
-  if (Arena.getArena(core, player) == null){
-   sender.sendMessage(Core.warning + "You're not in an arena");
-   return;
-  }
+      if (args.length != 1){
+       sender.sendMessage(Core.warning + "Invalid argument amount");
+       return;
+      }
 
-  Arena.leaveArena(core, Arena.getArena(core, player), player);
+      if (Arena.getArena(core, player) == null){
+       sender.sendMessage(Core.warning + "You're not in an arena");
+       return;
+      }
 
- }
+      Arena.leaveArena(core, Arena.getArena(core, player), player);
 
- public void lasertagAnnounce(CommandSender sender) {
-  Bukkit.getServer().broadcastMessage("§e" + sender.getName() + "§8: §f§lStarting a new round! §fCome join me!");
- }
- public void lasertag(CommandSender sender){
-  sender.sendMessage(Core.info + "Currently running §cLaser Tag §lBETA");
-  sender.sendMessage(Core.info + "Developed by: §cFlipwhatthezip2 §eand §cReadySetPawn");
-  sender.sendMessage(Core.info + "For a list of commands type: §c/lasertag §lhelp");
- }
- public void lasertagdebug(CommandSender sender){
-  sender.sendMessage(Core.info + "Displaying debug info:");
-  sender.sendMessage(Core.info + "Currently running build §c§lLS.b.01");
-  sender.sendMessage(Core.info + "Report reference #: §c1.b.a");
-  sender.sendMessage(Core.info + "Current game status: §c§lN/A");
- }
- public void lasertagarena(CommandSender sender, String[] args){
-  if (args.length == 1) {
-   sender.sendMessage(Core.info + "Commands for §c§lLASERTAG ARENAS§e:");
-   sender.sendMessage(Core.infoList + "/lasertag arena create [arena] [world] §8- §7Creates arena.");
-   sender.sendMessage(Core.infoList + "/lasertag arena delete [arena] §8- §7Deletes arena.");
-   sender.sendMessage(Core.infoList + "/lasertag arena maxPlayer [arena] [maxPlayers] §8- §7Sets max players.");
-   sender.sendMessage(Core.infoList + "/lasertag arena minPlayer [arena] [minPlayers] §8- §7Sets min players.");
-   sender.sendMessage(Core.infoList + "/lasertag arena setYellowSpawn [arena] §8- §7Sets spawn.");
-   sender.sendMessage(Core.infoList + "/lasertag arena setGreenSpawn [arena] §8- §7Sets spawn.");
-   return;
-  }
+     }
 
-  else if (args.length == 3 || args.length == 4){
-   if ((!(args[1].equalsIgnoreCase("create") || args[1].equalsIgnoreCase("maxPlayers") ||
-           args[1].equalsIgnoreCase("minPlayers"))) && args.length == 4) {
-    sender.sendMessage(Core.warning + "Invaild argument ammount.");
-    return;
-   }
-  }
+     public void lasertagAnnounce(CommandSender sender) {
+      Bukkit.getServer().broadcastMessage("§e" + sender.getName() + "§8: §f§lStarting a new round! §fCome join me!");
+     }
+     public void lasertag(CommandSender sender){
+      sender.sendMessage(Core.info + "Currently running §cLaser Tag §lBETA");
+      sender.sendMessage(Core.info + "Developed by: §cFlipwhatthezip2 §eand §cReadySetPawn");
+      sender.sendMessage(Core.info + "For a list of commands type: §c/lasertag §lhelp");
+     }
+     public void lasertagdebug(CommandSender sender){
+      sender.sendMessage(Core.info + "Displaying debug info:");
+      sender.sendMessage(Core.info + "Currently running build §c§lLS.b.01");
+      sender.sendMessage(Core.info + "Report reference #: §c1.b.a");
+      sender.sendMessage(Core.info + "Current game status: §c§lN/A");
+     }
+     public void lasertagarena(CommandSender sender, String[] args){
+      if (args.length == 1) {
+       sender.sendMessage(Core.info + "Commands for §c§lLASERTAG ARENAS§e:");
+       sender.sendMessage(Core.infoList + "/lasertag arena create [arena] [world] §8- §7Creates arena.");
+       sender.sendMessage(Core.infoList + "/lasertag arena delete [arena] §8- §7Deletes arena.");
+       sender.sendMessage(Core.infoList + "/lasertag arena maxPlayer [arena] [maxPlayers] §8- §7Sets max players.");
+       sender.sendMessage(Core.infoList + "/lasertag arena minPlayer [arena] [minPlayers] §8- §7Sets min players.");
+       sender.sendMessage(Core.infoList + "/lasertag arena setYellowSpawn [arena] §8- §7Sets spawn.");
+       sender.sendMessage(Core.infoList + "/lasertag arena setGreenSpawn [arena] §8- §7Sets spawn.");
+       return;
+      }
 
-  if (args[1].equalsIgnoreCase("create")){
+      else if (args.length == 3 || args.length == 4){
+       if ((!(args[1].equalsIgnoreCase("create") || args[1].equalsIgnoreCase("maxPlayers") ||
+               args[1].equalsIgnoreCase("minPlayers"))) && args.length == 4) {
+        sender.sendMessage(Core.warning + "Invaild argument ammount.");
+        return;
+       }
+      }
 
-   if (args.length != 3){
-    sender.sendMessage(Core.warning + "Invalid argument amount");
-    return;
-   }
+      if (args[1].equalsIgnoreCase("create")){
 
-   if (arenasFile.getArenaNames().contains(args[2])){
-    sender.sendMessage(Core.warning + "Invaild arena name. Is it created?");
-    return;
-   }
+       if (args.length != 3){
+        sender.sendMessage(Core.warning + "Invalid argument amount");
+        return;
+       }
 
-   if (Bukkit.getWorld(args[2]) == null){
-    sender.sendMessage(Core.warning + "Invaild world name. Make sure you input the correct world name.");
-    return;
-   }
+       if (arenasFile.getArenaNames().contains(args[2])){
+        sender.sendMessage(Core.warning + "Invaild arena name. Is it created?");
+        return;
+       }
 
-   World world = Bukkit.getWorld(args[2]);
+       if (Bukkit.getWorld(args[2]) == null){
+        sender.sendMessage(Core.warning + "Invaild world name. Make sure you input the correct world name.");
+        return;
+       }
 
-   ArenaProperties ap = new ArenaProperties(world, 4, 12, args[2]);
-   Arena arena = new Arena(core, ap, core.getLaserGun());
-   core.getArenasFile().addArena(arena);
+       World world = Bukkit.getWorld(args[2]);
 
-   sender.sendMessage(Core.success + "Successfully created the arena: §l" + args[2] + "§a!");
-   sender.sendMessage(Core.success + "To make the arena valid please configure!");
-  }
+       ArenaProperties ap = new ArenaProperties(world, 4, 12, args[2]);
+       Arena arena = new Arena(core, ap, core.getLaserGun());
+       core.getArenasFile().addArena(arena);
 
-  else if (args[1].equalsIgnoreCase("delete")){
-   core.getArenasFile().deleteArena(Arena.getArena(core, args[2]));
-   sender.sendMessage(Core.success + "Successfully deleted the arena: §l" + args[2] + "§a!");
-  }
+       sender.sendMessage(Core.success + "Successfully created the arena: §l" + args[2] + "§a!");
+       sender.sendMessage(Core.success + "To make the arena valid please configure!");
+      }
 
-  else if (args[1].equalsIgnoreCase("minPlayers") || args[1].equalsIgnoreCase("maxPlayers")){
+      else if (args[1].equalsIgnoreCase("delete")){
 
-   if (args.length != 4){
-    sender.sendMessage(Core.warning + "Invalid argument amount");
-    return;
-   }
+       if (Arena.getArena(core, args[2]) == null){
+        sender.sendMessage(Core.warning + "Specified arena does not exist");
+        return;
+       }
 
-   try {
-    Integer.parseInt(args[3]);
-   } catch (NumberFormatException e){
-    sender.sendMessage(Core.warning + "4th argument is an invaild integer.");
-    return;
-   }
+       core.getArenasFile().deleteArena(Arena.getArena(core, args[2]));
+       sender.sendMessage(Core.success + "Successfully deleted the arena: §l" + args[2] + "§a!");
+      }
 
-   ArenaProperties ap = Arena.getArena(core, args[2]).getProperties();
+      else if (args[1].equalsIgnoreCase("minPlayers") || args[1].equalsIgnoreCase("maxPlayers")){
 
-   if (args[1].equalsIgnoreCase("minPlayers")){
-    ap.setMinimumPlayers(Integer.parseInt(args[3]));
-    sender.sendMessage(Core.success + "Successfully set the §lMIN §aplayers!");
-   }
+       if (args.length != 4){
+        sender.sendMessage(Core.warning + "Invalid argument amount");
+        return;
+       }
 
-   if (args[1].equalsIgnoreCase("maxPlayers")){
-    ap.setMaximumPlayers(Integer.parseInt(args[3]));
-    sender.sendMessage(Core.success + "Successfully set the §lMAX §aplayers!");
-   }
+       try {
+        Integer.parseInt(args[3]);
+       } catch (NumberFormatException e){
+        sender.sendMessage(Core.warning + "4th argument is an invaild integer.");
+        return;
+       }
 
-  }
+       ArenaProperties ap = Arena.getArena(core, args[2]).getProperties();
 
-  else if (args[1].equalsIgnoreCase("setYellowSpawn") || args[1].equalsIgnoreCase("setGreenSpawn")){
-   if (!(sender instanceof Player)){
-    sender.sendMessage(Core.warning + "Spawn setting failed. You must be ingame to set a spawn!");
-    return;
-   }
+       if (args[1].equalsIgnoreCase("minPlayers")){
+        ap.setMinimumPlayers(Integer.parseInt(args[3]));
+        sender.sendMessage(Core.success + "Successfully set the §lMIN §aplayers!");
+       }
 
-   Player player = (Player) sender;
+       if (args[1].equalsIgnoreCase("maxPlayers")){
+        ap.setMaximumPlayers(Integer.parseInt(args[3]));
+        sender.sendMessage(Core.success + "Successfully set the §lMAX §aplayers!");
+       }
 
-   if (args.length != 3){
-    sender.sendMessage(Core.warning + "Invalid argument amount");
-    return;
-   }
+      }
 
-   if (!arenasFile.getArenaNames().contains(args[2])){
-    sender.sendMessage(Core.warning + "Specified arena does not exist");
-    return;
-   }
+      else if (args[1].equalsIgnoreCase("setYellowSpawn") || args[1].equalsIgnoreCase("setGreenSpawn")){
+       if (!(sender instanceof Player)){
+        sender.sendMessage(Core.warning + "Spawn setting failed. You must be ingame to set a spawn!");
+        return;
+       }
 
-   if (args[1].equalsIgnoreCase("setYellowSpawn")){
-    core.getArenasFile().setYellowSpawn(args[2], player.getLocation());
-    sender.sendMessage(Core.success + "Successfully set the §e§lYELLOW §aspawn!");
-   }
+       Player player = (Player) sender;
 
-   if (args[1].equalsIgnoreCase("setGreenSpawn")){
-    core.getArenasFile().setGreenSpawn(args[2], player.getLocation());
-    sender.sendMessage(Core.success + "Successfully set the §2§lGREEN §aspawn!");
-   }
-  }
+       if (args.length != 3){
+        sender.sendMessage(Core.warning + "Invalid argument amount");
+        return;
+       }
 
-  else if (args[1].equalsIgnoreCase("setYellowBeacon") || args[1].equalsIgnoreCase("setGreenBeacon")){
-   if (!(sender instanceof Player)){
-    sender.sendMessage(Core.warning + "Beacon setting failed. You must be ingame to set a spawn!");
-    return;
-   }
+       if (!arenasFile.getArenaNames().contains(args[2])){
+        sender.sendMessage(Core.warning + "Specified arena does not exist");
+        return;
+       }
 
-   Player player = (Player) sender;
+       if (args[1].equalsIgnoreCase("setYellowSpawn")){
+        core.getArenasFile().setYellowSpawn(args[2], player.getLocation());
+        sender.sendMessage(Core.success + "Successfully set the §e§lYELLOW §aspawn!");
+       }
 
-   if (args.length != 3){
-    sender.sendMessage(Core.warning + "Invalid argument amount");
-    return;
-   }
+       if (args[1].equalsIgnoreCase("setGreenSpawn")){
+        core.getArenasFile().setGreenSpawn(args[2], player.getLocation());
+        sender.sendMessage(Core.success + "Successfully set the §2§lGREEN §aspawn!");
+       }
+      }
 
-   if (!arenasFile.getArenaNames().contains(args[2])){
-    sender.sendMessage(Core.warning + "Specified arena does not exist");
-    return;
-   }
+      else if (args[1].equalsIgnoreCase("setYellowBeacon") || args[1].equalsIgnoreCase("setGreenBeacon")){
+       if (!(sender instanceof Player)){
+        sender.sendMessage(Core.warning + "Beacon setting failed. You must be ingame to set a spawn!");
+        return;
+       }
 
-   if (args[1].equalsIgnoreCase("setYellowBeacon")){
-    core.getArenasFile().setYellowBeacon(args[2], player.getLocation());
-    sender.sendMessage(Core.success + "Successfully set the §e§lYELLOW §abeacon!");
-   }
+       Player player = (Player) sender;
 
-   if (args[1].equalsIgnoreCase("setGreenBeacon")){
-    core.getArenasFile().setGreenBeacon(args[2], player.getLocation());
-    sender.sendMessage(Core.success + "Successfully set the §2§lGREEN §abeacon!");
-   }
-  }
+       if (args.length != 3){
+        sender.sendMessage(Core.warning + "Invalid argument amount");
+        return;
+       }
 
- }
- public void lasertaghelp(CommandSender sender){
-  sender.sendMessage(Core.info + "Commands for §c§lLASERTAG§e:");
-  sender.sendMessage(Core.infoList + "/lasertag debug §8- §7Displays the current builds debug info.");
-  sender.sendMessage(Core.infoList + "/lasertag info §8- §7Displays the plugin info.");
-  sender.sendMessage(Core.infoList + "/lasertag arena §8- §7Displays all arenas commands.");
-  sender.sendMessage(Core.infoList + "/lasertag game §8- §7Displays the current games info.");
-  sender.sendMessage(Core.infoList + "/lasertag start §8- §7Force starts the current game.");
-  sender.sendMessage(Core.infoList + "/lasertag stop §8- §7Force stops the current game.");
- }
-}
+       if (!arenasFile.getArenaNames().contains(args[2])){
+        sender.sendMessage(Core.warning + "Specified arena does not exist");
+        return;
+       }
+
+       if (args[1].equalsIgnoreCase("setYellowBeacon")){
+        core.getArenasFile().setYellowBeacon(args[2], player.getLocation());
+        sender.sendMessage(Core.success + "Successfully set the §e§lYELLOW §abeacon!");
+       }
+
+       if (args[1].equalsIgnoreCase("setGreenBeacon")){
+        core.getArenasFile().setGreenBeacon(args[2], player.getLocation());
+        sender.sendMessage(Core.success + "Successfully set the §2§lGREEN §abeacon!");
+       }
+      }
+
+     }
+     public void lasertaghelp(CommandSender sender){
+      sender.sendMessage(Core.info + "Commands for §c§lLASERTAG§e:");
+      sender.sendMessage(Core.infoList + "/lasertag debug §8- §7Displays the current builds debug info.");
+      sender.sendMessage(Core.infoList + "/lasertag info §8- §7Displays the plugin info.");
+      sender.sendMessage(Core.infoList + "/lasertag arena §8- §7Displays all arenas commands.");
+      sender.sendMessage(Core.infoList + "/lasertag game §8- §7Displays the current games info.");
+      sender.sendMessage(Core.infoList + "/lasertag start §8- §7Force starts the current game.");
+      sender.sendMessage(Core.infoList + "/lasertag stop §8- §7Force stops the current game.");
+     }
+    }

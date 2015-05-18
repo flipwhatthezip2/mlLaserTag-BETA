@@ -34,24 +34,25 @@ public class LaserTagBeacon {
         this.arena = arena;
         this.team = team;
 
-        this.beaconLocation = core.getArenasFile().getBeacon(arena.getProperties().getArenaName(), team);
+        this.beaconLocation = core.getArenasFile().getBeacon(arena.getProperties().getArenaName(), team).getBlock().getLocation();
         this.beacon = (EnderCrystal) arena.getProperties().getWorld().spawnEntity(beaconLocation, EntityType.ENDER_CRYSTAL);
 
+        this.establishIndicatorRing();
         this.setRing(BeaconLife.GREEN);
     }
 
     public void establishIndicatorRing(){
         indicatorRing.clear();
 
-        indicatorRing.add(beaconLocation.getBlock().getRelative(BlockFace.EAST));
-        indicatorRing.add(beaconLocation.getBlock().getRelative(BlockFace.WEST));
-        indicatorRing.add(beaconLocation.getBlock().getRelative(BlockFace.NORTH));
-        indicatorRing.add(beaconLocation.getBlock().getRelative(BlockFace.SOUTH));
+        indicatorRing.add(beaconLocation.getBlock().getRelative(BlockFace.EAST).getRelative(BlockFace.DOWN));
+        indicatorRing.add(beaconLocation.getBlock().getRelative(BlockFace.WEST).getRelative(BlockFace.DOWN));
+        indicatorRing.add(beaconLocation.getBlock().getRelative(BlockFace.NORTH).getRelative(BlockFace.DOWN));
+        indicatorRing.add(beaconLocation.getBlock().getRelative(BlockFace.SOUTH).getRelative(BlockFace.DOWN));
 
-        indicatorRing.add(beaconLocation.getBlock().getRelative(BlockFace.NORTH_EAST));
-        indicatorRing.add(beaconLocation.getBlock().getRelative(BlockFace.NORTH_WEST));
-        indicatorRing.add(beaconLocation.getBlock().getRelative(BlockFace.SOUTH_EAST));
-        indicatorRing.add(beaconLocation.getBlock().getRelative(BlockFace.SOUTH_WEST));
+        indicatorRing.add(beaconLocation.getBlock().getRelative(BlockFace.NORTH_EAST).getRelative(BlockFace.DOWN));
+        indicatorRing.add(beaconLocation.getBlock().getRelative(BlockFace.NORTH_WEST).getRelative(BlockFace.DOWN));
+        indicatorRing.add(beaconLocation.getBlock().getRelative(BlockFace.SOUTH_EAST).getRelative(BlockFace.DOWN));
+        indicatorRing.add(beaconLocation.getBlock().getRelative(BlockFace.SOUTH_WEST).getRelative(BlockFace.DOWN));
     }
 
     public void setLife(int life){
@@ -88,7 +89,7 @@ public class LaserTagBeacon {
             b.setType(material);
             b.setData(id);
 
-            arena.getProperties().getWorld().playEffect(b.getLocation(), Effect.STEP_SOUND, b.getTypeId() + "_" + b.getData(), 20);
+            arena.getProperties().getWorld().playEffect(b.getLocation(), Effect.STEP_SOUND, b.getTypeId(), 20);
         }
     }
 

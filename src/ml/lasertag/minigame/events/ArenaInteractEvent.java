@@ -10,18 +10,12 @@ public class ArenaInteractEvent extends Event {
 
     public static final HandlerList handlerList = new HandlerList();
 
-    private Player player;
     private ArenaAction arenaAction;
     private Arena arena;
 
-    public ArenaInteractEvent(Player player, ArenaAction arenaAction, Arena arena){
-        this.player = player;
+    public ArenaInteractEvent(ArenaAction arenaAction, Arena arena){
         this.arenaAction = arenaAction;
         this.arena = arena;
-    }
-
-    public Player getPlayer(){
-        return this.player;
     }
 
     public ArenaAction getArenaAction(){
@@ -41,6 +35,6 @@ public class ArenaInteractEvent extends Event {
     }
 
     public enum ArenaAction {
-        JOIN, LEAVE;
+        JOIN, LEAVE, CREATE, DELETE;
     }
 }

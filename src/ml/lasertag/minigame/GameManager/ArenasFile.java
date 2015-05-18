@@ -1,6 +1,7 @@
 package ml.lasertag.minigame.GameManager;
 
 import ml.lasertag.minigame.Core;
+import ml.lasertag.minigame.events.ArenaInteractEvent;
 import ml.lasertag.minigame.game.TEAM;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -58,9 +59,14 @@ public class ArenasFile {
   arenasFile.set(arenaName + ".MaxPlayers", arena.getProperties().getMaximumPlayers());
   arenasFile.set(arenaName + ".GreenSpawn", null);
   arenasFile.set(arenaName + ".YellowSpawn", null);
+  arenasFile.set(arenaName + ".GreenBeacon", null);
+  arenasFile.set(arenaName + ".YellowBeacon", null);
 
   this.setGreenSpawn(arena.getProperties().getArenaName(), arena.getProperties().getWorld().getSpawnLocation());
   this.setYellowSpawn(arena.getProperties().getArenaName(), arena.getProperties().getWorld().getSpawnLocation());
+
+  this.setGreenBeacon(arena.getProperties().getArenaName(), arena.getProperties().getWorld().getSpawnLocation());
+  this.setYellowBeacon(arena.getProperties().getArenaName(), arena.getProperties().getWorld().getSpawnLocation());
 
   this.save();
  }
@@ -79,6 +85,8 @@ public class ArenasFile {
  }
 
  public void deleteArena(Arena arena){
+  Bukkit.getPluginManager().callEvent(new ArenaInteractEvent(ArenaInteractEvent.ArenaAction.DELETE, arena));
+
   arenas.remove(arena);
   arenaNames.remove(arena.getProperties().getArenaName());
 
@@ -122,17 +130,17 @@ public class ArenasFile {
 
  public Location getGreenSpawn(String arenaName){
 
-  World world = Bukkit.getWorld(arenasFile.getString(arenaName + ".World"));
-  int x = Integer.parseInt(arenasFile.get(arenaName + ".GreenSpawn").toString().split(", ")[0]);
-  int y = Integer.parseInt(arenasFile.get(arenaName + ".GreenSpawn").toString().split(", ")[1]);
-  int z = Integer.parseInt(arenasFile.get(arenaName + ".GreenSpawn").toString().split(", ")[2]);
+   World world = Bukkit.getWorld(arenaName);
+   int x = Integer.parseInt(arenasFile.get(arenaName + ".GreenSpawn").toString().split(", ")[0]);
+   int y = Integer.parseInt(arenasFile.get(arenaName + ".GreenSpawn").toString().split(", ")[1]);
+   int z = Integer.parseInt(arenasFile.get(arenaName + ".GreenSpawn").toString().split(", ")[2]);
 
-  return new Location(world, x, y, z);
+   return new Location(world, x, y, z);
  }
 
  public Location getYellowSpawn(String arenaName){
 
-  World world = Bukkit.getWorld(arenasFile.getString(arenaName + ".World"));
+  World world = Bukkit.getWorld(arenaName);
   int x = Integer.parseInt(arenasFile.get(arenaName + ".YellowSpawn").toString().split(", ")[0]);
   int y = Integer.parseInt(arenasFile.get(arenaName + ".YellowSpawn").toString().split(", ")[1]);
   int z = Integer.parseInt(arenasFile.get(arenaName + ".YellowSpawn").toString().split(", ")[2]);
@@ -142,22 +150,34 @@ public class ArenasFile {
 
  public Location getGreenBeacon(String arenaName){
 
-  World world = Bukkit.getWorld(arenasFile.getString(arenaName + ".World"));
-  int x = Integer.parseInt(arenasFile.get(arenaName + ".GreenBeacon").toString().split(", ")[0]);
-  int y = Integer.parseInt(arenasFile.get(arenaName + ".GreenBeacon").toString().split(", ")[1]);
-  int z = Integer.parseInt(arenasFile.get(arenaName + ".GreenBeacon").toString().split(", ")[2]);
+  World world = Bukkit.getWorld(arenaName);
 
-  return new Location(world, x, y, z);
+  try {
+   int x = Integer.parseInt(arenasFile.get(arenaName + ".GreenBeacon").toString().split(", ")[0]);
+   int y = Integer.parseInt(arenasFile.get(arenaName + ".GreenBeacon").toString().split(", ")[1]);
+   int z = Integer.parseInt(arenasFile.get(arenaName + ".GreenBeacon").toString().split(", ")[2]);
+
+   return new Location(world, x, y, z);
+  } catch (NullPointerException e){
+   Bukkit.getLogger().info("FAILED TO GET GREEN BEACON LOCATION FOR " + arenaName);
+   return world.getSpawnLocation();
+  }
  }
 
  public Location getYellowBeacon(String arenaName){
 
-  World world = Bukkit.getWorld(arenasFile.getString(arenaName + ".World"));
-  int x = Integer.parseInt(arenasFile.get(arenaName + ".YellowBeacon").toString().split(", ")[0]);
-  int y = Integer.parseInt(arenasFile.get(arenaName + ".YellowBeacon").toString().split(", ")[1]);
-  int z = Integer.parseInt(arenasFile.get(arenaName + ".YellowBeacon").toString().split(", ")[2]);
+  World world = Bukkit.getWorld(arenaName);
 
-  return new Location(world, x, y, z);
+  try {
+   int x = Integer.parseInt(arenasFile.get(arenaName + ".YellowBeacon").toString().split(", ")[0]);
+   int y = Integer.parseInt(arenasFile.get(arenaName + ".YellowBeacon").toString().split(", ")[1]);
+   int z = Integer.parseInt(arenasFile.get(arenaName + ".YellowBeacon").toString().split(", ")[2]);
+
+   return new Location(world, x, y, z);
+  } catch (NullPointerException e){
+   Bukkit.getLogger().info("FAILED TO GET YELLOW BEACON LOCATION FOR " + arenaName);
+   return world.getSpawnLocation();
+  }
  }
 
  public Location getBeacon(String arenaName, TEAM team){
