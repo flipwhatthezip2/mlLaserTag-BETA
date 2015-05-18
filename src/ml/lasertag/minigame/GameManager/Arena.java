@@ -70,6 +70,7 @@ public class Arena {
   player.teleport(getSpawn(Teams.getTeam(player)));
   TEAM.setUniform(player);
   player.getInventory().setItem(0, gun);
+  if (players.size() == properties.getMaximumPlayers()) this.canJoin = false;
  }
 
  public void removePlayer(Player player){
@@ -78,6 +79,7 @@ public class Arena {
   player.getInventory().clear();
   player.getInventory().setArmorContents(null);
   player.setGameMode(GameMode.ADVENTURE);
+  if (arenaState == ArenaState.WAITING || arenaState == ArenaState.COUNTDOWN) this.canJoin = true;
  }
 
  public ArenaState getArenaState(){
@@ -122,6 +124,7 @@ public class Arena {
   this.arenaState = ArenaState.IN_GAME;
   this.broadcastMessage(Core.success + "The game has be§lgun§a!");
   this.spawnPlayers();
+  this.canJoin = false;
  }
 
  public void endGame(){
@@ -133,6 +136,7 @@ public class Arena {
   this.emptyPlayerList();
   for (Player p : players) p.teleport(Bukkit.getWorld("Lobby").getSpawnLocation());
   this.arenaState = ArenaState.WAITING;
+  this.canJoin = true;
  }
 
  public void emptyPlayerList() {
