@@ -13,6 +13,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
+import org.bukkit.event.weather.WeatherChangeEvent;
 import org.bukkit.inventory.Inventory;
 
 public class Restrictions implements Listener {
@@ -68,6 +69,11 @@ public class Restrictions implements Listener {
     }
 
     @EventHandler
+    public void weatherChange (WeatherChangeEvent e){
+        e.setCancelled(true);
+    }
+
+    @EventHandler
     public void onEntityDamage(EntityDamageByEntityEvent e){
         e.setCancelled(true);
     }
@@ -76,7 +82,6 @@ public class Restrictions implements Listener {
 
     @EventHandler
     public void onInventoryMove(InventoryClickEvent e){
-        e.setCancelled(true);
         Player p = (Player) e.getWhoClicked();
         Inventory inventory = e.getClickedInventory();
         if (inventory.getName().equalsIgnoreCase("§4§lLASERTAG! §8Pick an Arena")){
@@ -93,6 +98,7 @@ public class Restrictions implements Listener {
                     p.sendMessage(Core.warningList + "§7Kill other players to weaken their teams beacon.");
                     p.sendMessage(Core.warningList + "§7First team to destroy the other teams beacon in §c5 min §7wins!");
                     p.sendMessage(Core.warningList + "Camping spawns and beacons result in debuffs, beware!");
+                    e.setCancelled(true);
                 }
             }
         }
