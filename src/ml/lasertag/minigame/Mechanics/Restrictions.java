@@ -1,7 +1,6 @@
 package ml.lasertag.minigame.Mechanics;
 
 import ml.lasertag.minigame.Core;
-import ml.lasertag.minigame.GameManager.ArenaSelector;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -32,17 +31,35 @@ public class Restrictions implements Listener {
 
     @EventHandler
     public void onInteract(PlayerInteractEvent e){
-        e.setCancelled(true);
+        Player player = e.getPlayer();
+        if (player.getGameMode() == GameMode.CREATIVE){
+            e.setCancelled(false);
+            return;
+        } else {
+            e.setCancelled(true);
+        }
     }
 
     @EventHandler
     public void onItemDrop(PlayerDropItemEvent e){
-        e.setCancelled(true);
+        Player player = e.getPlayer();
+        if (player.getGameMode() == GameMode.CREATIVE){
+            e.setCancelled(false);
+            return;
+        } else {
+            e.setCancelled(true);
+        }
     }
 
     @EventHandler
     public void onItemGrab(PlayerPickupItemEvent e){
-        e.setCancelled(true);
+        Player player = e.getPlayer();
+        if (player.getGameMode() == GameMode.CREATIVE){
+            e.setCancelled(false);
+            return;
+        } else {
+            e.setCancelled(true);
+        }
     }
 
     @EventHandler
@@ -69,11 +86,12 @@ public class Restrictions implements Listener {
                     p.sendMessage(Core.warningList + "§7When you first join a game you are put one of §c2 teams");
                     p.sendMessage(Core.warningList + "§7Both teams have associated colors, §2§lGREEN §7and §e§lYELLOW");
                     p.sendMessage(Core.warningList + "§7You spawn in with 1 essential item, your §claser gun");
-                    p.sendMessage(Core.warningList + "§7The objective of the game is to destroy the other teams §cbeacon");
+                    p.sendMessage(Core.warningList + "§7The object of the game is destroy the other teams §cbeacon");
                     p.sendMessage(Core.warningList + "§7To destroy the beacon you must shoot at it with your laser");
-                    p.sendMessage(Core.warningList + "§7Every §c4 hits §7the beacon takes causes it to loose 1 health (out of 5)");
+                    p.sendMessage(Core.warningList + "§7Every §c4 hits §7the beacon takes causes it to loose 1 health");
+                    p.sendMessage(Core.warningList + "§7Each teams beacon has §c5 lives");
                     p.sendMessage(Core.warningList + "§7Kill other players to weaken their teams beacon.");
-                    p.sendMessage(Core.warningList + "§7First team to take out the other teams beacon within §c5min §7wins!");
+                    p.sendMessage(Core.warningList + "§7First team to destroy the other teams beacon in §c5 min §7wins!");
                     p.sendMessage(Core.warningList + "Camping spawns and beacons result in debuffs, beware!");
                 }
             }
