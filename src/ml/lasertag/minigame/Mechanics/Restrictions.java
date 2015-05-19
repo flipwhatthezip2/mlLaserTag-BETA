@@ -71,7 +71,7 @@ public class Restrictions implements Listener {
 
     @EventHandler
     public void onPlayerDamage(EntityDamageEvent e){
-        if (e.getEntity() instanceof Player && e.getCause() == EntityDamageEvent.DamageCause.FALL) e.setCancelled(true);
+        if (e.getCause() == EntityDamageEvent.DamageCause.FALL) e.setCancelled(true);
     }
 
     @EventHandler
@@ -90,7 +90,7 @@ public class Restrictions implements Listener {
     public void onInventoryMove(InventoryClickEvent e){
         Player p = (Player) e.getWhoClicked();
         Inventory inventory = e.getClickedInventory();
-        if (inventory.getName().equalsIgnoreCase("§4§lLASERTAG! §8Pick an Arena")){
+        if (inventory.getName() != null && inventory.getName().equalsIgnoreCase("§4§lLASERTAG! §8Pick an Arena")){
             if (e.getCurrentItem() != null){
                 if (e.getCurrentItem().getType() == Material.STAINED_GLASS_PANE){
                     p.sendMessage(Core.warning + "How to play §lLASERTAG!§c:");

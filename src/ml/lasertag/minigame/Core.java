@@ -21,16 +21,13 @@ import ml.lasertag.minigame.Mechanics.PlayerJoin;
 import ml.lasertag.minigame.Mechanics.Restrictions;
 import ml.lasertag.minigame.api.Feature;
 import ml.lasertag.minigame.commands.LaserTag;
-import ml.lasertag.minigame.game.GameStatus;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.entity.EnderCrystal;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitRunnable;
 
 public class Core extends JavaPlugin {
 
@@ -43,8 +40,6 @@ public class Core extends JavaPlugin {
     public static String successList = "§2§l> §a";
     public static String warning = "§4§l>> §c";
     public static String warningList = "§4§l> §c";
-
-    public static GameStatus currentState;
 
     public void onEnable(){
         Bukkit.getServer().getLogger().info(">> Minigame 'LaserTag' is successfully running on: " + Bukkit.getServerName());
@@ -73,6 +68,12 @@ public class Core extends JavaPlugin {
             for (Entity e : w.getEntities()){
                 if (e instanceof EnderCrystal) e.remove();
             }
+        }
+
+        for (Player p : Bukkit.getOnlinePlayers()){
+            p.getInventory().clear();
+            p.getInventory().setArmorContents(null);
+            p.updateInventory();
         }
 
 

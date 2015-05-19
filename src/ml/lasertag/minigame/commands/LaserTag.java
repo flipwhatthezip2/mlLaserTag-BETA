@@ -173,7 +173,7 @@ public class LaserTag implements CommandExecutor {
 
        World world = Bukkit.getWorld(args[2]);
 
-       ArenaProperties ap = new ArenaProperties(world, 4, 12, args[2]);
+       ArenaProperties ap = new ArenaProperties(core, world, 4, 12, args[2]);
        Arena arena = new Arena(core, ap, core.getLaserGun());
        core.getArenasFile().addArena(arena);
 

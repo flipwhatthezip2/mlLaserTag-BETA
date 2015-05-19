@@ -3,8 +3,10 @@ package ml.lasertag.minigame.Mechanics;
 
 import ml.lasertag.minigame.Core;
 import ml.lasertag.minigame.GameManager.Arena;
+import ml.lasertag.minigame.api.ParticlePlayer;
 import ml.lasertag.minigame.game.TEAM;
 import net.md_5.bungee.api.ChatColor;
+import net.minecraft.server.v1_8_R2.EnumParticle;
 import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -106,9 +108,14 @@ public class LaserTagBeacon {
     public void death(){
         arena.getProperties().getWorld().playEffect(beaconLocation, Effect.EXPLOSION_LARGE, 20, 20);
         arena.getProperties().getWorld().playSound(beaconLocation, Sound.ENDERDRAGON_DEATH, 1, 100);
+
+        arena.endGame();
     }
 
     public void dealDamage(int damage){
+        ParticlePlayer.playParticle(EnumParticle.EXPLOSION_HUGE, beaconLocation.clone().add(0.5, 2, 0.5), 1);
+        arena.getProperties().getWorld().playSound(beaconLocation, Sound.BLAZE_HIT, 1, 100);
+
         health = health - damage;
 
         if (health >= 16) this.setLife(5);

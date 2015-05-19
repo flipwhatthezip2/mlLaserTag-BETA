@@ -74,7 +74,7 @@ public class ArenasFile {
  public void loadArenas(){
   for (String arenaName : arenasFile.getStringList("Arenas")){
    ArenaProperties properties =
-           new ArenaProperties(Bukkit.getWorld(arenasFile.getString(arenaName + ".World")),
+           new ArenaProperties(core, Bukkit.getWorld(arenasFile.getString(arenaName + ".World")),
                    arenasFile.getInt(arenaName + ".MinPlayers"),
                    arenasFile.getInt(arenaName + ".MaxPlayers"),
                    arenaName);
@@ -180,9 +180,26 @@ public class ArenasFile {
   }
  }
 
+ public void setMinimumPlayers(String arenaName, int minimumPlayers){
+  arenasFile.set(arenaName + ".MinPlayers", minimumPlayers);
+  this.save();
+ }
+
+ public void setMaximumPlayers(String arenaName, int maximumPlayers){
+  arenasFile.set(arenaName + ".MaxPlayers", maximumPlayers);
+  this.save();
+ }
+
  public Location getBeacon(String arenaName, TEAM team){
   if (team == TEAM.YELLOW) return this.getYellowBeacon(arenaName);
   return this.getGreenBeacon(arenaName);
+ }
+
+ public Arena getArena(String arenaName){
+  for (Arena arena : arenas){
+   if (arena.getProperties().getArenaName() == arenaName) return arena;
+  }
+  return null;
  }
 
  public void save(){

@@ -35,6 +35,6 @@ public class ArenaInteractEvent extends Event {
     }
 
     public enum ArenaAction {
-        JOIN, LEAVE, CREATE, DELETE;
+        JOIN, LEAVE, CREATE, DELETE, UPDATE_STAT;
     }
 }

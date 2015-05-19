@@ -39,7 +39,7 @@ public class Arena {
  private LaserTagBeacon yellowBeacon;
  private LaserTagBeacon greenBeacon;
 
- private boolean pvp = true;
+ private boolean pvp = false;
 
 
  public Arena(Core core, ArenaProperties properties, LaserGun laserGun){
@@ -99,6 +99,7 @@ public class Arena {
   TEAM.setUniform(player);
   player.getInventory().setItem(0, gun);
   if (players.size() == properties.getMaximumPlayers()) this.canJoin = false;
+  if (players.size() >= properties.getMinimumPlayers()) this.startCountdown();
  }
 
  public void removePlayer(Player player){
@@ -108,6 +109,7 @@ public class Arena {
   player.getInventory().setArmorContents(null);
   player.setGameMode(GameMode.ADVENTURE);
   if (arenaState == ArenaState.WAITING || arenaState == ArenaState.COUNTDOWN) this.canJoin = true;
+  if (players.size() < properties.getMinimumPlayers()) this.cancelCountdown();
  }
 
  public ArenaState getArenaState(){
@@ -133,6 +135,10 @@ public class Arena {
 
    @Override
    public void run(){
+    if (currentCountDownStage == 0){
+     startGame(); this.cancel(); return;
+    }
+
     broadcastMessage(Core.warning + "Game starting in: §l" + currentCountDownStage);
     currentCountDownStage--;
    }
@@ -154,8 +160,9 @@ public class Arena {
   this.spawnPlayers();
   this.canJoin = false;
 
-  this.yellowBeacon = new LaserTagBeacon(core, this, TEAM.YELLOW);
-  this.greenBeacon = new LaserTagBeacon(core, this, TEAM.GREEN);
+  for (Player p : players){
+   p.setGameMode(GameMode.ADVENTURE);
+  }
  }
 
  public void endGame(){
@@ -165,7 +172,7 @@ public class Arena {
   this.laserGun.resetCooldowns();
   this.broadcastMessage(Core.success + "The game has ended!");
   this.emptyPlayerList();
-  for (Player p : players) p.teleport(Bukkit.getWorld("Lobby").getSpawnLocation());
+  //for (Player p : players) p.teleport(Bukkit.getWorld("Lobby").getSpawnLocation());
   this.arenaState = ArenaState.WAITING;
   this.canJoin = true;
  }
