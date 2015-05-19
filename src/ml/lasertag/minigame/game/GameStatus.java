@@ -15,8 +15,8 @@ package ml.lasertag.minigame.game;
 
 public enum GameStatus {
 
- LOBBY,
- INGAME,
- RESTARTING;
+    LOBBY,
+    INGAME,
+    RESTARTING;
 
 }

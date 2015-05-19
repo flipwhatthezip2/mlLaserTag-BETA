@@ -20,30 +20,30 @@ import org.bukkit.scoreboard.*;
 
 public class Lobby {
 
- public static Scoreboard lobbyBoard;
+    public static Scoreboard lobbyBoard;
 
- public int lobbyCountdown = 30;
+    public int lobbyCountdown = 30;
 
- public static void setScoreboard(final Player p){
-  lobbyBoard = Bukkit.getServer().getScoreboardManager().getNewScoreboard();
+    public static void setScoreboard(final Player p){
+        lobbyBoard = Bukkit.getServer().getScoreboardManager().getNewScoreboard();
 
-  ScoreboardManager manager = Bukkit.getScoreboardManager();
-  Scoreboard board = manager.getNewScoreboard();
+        ScoreboardManager manager = Bukkit.getScoreboardManager();
+        Scoreboard board = manager.getNewScoreboard();
 
-  Objective lobbyBoard = board.registerNewObjective("lobbyBoard", "dummy");
+        Objective lobbyBoard = board.registerNewObjective("lobbyBoard", "dummy");
 
-  lobbyBoard.setDisplayName("         §c§lLASER TAG         ");
-  lobbyBoard.setDisplaySlot(DisplaySlot.SIDEBAR);
+        lobbyBoard.setDisplayName("         §c§lLASER TAG         ");
+        lobbyBoard.setDisplaySlot(DisplaySlot.SIDEBAR);
 
-  Score divider1 = lobbyBoard.getScore(" ");
-  Score playerOnlineText = lobbyBoard.getScore("§fReady you add text.");
+        Score divider1 = lobbyBoard.getScore(" ");
+        Score playerOnlineText = lobbyBoard.getScore("§fReady you add text.");
 
-  divider1.setScore(1);
-  playerOnlineText.setScore(0);
- }
+        divider1.setScore(1);
+        playerOnlineText.setScore(0);
+    }
 
- public static void setGameStatusLobby(){
-  // TODO: Add function to keep looking for minimum player requirements.
- }
+    public static void setGameStatusLobby(){
+        // TODO: Add function to keep looking for minimum player requirements.
+    }
 
 }

@@ -14,7 +14,6 @@ package ml.lasertag.minigame.Mechanics;
 
 import ml.lasertag.minigame.Core;
 import ml.lasertag.minigame.api.Feature;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -22,21 +21,16 @@ import org.bukkit.event.player.PlayerJoinEvent;
 
 public class PlayerJoin implements Listener {
 
- int start = 1; // starting point in your phrase, word, or letter
- int spaces = 20; // for spaces
+    @EventHandler
+    public void PlayerJoin(PlayerJoinEvent e){
+        final Player p = e.getPlayer();
 
+        e.setJoinMessage(Core.success + "§l" + p.getName() + " §ahas joined the server.");
 
- @EventHandler
- public void PlayerJoin(PlayerJoinEvent e){
-  final Player p = e.getPlayer();
+        Feature.sendTitle(p, 20, 200, 20, "§eWelcome to §c§lLASER TAG!", "§eA §6§lMineLegends §ecustom game!");
 
-  e.setJoinMessage(Core.success + "§l" + p.getName() + " §ahas joined the server.");
+        Feature.sendTabTitle(p, "§cPlaying on §lLASERTAG! §8- §c§lLASERTAG!", "§eA §6§lMineLegends §eoriginal game!");
 
-  Feature.sendTitle(p, 20, 200, 20, "§eWelcome to §c§lLASER TAG!", "§eA §6§lMineLegends §ecustom game!");
-  Feature.sendActionBar(p, "§2§l>> §aJoined server: §l" + Bukkit.getServerName());
-
-  Feature.sendTabTitle(p, "§6§lMineLegends! §8- §c§lLASERTAG!", "§eA §6§lMineLegends §eoriginal game!");
-
- }
+    }
 
 }
