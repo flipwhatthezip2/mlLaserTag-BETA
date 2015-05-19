@@ -43,6 +43,8 @@ public class Lobby {
         Score divider6 = lobbyBoard.getScore("      ");
         Score divider7 = lobbyBoard.getScore("       ");
 
+        Score line1 = lobbyBoard.getScore("§4-----------------");
+
         Score arenaNameText = lobbyBoard.getScore("§cArena Name:");
         Score arenaName = lobbyBoard.getScore("§7*GET NAME*");
         Score arenaPlayersText = lobbyBoard.getScore("§cPlayers:");
@@ -64,7 +66,7 @@ public class Lobby {
         divider4.setScore(1);
         yellowTeamText.setScore(0);
         yellowTeam.setScore(-1);
-        divider5.setScore(-2);
+        line1.setScore(-2);
     }
 
     public static void setGameStatusLobby(){
