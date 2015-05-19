@@ -4,9 +4,11 @@ package ml.lasertag.minigame.Mechanics;
 import ml.lasertag.minigame.Core;
 import ml.lasertag.minigame.GameManager.Arena;
 import ml.lasertag.minigame.game.TEAM;
+import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.EnderCrystal;
@@ -34,11 +36,14 @@ public class LaserTagBeacon {
         this.arena = arena;
         this.team = team;
 
-        this.beaconLocation = core.getArenasFile().getBeacon(arena.getProperties().getArenaName(), team).getBlock().getLocation();
+        this.beaconLocation = core.getArenasFile().getBeacon(arena.getProperties().getArenaName(), team).getBlock().getLocation().add(0.5, 0, 0.5);
         this.beacon = (EnderCrystal) arena.getProperties().getWorld().spawnEntity(beaconLocation, EntityType.ENDER_CRYSTAL);
 
         this.establishIndicatorRing();
         this.setRing(BeaconLife.GREEN);
+
+        beacon.setCustomName((team == TEAM.YELLOW ? ChatColor.GOLD + "Yellow" : ChatColor.DARK_GREEN + "Green") + " Team's Beacon");
+        beacon.setCustomNameVisible(true);
     }
 
     public void establishIndicatorRing(){
@@ -72,6 +77,10 @@ public class LaserTagBeacon {
             case 1:
                 setRing(BeaconLife.BLACK);
                 break;
+            case 0:
+                setRing(BeaconLife.BEDROCK);
+                this.death();
+                break;
         }
     }
 
@@ -84,6 +93,7 @@ public class LaserTagBeacon {
         else if (beaconLife == BeaconLife.ORANGE) id = 1;
         else if (beaconLife == BeaconLife.RED) id = 14;
         else if (beaconLife == BeaconLife.BLACK) id = 15;
+        else if (beaconLife == BeaconLife.BEDROCK){ id = 0; material = Material.BEDROCK;}
 
         for (Block b : indicatorRing){
             b.setType(material);
@@ -93,6 +103,11 @@ public class LaserTagBeacon {
         }
     }
 
+    public void death(){
+        arena.getProperties().getWorld().playEffect(beaconLocation, Effect.EXPLOSION_LARGE, 20, 20);
+        arena.getProperties().getWorld().playSound(beaconLocation, Sound.ENDERDRAGON_DEATH, 1, 100);
+    }
+
     public void dealDamage(int damage){
         health = health - damage;
 
@@ -100,7 +115,8 @@ public class LaserTagBeacon {
         else if (health >= 12) this.setLife(4);
         else if (health >= 8) this.setLife(3);
         else if (health >= 4) this.setLife(2);
-        else if (health >= 0) this.setLife(1);
+        else if (health > 0) this.setLife(1);
+        else if (health == 0) this.setLife(0);
 
     }
 
@@ -124,8 +140,12 @@ public class LaserTagBeacon {
         return this.team;
     }
 
+    public EnderCrystal getBeacon(){
+        return this.beacon;
+    }
+
     public enum BeaconLife {
-        GREEN, YELLOW, ORANGE, RED, BLACK;
+        GREEN, YELLOW, ORANGE, RED, BLACK, BEDROCK;
     }
 
 }

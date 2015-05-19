@@ -48,18 +48,8 @@ public class LaserTag implements CommandExecutor {
   else if (args[0].equalsIgnoreCase("join")) tryJoining(sender, args);
   else if (args[0].equalsIgnoreCase("leave")) tryLeaving(sender, args);
   else if (args[0].equalsIgnoreCase("spawnArenaSelector")) trySpawningArenaSelector(sender, args);
-  else if (args[0].equalsIgnoreCase("reload")) tryReloading(sender);
   return false;
  }
-    public void tryReloading(CommandSender sender){
-        if (!sender.isOp()){
-            sender.sendMessage(Core.warning + "You don't have permission to reload the server");
-            return;
-        }
-
-        core.customReload();
-        sender.sendMessage(Core.success + "Reloading...");
-    }
 
     public void trySpawningArenaSelector(CommandSender sender, String[] args){
       if (!sender.isOp()){

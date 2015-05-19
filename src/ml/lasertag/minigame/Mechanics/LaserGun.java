@@ -3,11 +3,14 @@ package ml.lasertag.minigame.Mechanics;
 import ml.lasertag.minigame.Core;
 import ml.lasertag.minigame.GameManager.Arena;
 import ml.lasertag.minigame.api.Feature;
+import ml.lasertag.minigame.events.LaserDamageBeaconEvent;
+import ml.lasertag.minigame.game.TEAM;
 import ml.lasertag.minigame.game.Teams;
 import net.minecraft.server.v1_8_R2.EnumParticle;
 import net.minecraft.server.v1_8_R2.PacketPlayOutWorldParticles;
 import org.bukkit.*;
 import org.bukkit.craftbukkit.v1_8_R2.entity.CraftPlayer;
+import org.bukkit.entity.EnderCrystal;
 import org.bukkit.entity.Firework;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -60,12 +63,15 @@ public class LaserGun implements Listener {
  public void shootLaser(Player player){
 
   List<Player> list = player.getWorld().getPlayers();
+  List<EnderCrystal> beacons = new ArrayList<EnderCrystal>();
   Location l = player.getEyeLocation();
 
   int range = 25;
 
-  for (org.bukkit.entity.Entity e : player.getWorld().getLivingEntities()){
+  for (org.bukkit.entity.Entity e : player.getWorld().getEntities()){
    if (e.getLocation().toVector().distance(l.toVector()) >= range) list.remove(e);
+   else if (e instanceof EnderCrystal) beacons.add((EnderCrystal) e);
+
   }
 
 
@@ -83,6 +89,25 @@ public class LaserGun implements Listener {
     if (!e.isDead() && e != player && e.getGameMode() == GameMode.ADVENTURE && Arena.getArena(core, e) != null){
      if (e.getLocation().toVector().distance(loc.toVector()) <= 1.5){
       damage(e, player);
+     }
+    }
+   }
+
+   for (EnderCrystal e : beacons){
+    for (Arena arena : core.getArenasFile().getArenas()){
+     if (Teams.getTeam(player) == TEAM.YELLOW){
+      if (arena.getGreenBeacon().getBeacon() == e && e.getLocation().toVector().distance(loc.toVector()) <= 1.5){
+       arena.getGreenBeacon().dealDamage(1);
+       Bukkit.getPluginManager().callEvent(new LaserDamageBeaconEvent(arena.getGreenBeacon(), player));
+       return;
+      }
+     }
+     else {
+      if (arena.getYellowBeacon().getBeacon() == e && e.getLocation().toVector().distance(loc.toVector()) <= 1.5){
+       arena.getYellowBeacon().dealDamage(1);
+       Bukkit.getPluginManager().callEvent(new LaserDamageBeaconEvent(arena.getYellowBeacon(), player));
+       return;
+      }
      }
     }
    }

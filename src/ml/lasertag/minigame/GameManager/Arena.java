@@ -53,6 +53,14 @@ public class Arena {
   Bukkit.getPluginManager().callEvent(new ArenaInteractEvent(ArenaInteractEvent.ArenaAction.CREATE, this));
  }
 
+ public LaserTagBeacon getYellowBeacon(){
+  return this.yellowBeacon;
+ }
+
+ public LaserTagBeacon getGreenBeacon(){
+  return this.greenBeacon;
+ }
+
  public ArenaProperties getProperties(){
   return this.properties;
  }

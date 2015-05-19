@@ -89,8 +89,6 @@ public class ArenaSelector implements Listener {
 
     @EventHandler
     public void onArenaClick(InventoryClickEvent e){
-        e.setCancelled(true);
-
         if (e.getWhoClicked() instanceof Player){
             Player player = (Player) e.getWhoClicked();
 
@@ -100,6 +98,7 @@ public class ArenaSelector implements Listener {
 
                 if (item.getType() == Material.SUGAR){
                     Bukkit.dispatchCommand(player, "lasertag join " + ChatColor.stripColor(item.getItemMeta().getDisplayName()));
+                    e.setCancelled(true);
                 }
 
             }

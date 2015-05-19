@@ -8,6 +8,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
@@ -21,6 +22,11 @@ public class Restrictions implements Listener {
 
     @EventHandler
     public void onFoodDrain(FoodLevelChangeEvent e){
+        e.setCancelled(true);
+    }
+
+    @EventHandler
+    public void onExplode(EntityExplodeEvent e){
         e.setCancelled(true);
     }
 

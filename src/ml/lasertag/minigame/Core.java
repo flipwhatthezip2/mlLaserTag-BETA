@@ -26,6 +26,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.entity.EnderCrystal;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -67,6 +68,16 @@ public class Core extends JavaPlugin {
         getCommand("lasertag").setExecutor(new LaserTag(this, arenasFile));
     }
 
+    public void onDisable(){
+        for (World w : Bukkit.getWorlds()){
+            for (Entity e : w.getEntities()){
+                if (e instanceof EnderCrystal) e.remove();
+            }
+        }
+
+
+    }
+
     public ArenasFile getArenasFile(){
         return this.arenasFile;
     }
@@ -81,22 +92,5 @@ public class Core extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new PlayerChat(), this);
         Bukkit.getPluginManager().registerEvents(new ArenaSelector(this), this);
         Bukkit.getPluginManager().registerEvents(new Restrictions(), this);
-    }
-
-    public void customReload(){
-        for (World w : Bukkit.getWorlds()){
-            for (LivingEntity le : w.getLivingEntities()){
-                if (le instanceof EnderCrystal) le.remove();
-            }
-        }
-
-        new BukkitRunnable(){
-
-            @Override
-            public void run(){
-                Bukkit.getServer().reload();
-            }
-
-        }.runTaskLater(this, 60L);
     }
 }
