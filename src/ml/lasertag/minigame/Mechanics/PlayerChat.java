@@ -31,14 +31,17 @@ public class PlayerChat implements Listener{
             for (Player p : Bukkit.getOnlinePlayers()){
                 p.sendMessage("§2[GREEN] " + e.getPlayer().getName() + "§8: §f" + message);
             }
+            return;
         } else if (Teams.getTeam(player) == TEAM.YELLOW){
             for (Player p : Bukkit.getOnlinePlayers()){
                 p.sendMessage("§e[YELLOW] " + e.getPlayer().getName() + "§8: §f" + message);
             }
+            return;
         } else {
             for (Player p : Bukkit.getOnlinePlayers()){
                 p.sendMessage("§c" + e.getPlayer().getName() + "§8: §f" + message);
             }
+            return;
         }
     }
 

@@ -32,7 +32,7 @@ public class PlayerJoin implements Listener {
 
         Feature.sendTabTitle(p, "§cPlaying on §lLASERTAG! §8- §c§lLASERTAG!", "§eA §6§lMineLegends §eoriginal game!");
 
-        Lobby.setScoreboard(p);
+        p.setScoreboard(Lobby.lobbyBoard);
     }
 
 }
