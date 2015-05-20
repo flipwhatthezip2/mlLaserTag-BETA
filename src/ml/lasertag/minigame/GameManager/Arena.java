@@ -188,7 +188,7 @@ public class Arena {
   this.pvp = false;
   this.broadcastTitle((greenBeacon.getHealth() > yellowBeacon.getHealth() ? ChatColor.DARK_GREEN + "Green " : ChatColor.YELLOW + "Yellow ") + "Team Won!",
                        ChatColor.GRAY + "The game has ended!");
-  PacketSender.broadcastSound("random.anil_land", properties.getWorld(), 100);
+  PacketSender.broadcastSound("random.levelup", properties.getWorld(), 100);
 
 
   new BukkitRunnable(){
@@ -202,7 +202,7 @@ public class Arena {
     arenaState = ArenaState.WAITING;
     canJoin = true;
     Bukkit.getPluginManager().callEvent(new ArenaInteractEvent(ArenaInteractEvent.ArenaAction.UPDATE_STAT, arena));
-    PacketSender.broadcastSound("random.anil_land", properties.getWorld(), 100);
+    PacketSender.broadcastSound("random.levelup", properties.getWorld(), 100);
    }
 
   }.runTaskLater(core, 160L);
