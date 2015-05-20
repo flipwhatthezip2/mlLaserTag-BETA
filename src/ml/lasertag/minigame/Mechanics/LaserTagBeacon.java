@@ -3,7 +3,7 @@ package ml.lasertag.minigame.Mechanics;
 
 import ml.lasertag.minigame.Core;
 import ml.lasertag.minigame.GameManager.Arena;
-import ml.lasertag.minigame.api.ParticlePlayer;
+import ml.lasertag.minigame.api.PacketSender;
 import ml.lasertag.minigame.game.TEAM;
 import net.md_5.bungee.api.ChatColor;
 import net.minecraft.server.v1_8_R2.EnumParticle;
@@ -106,14 +106,19 @@ public class LaserTagBeacon {
 
     public void death(){
         arena.getProperties().getWorld().playEffect(beaconLocation, Effect.EXPLOSION_LARGE, 20, 20);
-        arena.getProperties().getWorld().playSound(beaconLocation, Sound.ENDERDRAGON_DEATH, 1, 100);
+        PacketSender.broadcastSound("mob.enderdragon.death", arena.getProperties().getWorld(), 100);
 
         arena.endGame();
     }
 
+    public void reset(){
+        health = initialHealth;
+        setLife(5);
+    }
+
     public void dealDamage(int damage){
-        ParticlePlayer.playParticle(EnumParticle.EXPLOSION_HUGE, beaconLocation.clone().add(0.5, 2, 0.5), 1);
-        arena.getProperties().getWorld().playSound(beaconLocation, Sound.BLAZE_HIT, 1, 100);
+        PacketSender.playParticle(EnumParticle.EXPLOSION_HUGE, beaconLocation.clone().add(0.5, 2, 0.5), 1);
+        arena.getProperties().getWorld().playSound(beaconLocation, Sound.IRONGOLEM_HIT, 100, 1);
 
         health = health - damage;
 
@@ -123,6 +128,8 @@ public class LaserTagBeacon {
         else if (health >= 4) this.setLife(2);
         else if (health > 0) this.setLife(1);
         else if (health == 0) this.setLife(0);
+
+        arena.getScoreboard().updateHealth(this);
 
     }
 
@@ -148,6 +155,10 @@ public class LaserTagBeacon {
 
     public EnderCrystal getBeacon(){
         return this.beacon;
+    }
+
+    public int getHealth(){
+        return this.health;
     }
 
     public enum BeaconLife {

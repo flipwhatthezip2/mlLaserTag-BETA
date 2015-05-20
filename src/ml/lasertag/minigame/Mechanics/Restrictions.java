@@ -88,7 +88,6 @@ public class Restrictions implements Listener {
     public void onInventoryMove(InventoryClickEvent e){
         Player p = (Player) e.getWhoClicked();
         Inventory inventory = e.getClickedInventory();
-        e.setCancelled(true);
         if (inventory.getName() != null && inventory.getName().equalsIgnoreCase("§4§lLASERTAG! §8Pick an Arena")){
             if (e.getCurrentItem() != null){
                 if (e.getCurrentItem().getType() == Material.STAINED_GLASS_PANE){

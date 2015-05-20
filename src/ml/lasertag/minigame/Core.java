@@ -71,6 +71,9 @@ public class Core extends JavaPlugin {
             p.getInventory().clear();
             p.getInventory().setArmorContents(null);
             p.updateInventory();
+
+            p.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
+            p.teleport(Bukkit.getWorld("Lobby").getSpawnLocation());
         }
 
 

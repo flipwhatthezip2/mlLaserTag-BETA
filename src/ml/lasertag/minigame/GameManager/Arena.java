@@ -3,26 +3,30 @@ package ml.lasertag.minigame.GameManager;
 import ml.lasertag.minigame.Core;
 import ml.lasertag.minigame.Mechanics.LaserGun;
 import ml.lasertag.minigame.Mechanics.LaserTagBeacon;
+import ml.lasertag.minigame.api.Feature;
+import ml.lasertag.minigame.api.PacketSender;
 import ml.lasertag.minigame.events.ArenaInteractEvent;
+import ml.lasertag.minigame.game.StatsScoreboard;
 import ml.lasertag.minigame.game.TEAM;
 import ml.lasertag.minigame.game.Teams;
-import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
-import org.bukkit.Location;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Arena {
 
- static Core core;
+ Core core;
+
  private LaserGun laserGun;
+ private Arena arena;
 
  private ArenaProperties properties;
+ private StatsScoreboard scoreboard;
  private ArrayList<Player> players = new ArrayList<Player>();
  private ArenaState arenaState;
  private Teams teams;
@@ -42,13 +46,20 @@ public class Arena {
 
  public Arena(Core core, ArenaProperties properties, LaserGun laserGun){
   this.core = core;
+  this.arena = this;
   this.properties = properties;
   this.arenaState = ArenaState.WAITING;
   this.laserGun = laserGun;
   this.teams = new Teams(this);
+
   this.intializeBeacons();
+  this.scoreboard = new StatsScoreboard(core, this);
 
   Bukkit.getPluginManager().callEvent(new ArenaInteractEvent(ArenaInteractEvent.ArenaAction.CREATE, this));
+ }
+
+ public StatsScoreboard getScoreboard(){
+  return this.scoreboard;
  }
 
  public LaserTagBeacon getYellowBeacon(){
@@ -90,6 +101,11 @@ public class Arena {
   this.greenBeacon = new LaserTagBeacon(core, this, TEAM.GREEN);
  }
 
+ public void resetBeacons(){
+  greenBeacon.reset();
+  yellowBeacon.reset();
+ }
+
  public void addPlayer(Player player){
   players.add(player);
   teams.addPlayer(player, teams.pickTeam(player));
@@ -107,7 +123,7 @@ public class Arena {
   player.getInventory().setArmorContents(null);
   player.setGameMode(GameMode.ADVENTURE);
   if (arenaState == ArenaState.WAITING || arenaState == ArenaState.COUNTDOWN) this.canJoin = true;
-  if (players.size() < properties.getMinimumPlayers()) this.cancelCountdown();
+  if (players.size() < properties.getMinimumPlayers() && arenaState == ArenaState.COUNTDOWN) this.cancelCountdown();
  }
 
  public ArenaState getArenaState(){
@@ -149,6 +165,7 @@ public class Arena {
  public void cancelCountdown(){
   Bukkit.getScheduler().cancelTask(countDownRunnable.getTaskId());
   currentCountDownStage = countDownTime;
+  this.arenaState = ArenaState.WAITING;
   this.broadcastMessage(Core.warning + "Game countdown has been halted.");
   Bukkit.getPluginManager().callEvent(new ArenaInteractEvent(ArenaInteractEvent.ArenaAction.UPDATE_STAT, this));
  }
@@ -159,6 +176,7 @@ public class Arena {
   this.broadcastMessage(Core.success + "The game has be§lgun§a!");
   this.spawnPlayers();
   this.canJoin = false;
+  this.scoreboard.showScoreboard();
   Bukkit.getPluginManager().callEvent(new ArenaInteractEvent(ArenaInteractEvent.ArenaAction.UPDATE_STAT, this));
 
   for (Player p : players){
@@ -168,26 +186,40 @@ public class Arena {
 
  public void endGame(){
   this.pvp = false;
-  this.emptyInventories();
-  this.arenaState = ArenaState.RESTARTING;
-  this.laserGun.resetCooldowns();
-  this.broadcastMessage(Core.success + "The game has ended!");
-  this.emptyPlayerList();
-  //for (Player p : players) p.teleport(Bukkit.getWorld("Lobby").getSpawnLocation());
-  this.arenaState = ArenaState.WAITING;
-  this.canJoin = true;
-  Bukkit.getPluginManager().callEvent(new ArenaInteractEvent(ArenaInteractEvent.ArenaAction.UPDATE_STAT, this));
+  this.broadcastTitle((greenBeacon.getHealth() > yellowBeacon.getHealth() ? ChatColor.DARK_GREEN + "Green " : ChatColor.YELLOW + "Yellow ") + "Team Won!",
+                       ChatColor.GRAY + "The game has ended!");
+  PacketSender.broadcastSound("random.anil_land", properties.getWorld(), 100);
+
+
+  new BukkitRunnable(){
+
+   @Override
+  public void run(){
+    resetBeacons();
+    emptyInventories();
+    for (Player p : players) p.teleport(Bukkit.getWorld("Lobby").getSpawnLocation());
+    emptyArena();
+    arenaState = ArenaState.WAITING;
+    canJoin = true;
+    Bukkit.getPluginManager().callEvent(new ArenaInteractEvent(ArenaInteractEvent.ArenaAction.UPDATE_STAT, arena));
+    PacketSender.broadcastSound("random.anil_land", properties.getWorld(), 100);
+   }
+
+  }.runTaskLater(core, 160L);
+
  }
 
- public void emptyPlayerList() {
+ public void emptyArena() {
   for (Player player : players) {
-   this.removePlayer(player);
+   player.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
   }
+  players.clear();
  }
 
   public void emptyInventories(){
   for (Player player : players){
    player.getInventory().clear();
+   player.getInventory().setArmorContents(null);
    player.updateInventory();
   }
  }
@@ -204,6 +236,18 @@ public class Arena {
  public void broadcastMessage(String message){
   for (Player p : players){
    p.sendMessage(message);
+  }
+ }
+
+ public void broadcastTitle(String message, String subtitle){
+  for (Player p : players){
+   Feature.sendTitle(p, 20, 120, 20, message, subtitle);
+  }
+ }
+
+ public void broadcastActionBar(String message){
+  for (Player p : players){
+   Feature.sendActionBar(p, message);
   }
  }
 
@@ -227,6 +271,8 @@ public class Arena {
  public static void leaveArena(Core core, Arena arena, Player player){
   arena.broadcastMessage(Core.warning + "§l" + player.getName() + " §chas left the game!");
   arena.removePlayer(player);
+  player.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
+  player.teleport(Bukkit.getWorld("Lobby").getSpawnLocation());
   Bukkit.getPluginManager().callEvent(new ArenaInteractEvent(ArenaInteractEvent.ArenaAction.LEAVE, arena));
  }
 
