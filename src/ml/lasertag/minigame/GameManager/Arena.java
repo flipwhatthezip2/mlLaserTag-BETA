@@ -39,6 +39,7 @@ public class Arena {
 
  private boolean pvp = false;
 
+
  public Arena(Core core, ArenaProperties properties, LaserGun laserGun){
   this.core = core;
   this.properties = properties;
@@ -126,6 +127,7 @@ public class Arena {
 
  public void startCountdown(){
   this.arenaState = ArenaState.COUNTDOWN;
+  Bukkit.getPluginManager().callEvent(new ArenaInteractEvent(ArenaInteractEvent.ArenaAction.UPDATE_STAT, this));
   this.broadcastMessage(Core.success + "The game will begin shortly!");
 
   countDownRunnable = new BukkitRunnable(){
@@ -148,6 +150,7 @@ public class Arena {
   Bukkit.getScheduler().cancelTask(countDownRunnable.getTaskId());
   currentCountDownStage = countDownTime;
   this.broadcastMessage(Core.warning + "Game countdown has been halted.");
+  Bukkit.getPluginManager().callEvent(new ArenaInteractEvent(ArenaInteractEvent.ArenaAction.UPDATE_STAT, this));
  }
 
  public void startGame(){
@@ -156,6 +159,7 @@ public class Arena {
   this.broadcastMessage(Core.success + "The game has be§lgun§a!");
   this.spawnPlayers();
   this.canJoin = false;
+  Bukkit.getPluginManager().callEvent(new ArenaInteractEvent(ArenaInteractEvent.ArenaAction.UPDATE_STAT, this));
 
   for (Player p : players){
    p.setGameMode(GameMode.ADVENTURE);
@@ -172,6 +176,7 @@ public class Arena {
   //for (Player p : players) p.teleport(Bukkit.getWorld("Lobby").getSpawnLocation());
   this.arenaState = ArenaState.WAITING;
   this.canJoin = true;
+  Bukkit.getPluginManager().callEvent(new ArenaInteractEvent(ArenaInteractEvent.ArenaAction.UPDATE_STAT, this));
  }
 
  public void emptyPlayerList() {
