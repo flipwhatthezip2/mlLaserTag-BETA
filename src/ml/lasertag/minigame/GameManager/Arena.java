@@ -39,7 +39,6 @@ public class Arena {
 
  private boolean pvp = false;
 
-
  public Arena(Core core, ArenaProperties properties, LaserGun laserGun){
   this.core = core;
   this.properties = properties;
