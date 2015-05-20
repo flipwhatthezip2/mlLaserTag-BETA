@@ -22,7 +22,6 @@ import ml.lasertag.minigame.Mechanics.Restrictions;
 import ml.lasertag.minigame.api.Feature;
 import ml.lasertag.minigame.commands.LaserTag;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.entity.EnderCrystal;
 import org.bukkit.entity.Entity;
@@ -46,8 +45,6 @@ public class Core extends JavaPlugin {
 
         this.arenasFile = new ArenasFile(this);
         this.arenasFile.loadArenas();
-
-        Bukkit.getServer().getLogger().info(ChatColor.GREEN + "-Successfully initialize arenas-");
 
         Bukkit.getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
             @Override

@@ -84,8 +84,6 @@ public class Restrictions implements Listener {
         e.setCancelled(true);
     }
 
-    // TODO: NPE @ ml.lasertag.minigame.GameManager.ArenaSelector.onRightClick(ArenaSelector.java:60)
-
     @EventHandler
     public void onInventoryMove(InventoryClickEvent e){
         Player p = (Player) e.getWhoClicked();

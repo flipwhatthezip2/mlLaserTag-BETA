@@ -14,7 +14,6 @@ import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.EnderCrystal;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 
 import java.util.ArrayList;
@@ -44,7 +43,7 @@ public class LaserTagBeacon {
         this.establishIndicatorRing();
         this.setRing(BeaconLife.GREEN);
 
-        beacon.setCustomName((team == TEAM.YELLOW ? ChatColor.GOLD + "Yellow" : ChatColor.DARK_GREEN + "Green") + " Team's Beacon");
+        beacon.setCustomName((team == TEAM.YELLOW ? ChatColor.YELLOW + "Yellow" : ChatColor.DARK_GREEN + "Green") + " Team's Beacon");
         beacon.setCustomNameVisible(true);
     }
 
