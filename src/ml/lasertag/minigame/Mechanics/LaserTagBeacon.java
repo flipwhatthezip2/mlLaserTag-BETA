@@ -113,7 +113,7 @@ public class LaserTagBeacon {
 
     public void reset(){
         health = initialHealth;
-        setLife(5);
+        this.setLife(5);
     }
 
     public void dealDamage(int damage){
@@ -131,11 +131,6 @@ public class LaserTagBeacon {
 
         arena.getScoreboard().updateHealth(this);
 
-    }
-
-    public void resetHealth(){
-        health = initialHealth;
-        this.setLife(5);
     }
 
     public void setDeathRing(){

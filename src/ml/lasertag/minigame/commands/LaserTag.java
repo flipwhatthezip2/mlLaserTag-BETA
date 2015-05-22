@@ -156,6 +156,11 @@ public class LaserTag implements CommandExecutor {
 
       if (args[1].equalsIgnoreCase("create")){
 
+       if (!sender.isOp()){
+        sender.sendMessage(Core.warning + "You don't have permission to execute this command");
+        return;
+       }
+
        if (args.length != 3){
         sender.sendMessage(Core.warning + "Invalid argument amount");
         return;
@@ -182,6 +187,11 @@ public class LaserTag implements CommandExecutor {
       }
 
       else if (args[1].equalsIgnoreCase("delete")){
+
+       if (!sender.isOp()){
+        sender.sendMessage(Core.warning + "You don't have permission to execute this command");
+        return;
+       }
 
        if (Arena.getArena(core, args[2]) == null){
         sender.sendMessage(Core.warning + "Specified arena does not exist");
@@ -221,6 +231,12 @@ public class LaserTag implements CommandExecutor {
       }
 
       else if (args[1].equalsIgnoreCase("setYellowSpawn") || args[1].equalsIgnoreCase("setGreenSpawn")){
+
+       if (!sender.isOp()){
+        sender.sendMessage(Core.warning + "You don't have permission to execute this command");
+        return;
+       }
+
        if (!(sender instanceof Player)){
         sender.sendMessage(Core.warning + "Spawn setting failed. You must be ingame to set a spawn!");
         return;
@@ -250,6 +266,12 @@ public class LaserTag implements CommandExecutor {
       }
 
       else if (args[1].equalsIgnoreCase("setYellowBeacon") || args[1].equalsIgnoreCase("setGreenBeacon")){
+
+       if (!sender.isOp()){
+        sender.sendMessage(Core.warning + "You don't have permission to execute this command");
+        return;
+       }
+
        if (!(sender instanceof Player)){
         sender.sendMessage(Core.warning + "Beacon setting failed. You must be ingame to set a spawn!");
         return;

@@ -126,6 +126,8 @@ public class LaserGun implements Listener {
 
     public void damage(Player player, Player killer){
 
+        if (Teams.getTeam(player) == Teams.getTeam(killer)) return;
+
         if (player.getHealth() <= 8) awardKill(player, killer);
 
         player.damage(8);
