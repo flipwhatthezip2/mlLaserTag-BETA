@@ -27,7 +27,7 @@ public class PlayerChat implements Listener{
     Core core;
 
     public PlayerChat(Core core){
-
+        this.core = core;
     }
 
     @EventHandler
