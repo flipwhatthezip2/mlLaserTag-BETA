@@ -167,11 +167,12 @@ public class LaserGun implements Listener {
         Bukkit.getServer().broadcastMessage(Core.warning + "§l" + victim.getName() + " §chas felt the deadly wrath of §l" + killer.getName() + "§c.");
         victim.setGameMode(GameMode.SPECTATOR);
         victim.setLevel(10);
+        Feature.sendTitle(victim, 5, 200, 5, "§4§lYOU DIED!", "§cRespawning in §l" + victim.getLevel() + " seconds§c...");
 
         new BukkitRunnable(){
 
             public void run(){
-                Feature.sendTitle(victim, 5, 200, 5, "§4§lYOU DIED!", "§cRespawning in §l" + victim.getLevel() + " seconds§c...");
+                Feature.sendSubtitle(victim, 5, 20, 5, "§cRespawning in §l" + victim.getLevel() + " seconds§c...");
                 victim.setLevel(victim.getLevel() - 1);
 
                 if (Arena.getArena(core, victim) == null){
