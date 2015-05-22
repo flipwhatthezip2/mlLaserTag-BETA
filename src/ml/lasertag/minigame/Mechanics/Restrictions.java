@@ -1,6 +1,7 @@
 package ml.lasertag.minigame.Mechanics;
 
 import ml.lasertag.minigame.Core;
+import ml.lasertag.minigame.api.Feature;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -11,6 +12,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
@@ -82,6 +84,13 @@ public class Restrictions implements Listener {
     @EventHandler
     public void onEntityDamage(EntityDamageByEntityEvent e){
         e.setCancelled(true);
+    }
+
+    @EventHandler
+    public void onWorldChange(PlayerChangedWorldEvent e){
+        Player player = e.getPlayer();
+
+        Feature.sendTitle(player, 0, 0, 0, "", "");
     }
 
     @EventHandler

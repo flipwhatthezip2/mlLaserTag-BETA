@@ -106,7 +106,7 @@ public class LaserTagBeacon {
 
     public void death(){
         arena.getProperties().getWorld().playEffect(beaconLocation, Effect.EXPLOSION_LARGE, 20, 20);
-        PacketSender.broadcastSound("mob.enderdragon.death", arena.getProperties().getWorld(), 100);
+        PacketSender.broadcastSound("mob.enderdragon.end", arena.getProperties().getWorld(), 100);
 
         arena.endGame();
     }

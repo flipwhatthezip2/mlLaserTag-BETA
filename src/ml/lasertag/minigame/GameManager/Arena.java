@@ -124,6 +124,8 @@ public class Arena {
   player.setGameMode(GameMode.ADVENTURE);
   if (arenaState == ArenaState.WAITING || arenaState == ArenaState.COUNTDOWN) this.canJoin = true;
   if (players.size() < properties.getMinimumPlayers() && arenaState == ArenaState.COUNTDOWN) this.cancelCountdown();
+  if (players.size() < properties.getMinimumPlayers() && arenaState == ArenaState.IN_GAME) this.endGameAsDraw();
+
  }
 
  public ArenaState getArenaState(){
@@ -151,7 +153,7 @@ public class Arena {
    @Override
    public void run(){
     if (currentCountDownStage == 0){
-     startGame(); this.cancel(); return;
+     currentCountDownStage = 5; startGame(); this.cancel(); return;
     }
 
     broadcastMessage(Core.warning + "Game starting in: §l" + currentCountDownStage);
@@ -181,14 +183,37 @@ public class Arena {
 
   for (Player p : players){
    p.setGameMode(GameMode.ADVENTURE);
+   p.setWalkSpeed(0.28F);
   }
+ }
+
+ public void endGameAsDraw(){
+  this.pvp = false;
+  this.broadcastTitle(ChatColor.BLUE + "Draw", ChatColor.GRAY + "The game has ended!");
+  this.arenaState = ArenaState.RESTARTING;
+
+
+  new BukkitRunnable(){
+
+   @Override
+   public void run(){
+    resetBeacons();
+    handlePlayerLeave();
+    for (Player p : players) p.teleport(Bukkit.getWorld("Lobby").getSpawnLocation());
+    emptyArena();
+    arenaState = ArenaState.WAITING;
+    canJoin = true;
+    Bukkit.getPluginManager().callEvent(new ArenaInteractEvent(ArenaInteractEvent.ArenaAction.UPDATE_STAT, arena));
+   }
+
+  }.runTaskLater(core, 160L);
  }
 
  public void endGame(){
   this.pvp = false;
   this.broadcastTitle((greenBeacon.getHealth() > yellowBeacon.getHealth() ? ChatColor.DARK_GREEN + "Green " : ChatColor.YELLOW + "Yellow ") + "Team Won!",
-                       ChatColor.GRAY + "The game has ended!");
-  PacketSender.broadcastSound("random.levelup", properties.getWorld(), 100);
+          ChatColor.GRAY + "The game has ended!");
+  this.arenaState = ArenaState.RESTARTING;
 
 
   new BukkitRunnable(){
@@ -196,13 +221,12 @@ public class Arena {
    @Override
   public void run(){
     resetBeacons();
-    emptyInventories();
+    handlePlayerLeave();
     for (Player p : players) p.teleport(Bukkit.getWorld("Lobby").getSpawnLocation());
     emptyArena();
     arenaState = ArenaState.WAITING;
     canJoin = true;
     Bukkit.getPluginManager().callEvent(new ArenaInteractEvent(ArenaInteractEvent.ArenaAction.UPDATE_STAT, arena));
-    PacketSender.broadcastSound("random.levelup", properties.getWorld(), 100);
    }
 
   }.runTaskLater(core, 160L);
@@ -216,11 +240,13 @@ public class Arena {
   players.clear();
  }
 
-  public void emptyInventories(){
+  public void handlePlayerLeave(){
   for (Player player : players){
    player.getInventory().clear();
    player.getInventory().setArmorContents(null);
    player.updateInventory();
+
+   player.setWalkSpeed(0.2F);
   }
  }
 
@@ -271,6 +297,7 @@ public class Arena {
  public static void leaveArena(Core core, Arena arena, Player player){
   arena.broadcastMessage(Core.warning + "§l" + player.getName() + " §chas left the game!");
   arena.removePlayer(player);
+  player.setWalkSpeed(0.2F);
   player.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
   player.teleport(Bukkit.getWorld("Lobby").getSpawnLocation());
   Bukkit.getPluginManager().callEvent(new ArenaInteractEvent(ArenaInteractEvent.ArenaAction.LEAVE, arena));
