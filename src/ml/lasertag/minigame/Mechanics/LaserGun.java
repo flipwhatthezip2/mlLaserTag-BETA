@@ -165,18 +165,26 @@ public class LaserGun implements Listener {
     public void awardKill(final Arena arena, final Player victim, Player killer){
         Bukkit.getServer().broadcastMessage(Core.deathMessage + "§6" + victim.getName() + " §7has been shot by §6" + killer.getName() + "§7.");
         victim.setGameMode(GameMode.SPECTATOR);
-        victim.setLevel(10);
+        victim.setLevel(5);
+        Feature.sendTitle(victim, 5, 100, 5, "§4§lYOU DIED!", "§cRespawning in §l" + victim.getLevel() + " seconds§c...");
 
         new BukkitRunnable(){
 
             public void run(){
-                Feature.sendTitle(victim, 5, 200, 5, "§4§lYOU DIED!", "§cRespawning in §l" + victim.getLevel() + " seconds§c...");
+                Feature.sendSubtitle(victim, 5, 20, 5, "§cRespawning in §l" + victim.getLevel() + " seconds§c...");
                 victim.setLevel(victim.getLevel() - 1);
 
                 if (Arena.getArena(core, victim) == null){
                     victim.spigot().respawn();
                     victim.setGameMode(GameMode.ADVENTURE);
-                    Feature.sendTitle(victim, 5, 200, 5, "", "");
+                    Feature.sendTitle(victim, 5, 100, 5, "", "");
+                    this.cancel();
+                    return;
+                }
+
+                if (Arena.getArena(core, victim).getArenaState() == Arena.ArenaState.RESTARTING){
+                    victim.spigot().respawn();
+                    victim.setGameMode(GameMode.ADVENTURE);
                     this.cancel();
                 }
 
