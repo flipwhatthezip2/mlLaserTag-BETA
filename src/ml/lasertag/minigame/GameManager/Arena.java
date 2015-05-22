@@ -58,12 +58,12 @@ public class Arena {
   Bukkit.getPluginManager().callEvent(new ArenaInteractEvent(ArenaInteractEvent.ArenaAction.CREATE, this));
  }
 
- public StatsScoreboard getScoreboard(){
-  return this.scoreboard;
- }
-
  public Teams getTeams(){
   return this.teams;
+ }
+
+ public StatsScoreboard getScoreboard(){
+  return this.scoreboard;
  }
 
  public LaserTagBeacon getYellowBeacon(){
@@ -196,6 +196,7 @@ public class Arena {
   this.broadcastTitle(ChatColor.BLUE + "Draw", ChatColor.GRAY + "The game has ended!");
   this.arenaState = ArenaState.RESTARTING;
   this.teams.resetTeams();
+  this.scoreboard.reset();
 
 
   new BukkitRunnable(){
@@ -220,6 +221,7 @@ public class Arena {
           ChatColor.GRAY + "The game has ended!");
   this.arenaState = ArenaState.RESTARTING;
   this.teams.resetTeams();
+  this.scoreboard.reset();
 
 
   new BukkitRunnable(){

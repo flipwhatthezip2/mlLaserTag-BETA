@@ -69,4 +69,10 @@ public class StatsScoreboard {
         }
     }
 
+    public void reset(){
+        this.greenBeaconHealth = 20;
+        this.yellowBeaconHealth = 20;
+        this.initializeScoreboard();
+    }
+
 }
