@@ -13,6 +13,7 @@ package ml.lasertag.minigame.Mechanics;
 
 
 import ml.lasertag.minigame.Core;
+import ml.lasertag.minigame.GameManager.Arena;
 import ml.lasertag.minigame.api.Feature;
 import ml.lasertag.minigame.game.Lobby;
 import org.bukkit.Bukkit;
@@ -20,8 +21,15 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 
 public class PlayerJoin implements Listener {
+
+    Core core;
+
+    public PlayerJoin(Core core){
+        this.core = core;
+    }
 
     @EventHandler
     public void PlayerJoin(PlayerJoinEvent e){
@@ -34,6 +42,13 @@ public class PlayerJoin implements Listener {
         Feature.sendTabTitle(p, "§cPlaying on §lLASERTAG! §8- §c§lLASERTAG!", "§eA §6§lMineLegends §eoriginal game!");
 
         e.getPlayer().teleport(Bukkit.getWorld("Lobby").getSpawnLocation());
+    }
+
+    @EventHandler
+    public void onLeave(PlayerQuitEvent e){
+        if (Arena.getArena(core, e.getPlayer()) != null){
+            Arena.leaveArena(core, Arena.getArena(core, e.getPlayer()), e.getPlayer());
+        }
     }
 
 }

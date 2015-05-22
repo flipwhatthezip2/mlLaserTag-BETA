@@ -209,6 +209,7 @@ public class Arena {
     emptyArena();
     arenaState = ArenaState.WAITING;
     canJoin = true;
+    scoreboard.reset();
     Bukkit.getPluginManager().callEvent(new ArenaInteractEvent(ArenaInteractEvent.ArenaAction.UPDATE_STAT, arena));
    }
 
@@ -221,7 +222,6 @@ public class Arena {
           ChatColor.GRAY + "The game has ended!");
   this.arenaState = ArenaState.RESTARTING;
   this.teams.resetTeams();
-  this.scoreboard.reset();
 
 
   new BukkitRunnable(){
@@ -234,6 +234,7 @@ public class Arena {
     emptyArena();
     arenaState = ArenaState.WAITING;
     canJoin = true;
+    scoreboard.reset();
     Bukkit.getPluginManager().callEvent(new ArenaInteractEvent(ArenaInteractEvent.ArenaAction.UPDATE_STAT, arena));
    }
 
@@ -255,6 +256,7 @@ public class Arena {
    player.updateInventory();
 
    player.setWalkSpeed(0.2F);
+   player.setHealth(20D);
   }
  }
 
