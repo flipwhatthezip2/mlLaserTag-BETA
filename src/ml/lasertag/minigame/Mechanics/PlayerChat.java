@@ -12,6 +12,8 @@ package ml.lasertag.minigame.Mechanics;
  */
 
 
+import ml.lasertag.minigame.Core;
+import ml.lasertag.minigame.GameManager.Arena;
 import ml.lasertag.minigame.game.TEAM;
 import ml.lasertag.minigame.game.Teams;
 import org.bukkit.Bukkit;
@@ -22,17 +24,32 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 public class PlayerChat implements Listener{
 
+    Core core;
+
+    public PlayerChat(Core core){
+
+    }
+
     @EventHandler
     public void PlayerChat(AsyncPlayerChatEvent e){
         String message = e.getMessage();
         e.setCancelled(true);
         Player player = e.getPlayer();
-        if (Teams.getTeam(player) == TEAM.GREEN){
+
+        Arena arena;
+
+        if (Arena.getArena(core, e.getPlayer()) == null){
+            return;
+        }
+
+        arena = Arena.getArena(core, e.getPlayer());
+
+        if (arena.getTeams().getTeam(player) == TEAM.GREEN){
             for (Player p : Bukkit.getOnlinePlayers()){
                 p.sendMessage("§2[GREEN] " + e.getPlayer().getName() + "§8: §f" + message);
             }
             return;
-        } else if (Teams.getTeam(player) == TEAM.YELLOW){
+        } else if (arena.getTeams().getTeam(player) == TEAM.YELLOW){
             for (Player p : Bukkit.getOnlinePlayers()){
                 p.sendMessage("§e[YELLOW] " + e.getPlayer().getName() + "§8: §f" + message);
             }

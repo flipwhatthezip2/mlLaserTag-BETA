@@ -1,5 +1,7 @@
 package ml.lasertag.minigame.game;
 
+import ml.lasertag.minigame.Core;
+import ml.lasertag.minigame.GameManager.Arena;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -19,8 +21,8 @@ public enum TEAM {
         return this.color;
     }
 
-    public static void setUniform(Player player){
-        TEAM team = Teams.getTeam(player);
+    public static void setUniform(Core core, Player player){
+        TEAM team = Arena.getArena(core, player).getTeams().getTeam(player);
 
         ItemStack helmet = new ItemStack(Material.LEATHER_HELMET); LeatherArmorMeta helmetMeta = (LeatherArmorMeta) helmet.getItemMeta();
         helmetMeta.setColor(team.getColor()); helmet.setItemMeta(helmetMeta);

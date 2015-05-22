@@ -59,6 +59,14 @@ public class LaserGun implements Listener {
 
     public void shootLaser(Player player){
 
+        Arena arena;
+
+        if (Arena.getArena(core, player) == null){
+            return;
+        }
+
+        arena = Arena.getArena(core, player);
+
         List<Player> list = player.getWorld().getPlayers();
         List<EnderCrystal> beacons = new ArrayList<EnderCrystal>();
         Location l = player.getEyeLocation();
@@ -74,9 +82,9 @@ public class LaserGun implements Listener {
 
         for (double a = 0; a < range; a+= 0.05){
 
-            double r = Teams.getTeam(player).getColor().getRed();
-            double g = Teams.getTeam(player).getColor().getGreen();
-            double b = Teams.getTeam(player).getColor().getBlue();
+            double r = arena.getTeams().getTeam(player).getColor().getRed();
+            double g = arena.getTeams().getTeam(player).getColor().getGreen();
+            double b = arena.getTeams().getTeam(player).getColor().getBlue();
 
             Location loc = l.add(l.getDirection().multiply(a));
 
@@ -85,14 +93,14 @@ public class LaserGun implements Listener {
             for (Player e : list){
                 if (!e.isDead() && e != player && e.getGameMode() == GameMode.ADVENTURE && Arena.getArena(core, e) != null){
                     if (e.getLocation().toVector().distance(loc.toVector()) <= 1.5){
-                        damage(e, player);
+                        damage(arena, e, player);
                     }
                 }
             }
 
             for (EnderCrystal e : beacons){
-                for (Arena arena : core.getArenasFile().getArenas()){
-                    if (Teams.getTeam(player) == TEAM.YELLOW){
+                for (Arena ar : core.getArenasFile().getArenas()){
+                    if (arena.getTeams().getTeam(player) == TEAM.YELLOW){
                         if (arena.getGreenBeacon().getBeacon() == e && e.getLocation().toVector().distance(loc.toVector()) <= 1.5){
                             arena.getGreenBeacon().dealDamage(1);
                             Bukkit.getPluginManager().callEvent(new LaserDamageBeaconEvent(arena.getGreenBeacon(), player));
@@ -124,11 +132,11 @@ public class LaserGun implements Listener {
         }
     }
 
-    public void damage(Player player, Player killer){
+    public void damage(Arena arena, Player player, Player killer){
 
-        if (Teams.getTeam(player) == Teams.getTeam(killer)) return;
+        if (arena.getTeams().getTeam(player) == arena.getTeams().getTeam(killer)) return;
 
-        if (player.getHealth() <= 8) awardKill(player, killer);
+        if (player.getHealth() <= 8) awardKill(arena, player, killer);
 
         player.damage(8);
         player.getWorld().playSound(player.getEyeLocation(), Sound.IRONGOLEM_HIT, 100L, 100L);
@@ -139,9 +147,9 @@ public class LaserGun implements Listener {
         FireworkMeta fwm = fw.getFireworkMeta();
 
         fwm.addEffect(FireworkEffect.builder().withColor(Color.fromRGB(
-                Teams.getTeam(player).getColor().getRed(),
-                Teams.getTeam(player).getColor().getGreen(),
-                Teams.getTeam(player).getColor().getBlue())).build());
+                arena.getTeams().getTeam(player).getColor().getRed(),
+                arena.getTeams().getTeam(player).getColor().getGreen(),
+                arena.getTeams().getTeam(player).getColor().getBlue())).build());
 
         fw.setFireworkMeta(fwm);
 
@@ -155,7 +163,7 @@ public class LaserGun implements Listener {
         }, 2L);
     }
 
-    public void awardKill(final Player victim, Player killer){
+    public void awardKill(final Arena arena, final Player victim, Player killer){
         Bukkit.getServer().broadcastMessage(Core.warning + "§l" + victim.getName() + " §chas felt the deadly wrath of §l" + killer.getName() + "§c.");
         victim.setGameMode(GameMode.SPECTATOR);
         victim.setLevel(10);
@@ -177,7 +185,7 @@ public class LaserGun implements Listener {
                     victim.setGameMode(GameMode.ADVENTURE);
                     victim.spigot().respawn();
                     victim.setHealth(20D);
-                    victim.teleport(Arena.getArena(core, victim).getSpawn(Teams.getTeam(victim)));
+                    victim.teleport(Arena.getArena(core, victim).getSpawn(arena.getTeams().getTeam(victim)));
                     Feature.sendTitle(victim, 5, 200, 5, "", "");
                     this.cancel();
                 }

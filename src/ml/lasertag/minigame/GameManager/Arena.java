@@ -62,6 +62,10 @@ public class Arena {
   return this.scoreboard;
  }
 
+ public Teams getTeams(){
+  return this.teams;
+ }
+
  public LaserTagBeacon getYellowBeacon(){
   return this.yellowBeacon;
  }
@@ -109,8 +113,8 @@ public class Arena {
  public void addPlayer(Player player){
   players.add(player);
   teams.addPlayer(player, teams.pickTeam(player));
-  player.teleport(getSpawn(Teams.getTeam(player)));
-  TEAM.setUniform(player);
+  player.teleport(getSpawn(this.teams.getTeam(player)));
+  TEAM.setUniform(core, player);
   player.getInventory().setItem(0, gun);
   if (players.size() == properties.getMaximumPlayers()) this.canJoin = false;
   if (players.size() >= properties.getMinimumPlayers()) this.startCountdown();
@@ -118,7 +122,7 @@ public class Arena {
 
  public void removePlayer(Player player){
   players.remove(player);
-  teams.removePlayer(player, Teams.getTeam(player));
+  teams.removePlayer(player);
   player.getInventory().clear();
   player.getInventory().setArmorContents(null);
   player.setGameMode(GameMode.ADVENTURE);
@@ -139,7 +143,7 @@ public class Arena {
 
  public void spawnPlayers(){
   for (Player p : players){
-   p.teleport(Arena.getArena(core, p).getSpawn(Teams.getTeam(p)));
+   p.teleport(Arena.getArena(core, p).getSpawn(this.teams.getTeam(p)));
   }
  }
 
@@ -191,6 +195,7 @@ public class Arena {
   this.pvp = false;
   this.broadcastTitle(ChatColor.BLUE + "Draw", ChatColor.GRAY + "The game has ended!");
   this.arenaState = ArenaState.RESTARTING;
+  this.teams.resetTeams();
 
 
   new BukkitRunnable(){
@@ -214,6 +219,7 @@ public class Arena {
   this.broadcastTitle((greenBeacon.getHealth() > yellowBeacon.getHealth() ? ChatColor.DARK_GREEN + "Green " : ChatColor.YELLOW + "Yellow ") + "Team Won!",
           ChatColor.GRAY + "The game has ended!");
   this.arenaState = ArenaState.RESTARTING;
+  this.teams.resetTeams();
 
 
   new BukkitRunnable(){
@@ -253,7 +259,7 @@ public class Arena {
 
  public void distributeKits(){
   for (Player p : players){
-   TEAM.setUniform(p);
+   TEAM.setUniform(core, p);
    p.getInventory().setItem(0, gun);
    p.updateInventory();
   }

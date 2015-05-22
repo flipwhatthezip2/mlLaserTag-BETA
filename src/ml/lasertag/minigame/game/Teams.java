@@ -4,36 +4,43 @@ import ml.lasertag.minigame.GameManager.Arena;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Teams {
 
     private Arena arena;
 
-    private static ArrayList<Player> yellowTeam = new ArrayList<Player>();
-    private static ArrayList<Player> greenTeam = new ArrayList<Player>();
+    private HashMap<Player, TEAM> teams = new HashMap<Player, TEAM>();
+    private int yellowTeamCount = 0;
+    private int greenTeamCount = 0;
 
     public Teams(Arena arena){
         this.arena = arena;
     }
 
     public void addPlayer(Player player, TEAM team){
-        if (team == TEAM.YELLOW) yellowTeam.add(player);
-        else greenTeam.add(player);
+        this.teams.put(player, team);
     }
 
-    public void removePlayer(Player player, TEAM team){
-        if (team == TEAM.YELLOW) yellowTeam.remove(player);
-        else greenTeam.remove(player);
+    public void removePlayer(Player player){
+        this.teams.remove(player);
     }
 
     public TEAM pickTeam(Player player){
-        if (yellowTeam.size() > greenTeam.size()) return TEAM.GREEN;
+        if (this.yellowTeamCount > this.greenTeamCount){
+            greenTeamCount++;
+            return TEAM.GREEN;
+        }
+        yellowTeamCount++;
         return TEAM.YELLOW;
     }
 
-    public static TEAM getTeam(Player player){
-        if (yellowTeam.contains(player)) return TEAM.YELLOW;
-        return TEAM.GREEN;
+    public void resetTeams(){
+        teams.clear();
+    }
+
+    public TEAM getTeam(Player player){
+        return teams.get(player);
     }
 
 }
