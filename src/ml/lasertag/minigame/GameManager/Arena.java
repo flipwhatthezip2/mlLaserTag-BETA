@@ -115,7 +115,7 @@ public class Arena {
   TEAM.setUniform(core, player);
   player.getInventory().setItem(0, gun);
   if (players.size() == properties.getMaximumPlayers()) this.canJoin = false;
-  if (players.size() >= properties.getMinimumPlayers()) this.startCountdown();
+  if (players.size() == properties.getMinimumPlayers()) this.startCountdown();
  }
 
  public void removePlayer(Player player){
@@ -194,7 +194,6 @@ public class Arena {
   this.broadcastTitle(ChatColor.BLUE + "Draw", ChatColor.GRAY + "The game has ended!");
   this.arenaState = ArenaState.RESTARTING;
   this.teams.resetTeams();
-  this.scoreboard.reset();
 
 
   new BukkitRunnable(){
