@@ -4,7 +4,6 @@ import ml.lasertag.minigame.Core;
 import ml.lasertag.minigame.Mechanics.LaserGun;
 import ml.lasertag.minigame.Mechanics.LaserTagBeacon;
 import ml.lasertag.minigame.api.Feature;
-import ml.lasertag.minigame.api.PacketSender;
 import ml.lasertag.minigame.events.ArenaInteractEvent;
 import ml.lasertag.minigame.game.StatsScoreboard;
 import ml.lasertag.minigame.game.TEAM;
@@ -16,7 +15,6 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class Arena {
 
@@ -298,12 +296,12 @@ public class Arena {
 
  public static void joinArena(Core core, Arena arena, Player player){
   arena.addPlayer(player);
-  arena.broadcastMessage(Core.success + "§l" + player.getName() + " §ahas joined the game!");
+  arena.broadcastMessage(Core.joinMessage + "§6" + player.getName() + " §7has joined the game!");
   Bukkit.getPluginManager().callEvent(new ArenaInteractEvent(ArenaInteractEvent.ArenaAction.JOIN, arena));
  }
 
  public static void leaveArena(Core core, Arena arena, Player player){
-  arena.broadcastMessage(Core.warning + "§l" + player.getName() + " §chas left the game!");
+  arena.broadcastMessage(Core.quitMessage + "§6" + player.getName() + " §7has left the game!");
   arena.removePlayer(player);
   player.setWalkSpeed(0.2F);
   player.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());

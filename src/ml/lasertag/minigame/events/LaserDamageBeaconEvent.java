@@ -1,9 +1,8 @@
 package ml.lasertag.minigame.events;
 
 
-import ml.lasertag.minigame.Mechanics.LaserTagBeacon;
+        import ml.lasertag.minigame.Mechanics.LaserTagBeacon;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 

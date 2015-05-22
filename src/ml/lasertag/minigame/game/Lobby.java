@@ -22,8 +22,6 @@ public class Lobby {
 
     public static Scoreboard lobbyBoard;
 
-    public int lobbyCountdown = 30;
-
     public static void setScoreboard(final Player p){
         lobbyBoard = Bukkit.getServer().getScoreboardManager().getNewScoreboard();
 

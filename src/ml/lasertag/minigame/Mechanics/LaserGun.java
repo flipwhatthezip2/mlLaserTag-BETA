@@ -5,7 +5,6 @@ import ml.lasertag.minigame.GameManager.Arena;
 import ml.lasertag.minigame.api.Feature;
 import ml.lasertag.minigame.events.LaserDamageBeaconEvent;
 import ml.lasertag.minigame.game.TEAM;
-import ml.lasertag.minigame.game.Teams;
 import net.minecraft.server.v1_8_R2.EnumParticle;
 import net.minecraft.server.v1_8_R2.PacketPlayOutWorldParticles;
 import org.bukkit.*;
@@ -164,7 +163,7 @@ public class LaserGun implements Listener {
     }
 
     public void awardKill(final Arena arena, final Player victim, Player killer){
-        Bukkit.getServer().broadcastMessage(Core.warning + "§l" + victim.getName() + " §chas felt the deadly wrath of §l" + killer.getName() + "§c.");
+        Bukkit.getServer().broadcastMessage(Core.deathMessage + "§6" + victim.getName() + " §7has been shot by §6" + killer.getName() + "§7.");
         victim.setGameMode(GameMode.SPECTATOR);
         victim.setLevel(10);
 

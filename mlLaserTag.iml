@@ -8,5 +8,6 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="Spigot" level="project" />
+    <orderEntry type="library" name="GameAPI" level="project" />
   </component>
 </module>

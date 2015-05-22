@@ -14,7 +14,6 @@ package ml.lasertag.minigame.Mechanics;
 
 import ml.lasertag.minigame.Core;
 import ml.lasertag.minigame.api.Feature;
-import ml.lasertag.minigame.game.Lobby;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -27,7 +26,7 @@ public class PlayerJoin implements Listener {
     public void PlayerJoin(PlayerJoinEvent e){
         final Player p = e.getPlayer();
 
-        e.setJoinMessage(Core.success + "§l" + p.getName() + " §ahas joined the server.");
+        e.setJoinMessage(Core.infoMessage + "§6" + p.getName() + " §7has joined the server.");
 
         Feature.sendTitle(p, 20, 200, 20, "§eWelcome to §c§lLASER TAG!", "§eA §6§lMineLegends §ecustom game!");
 

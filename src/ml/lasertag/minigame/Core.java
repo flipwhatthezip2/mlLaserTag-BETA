@@ -13,6 +13,7 @@ package ml.lasertag.minigame;
  */
 
 
+import gameAPI.Flipwhatthezip2.chat.ChatStrings;
 import ml.lasertag.minigame.GameManager.ArenaSelector;
 import ml.lasertag.minigame.GameManager.ArenasFile;
 import ml.lasertag.minigame.Mechanics.LaserGun;
@@ -40,8 +41,38 @@ public class Core extends JavaPlugin {
     public static String warning = "§4§l>> §c";
     public static String warningList = "§4§l> §c";
 
+    public static String joinMessage = ChatStrings.joinMessage;
+    public static String quitMessage = ChatStrings.quitMessage;
+
+    public static String deathMessage = ChatStrings.deathMessage;
+    public static String killMessage = ChatStrings.killMessage;
+
+    public static String teamMessage = ChatStrings.teamMessage;
+    public static String gameMessage = ChatStrings.gameMessage;
+    public static String statusMessage = ChatStrings.statusMessage;
+    public static String rechargingMessage = ChatStrings.rechargingMessage;
+    public static String powerupMessage = ChatStrings.powerupMessage;
+
+    public static String infoMessage = ChatStrings.infoMessage;
+    public static String serverMessage = ChatStrings.serverMessage;
+    public static String portalMessage = ChatStrings.portalMessage;
+
     public void onEnable(){
-        Bukkit.getServer().getLogger().info(">> Minigame 'LaserTag' is successfully running on: " + Bukkit.getServerName());
+
+        ChatStrings.setJoinMessage("§3Join> §7");
+        ChatStrings.setQuitMessage("§3Quit> §7");
+        ChatStrings.setDeathMessage("§3Death> §7");
+        ChatStrings.setKillMessage("§3Kill> §7");
+        ChatStrings.setTeamMessage("§3Team> §7");
+        ChatStrings.setGameMessage("§3Game> §7");
+        ChatStrings.setStatusMessage("§3Status> §7");
+        ChatStrings.setRechargingMessage("§3Recharging> §7");
+        ChatStrings.setPowerupMessage("§3Powerup> §7");
+        ChatStrings.setInfoMessage("§3Info> §7");
+        ChatStrings.setServerMessage("§3Server> §7");
+        ChatStrings.setPortalMessage("§3Portal> §7");
+
+        Bukkit.getServer().getLogger().info(ChatStrings.serverMessage() + "Successfully initialized the minigame 'LaserTag' on server: " + Bukkit.getServerName());
 
         this.arenasFile = new ArenasFile(this);
         this.arenasFile.loadArenas();
