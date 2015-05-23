@@ -52,7 +52,7 @@ public class GunSelector implements Listener{
 
             gunSelectorMenu.setItem(index, gun.getGun());
 
-            index++;
+            index = index + 2;
         }
 
     }

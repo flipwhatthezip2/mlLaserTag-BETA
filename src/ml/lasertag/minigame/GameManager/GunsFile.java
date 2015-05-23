@@ -37,6 +37,8 @@ public class GunsFile {
 
     public void createGun(String name, int cooldown, int range, int damage){
 
+        name = name.toUpperCase();
+
         guns.add(new Gun(core, this, name, cooldown, range, damage));
         gunNames.add(name);
 
@@ -78,6 +80,9 @@ public class GunsFile {
 
         Gun gun = Gun.getGun(name);
 
+        name = name.toUpperCase();
+        newName = newName.toUpperCase();
+
         gunNames.remove(name);
         gunNames.add(newName);
 
@@ -95,6 +100,8 @@ public class GunsFile {
     public void setGunStat(String name, GunStat gunStat, int newValue){
 
         Gun gun = Gun.getGun(name);
+
+        name = name.toUpperCase();
 
         if (gunStat == GunStat.COOLDOWN){
             gunsFile.set(name + ".CoolDown", newValue);
