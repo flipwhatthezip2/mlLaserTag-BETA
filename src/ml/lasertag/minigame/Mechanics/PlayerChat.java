@@ -17,6 +17,7 @@ import ml.lasertag.minigame.GameManager.Arena;
 import ml.lasertag.minigame.game.TEAM;
 import ml.lasertag.minigame.game.Teams;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -33,15 +34,16 @@ public class PlayerChat implements Listener{
     @EventHandler
     public void PlayerChat(AsyncPlayerChatEvent e){
         String message = e.getMessage();
-        e.setCancelled(true);
         Player player = e.getPlayer();
 
         Arena arena;
 
         if (Arena.getArena(core, e.getPlayer()) == null){
+            e.setFormat(ChatColor.RED + player.getName() + ChatColor.GRAY + ": " + ChatColor.WHITE + e.getMessage());
             return;
         }
 
+        e.setCancelled(true);
         arena = Arena.getArena(core, e.getPlayer());
 
         if (arena.getTeams().getTeam(player) == TEAM.GREEN){

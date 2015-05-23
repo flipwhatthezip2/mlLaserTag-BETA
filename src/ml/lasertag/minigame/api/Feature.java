@@ -15,10 +15,13 @@ package ml.lasertag.minigame.api;
 
 
 import net.minecraft.server.v1_8_R2.*;
-import org.bukkit.ChatColor;
+import org.bukkit.*;
+import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_8_R2.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_8_R2.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.lang.reflect.Field;
@@ -114,4 +117,25 @@ public class Feature extends JavaPlugin implements Listener {
         PacketPlayOutChat ppoc = new PacketPlayOutChat(cbc, (byte)2);
         p.getHandle().playerConnection.sendPacket(ppoc);
     }
+
+    public static org.bukkit.inventory.ItemStack addGlow(org.bukkit.inventory.ItemStack item){
+        net.minecraft.server.v1_8_R2.ItemStack nmsItem = CraftItemStack.asNMSCopy(item);
+        NBTTagCompound tag = nmsItem.hasTag() ? nmsItem.getTag() : new NBTTagCompound();
+
+        NBTTagList ench = new NBTTagList();
+        tag.set("ench", ench);
+        nmsItem.setTag(tag);
+
+        return CraftItemStack.asCraftMirror(nmsItem);
+    }
+    public static org.bukkit.inventory.ItemStack removeGlow(org.bukkit.inventory.ItemStack item){
+        org.bukkit.inventory.ItemStack gun = new org.bukkit.inventory.ItemStack(Material.IRON_BARDING);
+        ItemMeta meta = gun.getItemMeta();
+
+        meta.setDisplayName(item.getItemMeta().getDisplayName()); meta.setLore(item.getItemMeta().getLore());
+        gun.setItemMeta(meta);
+
+        return gun;
+    }
+
 }

@@ -4,6 +4,7 @@ import ml.lasertag.minigame.Core;
 import ml.lasertag.minigame.GameManager.Arena;
 import ml.lasertag.minigame.GameManager.Gun;
 import ml.lasertag.minigame.api.Feature;
+import ml.lasertag.minigame.api.PacketSender;
 import ml.lasertag.minigame.events.LaserDamageBeaconEvent;
 import ml.lasertag.minigame.game.TEAM;
 import net.minecraft.server.v1_8_R2.EnumParticle;
@@ -40,19 +41,24 @@ public class LaserGun implements Listener {
 
     @EventHandler
     public void onShoot(final PlayerInteractEvent e){
-        if (e.getAction() == Action.RIGHT_CLICK_AIR && e.getPlayer().getItemInHand().getType() == Material.IRON_BARDING
-                && !cantShoot.contains(e.getPlayer()) && Arena.getArena(core, e.getPlayer()) != null &&
+
+        final Player player = e.getPlayer();
+
+        if (e.getAction() == Action.RIGHT_CLICK_AIR && player.getItemInHand().getType() == Material.IRON_BARDING
+                && !cantShoot.contains(player) && Arena.getArena(core, player) != null &&
                 Arena.getArena(core, e.getPlayer()).isPvpEnabled()){
-            shootLaser(e.getPlayer());
-            cantShoot.add(e.getPlayer());
+            shootLaser(player);
+            cantShoot.add(player);
+            player.getInventory().setItem(0, Feature.removeGlow(player.getInventory().getItem(0)));
             new BukkitRunnable(){
 
                 @Override
                 public void run(){
-                    cantShoot.remove(e.getPlayer());
+                    cantShoot.remove(player);
+                    player.getInventory().setItem(0, Feature.addGlow(player.getInventory().getItem(0)));
                 }
 
-            }.runTaskLater(core, Gun.getGun(e.getPlayer()).getCooldown());
+            }.runTaskLater(core, Gun.getGun(player).getCooldown());
         }
     }
 
@@ -79,13 +85,13 @@ public class LaserGun implements Listener {
         }
 
 
-        for (double a = 0; a < range; a+= 0.05){
+        for (double a = 0; a < range; a+= 0.25){
 
             double r = arena.getTeams().getTeam(player).getColor().getRed();
             double g = arena.getTeams().getTeam(player).getColor().getGreen();
             double b = arena.getTeams().getTeam(player).getColor().getBlue();
 
-            Location loc = l.add(l.getDirection().multiply(a));
+            Location loc = l.clone().add(l.getDirection().multiply(a));
 
             if (loc.getBlock().getType() != Material.AIR) return;
 

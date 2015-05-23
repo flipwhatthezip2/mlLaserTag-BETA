@@ -15,6 +15,7 @@ package ml.lasertag.minigame.commands;
 
 import ml.lasertag.minigame.Core;
 import ml.lasertag.minigame.GameManager.*;
+import ml.lasertag.minigame.api.PacketSender;
 import ml.lasertag.minigame.events.GunStatUpdate;
 import ml.lasertag.minigame.mobCreator.ArenaSelectorVillager;
 import ml.lasertag.minigame.mobCreator.EntityTypes;
@@ -80,6 +81,7 @@ public class LaserTag implements CommandExecutor {
 
         Gun.getGun(args[1]).addUser(player);
         player.sendMessage(Core.success + "Successfully chose gun §l" + Gun.getGun(args[1]).getName());
+        PacketSender.sendSound(player, "random.orb", 100F);
 
     }
 

@@ -1,6 +1,7 @@
 package ml.lasertag.minigame.GameManager;
 
 import ml.lasertag.minigame.Core;
+import ml.lasertag.minigame.api.Feature;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -33,13 +34,13 @@ public class Gun {
         ItemStack gun = new ItemStack(Material.IRON_BARDING); ItemMeta meta = gun.getItemMeta();
         meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', "&c&l" + name));
 
-        meta.setLore(Arrays.asList(ChatColor.translateAlternateColorCodes('&', "&cCooldown&f: " + ((double) cooldown/20) + " second(s)"),
-                                    ChatColor.translateAlternateColorCodes('&', "&cRange&f: " + range + " block(s)"),
-                                    ChatColor.translateAlternateColorCodes('&', "&cDamage&f: " + ((double) damage/2) + " Hearts")));
+        meta.setLore(Arrays.asList(ChatColor.translateAlternateColorCodes('&', "&cCooldown&f: " + ((double) cooldown / 20) + " second(s)"),
+                ChatColor.translateAlternateColorCodes('&', "&cRange&f: " + range + " block(s)"),
+                ChatColor.translateAlternateColorCodes('&', "&cDamage&f: " + ((double) damage / 2) + " Hearts")));
 
         gun.setItemMeta(meta);
 
-        return gun;
+        return Feature.addGlow(gun);
     }
 
     public void addUser(Player player){

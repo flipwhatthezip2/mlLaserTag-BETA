@@ -2,8 +2,10 @@ package ml.lasertag.minigame.Mechanics;
 
 import ml.lasertag.minigame.Core;
 import ml.lasertag.minigame.api.Feature;
+import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -35,7 +37,8 @@ public class Restrictions implements Listener {
     @EventHandler
     public void onInventoryClick(InventoryClickEvent e){
         Player player = (Player) e.getWhoClicked();
-        if (player.getGameMode() != GameMode.CREATIVE && !player.isOp()) e.setCancelled(true);
+        if (player.getGameMode() == GameMode.CREATIVE && player.isOp()) return;
+        e.setCancelled(true);
     }
 
     @EventHandler
@@ -78,7 +81,7 @@ public class Restrictions implements Listener {
 
     @EventHandler
     public void weatherChange (WeatherChangeEvent e){
-        e.setCancelled(true);
+        e.getWorld().setThundering(false);
     }
 
     @EventHandler
@@ -97,7 +100,7 @@ public class Restrictions implements Listener {
     public void onInventoryMove(InventoryClickEvent e){
         Player p = (Player) e.getWhoClicked();
         Inventory inventory = e.getClickedInventory();
-        if (inventory.getName() != null && inventory.getName().equalsIgnoreCase("§4§lLASERTAG! §8Pick an Arena")){
+        if (inventory.getName() != null && inventory.getName().contains("LASERTAG")){
             if (e.getCurrentItem() != null){
                 if (e.getCurrentItem().getType() == Material.STAINED_GLASS_PANE){
                     p.sendMessage(Core.warning + "How to play §lLASERTAG!§c:");

@@ -32,9 +32,9 @@ public class GunSelector implements Listener{
 
         ItemStack itemStack = new ItemStack(Material.STAINED_GLASS_PANE);
         ItemMeta itemMeta = itemStack.getItemMeta();
-        itemMeta.setDisplayName("§cHow to play:");
+        itemMeta.setDisplayName(ChatColor.translateAlternateColorCodes('&', "&cHow to play:"));
         List<String> lore = new ArrayList<>();
-        lore.add("§7Click me to learn §bhow to play§7!");
+        lore.add(ChatColor.translateAlternateColorCodes('&', "&7Click me to learn &bhow to play&7!"));
         itemMeta.setLore(lore);
         itemStack.setItemMeta(itemMeta);
         gunSelectorMenu.setItem(26, itemStack);

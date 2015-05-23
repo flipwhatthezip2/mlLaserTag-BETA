@@ -5,6 +5,7 @@ import net.minecraft.server.v1_8_R2.EnumParticle;
 import net.minecraft.server.v1_8_R2.PacketPlayOutNamedSoundEffect;
 import net.minecraft.server.v1_8_R2.PacketPlayOutWorldParticles;
 import org.bukkit.Location;
+import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.craftbukkit.v1_8_R2.entity.CraftPlayer;
 import org.bukkit.entity.Player;
@@ -38,6 +39,15 @@ public class PacketSender {
             playSound(sound, player.getLocation(), volume);
         }
 
+    }
+
+    public static void sendSound(Player player, String sound, float volume){
+        Location loc = player.getLocation();
+
+        PacketPlayOutNamedSoundEffect packet = new PacketPlayOutNamedSoundEffect(sound,
+                loc.getBlockX(), loc.getBlockY(), loc.getBlockZ(), volume, 1);
+
+        ((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet);
     }
 
 }
