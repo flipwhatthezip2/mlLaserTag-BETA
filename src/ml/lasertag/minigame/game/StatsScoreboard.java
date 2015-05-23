@@ -48,6 +48,8 @@ public class StatsScoreboard {
 
         obj.getScore(ChatColor.DARK_GREEN + "Green Beacon: ").setScore(6);
         obj.getScore(greenBeaconHealth + " ").setScore(5);
+
+        //TODO player health
     }
 
     public void updateHealth(LaserTagBeacon beacon){

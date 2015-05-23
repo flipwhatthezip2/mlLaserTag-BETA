@@ -11,10 +11,12 @@ import ml.lasertag.minigame.game.Teams;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Arena {
 
@@ -29,7 +31,6 @@ public class Arena {
  private ArenaState arenaState;
  private Teams teams;
  private BukkitTask countDownRunnable;
- private ItemStack gun = new ItemStack(Material.IRON_BARDING);
  private boolean canJoin = true;
 
  private int countDownTime = 5;
@@ -112,18 +113,23 @@ public class Arena {
   players.add(player);
   teams.addPlayer(player, teams.pickTeam(player));
   player.teleport(getSpawn(this.teams.getTeam(player)));
-  TEAM.setUniform(core, player);
-  player.getInventory().setItem(0, gun);
   if (players.size() == properties.getMaximumPlayers()) this.canJoin = false;
   if (players.size() == properties.getMinimumPlayers()) this.startCountdown();
  }
 
  public void removePlayer(Player player){
+
   players.remove(player);
   teams.removePlayer(player);
+
   player.getInventory().clear();
   player.getInventory().setArmorContents(null);
   player.setGameMode(GameMode.ADVENTURE);
+  player.setWalkSpeed(0.2F);
+  player.setHealth(20D);
+
+  Gun.getGun(player).removeUser(player);
+
   if (arenaState == ArenaState.WAITING || arenaState == ArenaState.COUNTDOWN) this.canJoin = true;
   if (players.size() < properties.getMinimumPlayers() && arenaState == ArenaState.COUNTDOWN) this.cancelCountdown();
   if (players.size() < properties.getMinimumPlayers() && arenaState == ArenaState.IN_GAME) this.endGameAsDraw();
@@ -181,6 +187,7 @@ public class Arena {
   this.spawnPlayers();
   this.canJoin = false;
   this.scoreboard.showScoreboard();
+  this.distributeKits();
   Bukkit.getPluginManager().callEvent(new ArenaInteractEvent(ArenaInteractEvent.ArenaAction.UPDATE_STAT, this));
 
   for (Player p : players){
@@ -254,14 +261,17 @@ public class Arena {
 
    player.setWalkSpeed(0.2F);
    player.setHealth(20D);
+
+   Gun.getGun(player).removeUser(player);
   }
  }
 
 
  public void distributeKits(){
+
   for (Player p : players){
    TEAM.setUniform(core, p);
-   p.getInventory().setItem(0, gun);
+   p.getInventory().setItem(0, Gun.getGun(p).getGun());
    p.updateInventory();
   }
  }

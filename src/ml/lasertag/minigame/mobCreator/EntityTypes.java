@@ -9,7 +9,8 @@ import java.util.Map;
 
 public enum EntityTypes {
 
-    AS_VILLAGER("Villager", 120, ArenaSelectorVillager.class);
+    AS_VILLAGER("Villager", 120, ArenaSelectorVillager.class),
+    GS_VILLAGER("Villager", 120, GunSelectorVillager.class);
 
     private EntityTypes(String name, int id, Class<? extends Entity> custom){
         addToMaps(custom, name, id);

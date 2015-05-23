@@ -2,6 +2,7 @@ package ml.lasertag.minigame.Mechanics;
 
 import ml.lasertag.minigame.Core;
 import ml.lasertag.minigame.GameManager.Arena;
+import ml.lasertag.minigame.GameManager.Gun;
 import ml.lasertag.minigame.api.Feature;
 import ml.lasertag.minigame.events.LaserDamageBeaconEvent;
 import ml.lasertag.minigame.game.TEAM;
@@ -27,7 +28,6 @@ public class LaserGun implements Listener {
     Core core;
 
     public ArrayList<Player> cantShoot = new ArrayList<Player>();
-    public int coolDown = 20;
     public int livesRemaining;
 
     public LaserGun(Core core){
@@ -52,7 +52,7 @@ public class LaserGun implements Listener {
                     cantShoot.remove(e.getPlayer());
                 }
 
-            }.runTaskLater(core, coolDown);
+            }.runTaskLater(core, Gun.getGun(e.getPlayer()).getCooldown());
         }
     }
 
@@ -70,7 +70,7 @@ public class LaserGun implements Listener {
         List<EnderCrystal> beacons = new ArrayList<EnderCrystal>();
         Location l = player.getEyeLocation();
 
-        int range = 25;
+        int range = Gun.getGun(player).getRange();
 
         for (org.bukkit.entity.Entity e : player.getWorld().getEntities()){
             if (e.getLocation().toVector().distance(l.toVector()) >= range) list.remove(e);
@@ -137,7 +137,7 @@ public class LaserGun implements Listener {
 
         if (player.getHealth() <= 8) awardKill(arena, player, killer);
 
-        player.damage(8);
+        player.damage(Gun.getGun(killer).getDamage());
         player.getWorld().playSound(player.getEyeLocation(), Sound.IRONGOLEM_HIT, 100L, 100L);
 
         Location loc = player.getEyeLocation();

@@ -15,6 +15,8 @@ package ml.lasertag.minigame;
 
 import ml.lasertag.minigame.GameManager.ArenaSelector;
 import ml.lasertag.minigame.GameManager.ArenasFile;
+import ml.lasertag.minigame.GameManager.GunSelector;
+import ml.lasertag.minigame.GameManager.GunsFile;
 import ml.lasertag.minigame.Mechanics.LaserGun;
 import ml.lasertag.minigame.Mechanics.PlayerChat;
 import ml.lasertag.minigame.Mechanics.PlayerJoin;
@@ -31,6 +33,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class Core extends JavaPlugin {
 
     public ArenasFile arenasFile;
+    public GunsFile gunsFile;
     public LaserGun laserGun;
 
     public static String info = "§7§l>> §e";
@@ -60,8 +63,12 @@ public class Core extends JavaPlugin {
 
         Bukkit.getServer().getLogger().info("Server> Successfully initialized the minigame 'LaserTag' on server: " + Bukkit.getServerName());
 
-        this.arenasFile = new ArenasFile(this);
-        this.arenasFile.loadArenas();
+
+        if (!getDataFolder().exists()) getDataFolder().mkdir();
+
+        this.arenasFile = new ArenasFile(this); this.arenasFile.loadArenas();
+        this.gunsFile = new GunsFile(this); this.gunsFile.loadGuns();
+
 
         Bukkit.getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
             @Override
@@ -100,6 +107,10 @@ public class Core extends JavaPlugin {
         return this.arenasFile;
     }
 
+    public GunsFile getGunsFile(){
+        return this.gunsFile;
+    }
+
     public LaserGun getLaserGun(){
         return this.laserGun;
     }
@@ -109,6 +120,7 @@ public class Core extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new PlayerJoin(this), this);
         Bukkit.getPluginManager().registerEvents(new PlayerChat(this), this);
         Bukkit.getPluginManager().registerEvents(new ArenaSelector(this), this);
+        Bukkit.getPluginManager().registerEvents(new GunSelector(this), this);
         Bukkit.getPluginManager().registerEvents(new Restrictions(), this);
     }
 }

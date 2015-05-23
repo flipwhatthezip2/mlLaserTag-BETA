@@ -2,7 +2,6 @@ package ml.lasertag.minigame.events;
 
 
 import ml.lasertag.minigame.GameManager.Arena;
-import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
