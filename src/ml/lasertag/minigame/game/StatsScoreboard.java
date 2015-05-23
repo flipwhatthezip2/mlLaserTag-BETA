@@ -19,8 +19,8 @@ public class StatsScoreboard {
     private Scoreboard scoreboard;
     private Objective obj;
 
-    private int greenBeaconHealth;
-    private int yellowBeaconHealth;
+    private double greenBeaconHealth;
+    private double yellowBeaconHealth;
 
     public StatsScoreboard(Core core, Arena arena){
         this.core = core;
@@ -72,9 +72,22 @@ public class StatsScoreboard {
     }
 
     public void reset(){
-        this.greenBeaconHealth = 20;
-        this.yellowBeaconHealth = 20;
+        this.greenBeaconHealth = 50;
+        this.yellowBeaconHealth = 50;
         this.initializeScoreboard();
+    }
+
+    public void set(TEAM team, int health){
+        if (team == TEAM.YELLOW){
+            scoreboard.resetScores(yellowBeaconHealth + "");
+            obj.getScore(health + "").setScore(8);
+            this.yellowBeaconHealth = health;
+        }
+        else {
+            scoreboard.resetScores(greenBeaconHealth + " ");
+            obj.getScore(health + " ").setScore(5);
+            this.greenBeaconHealth = health;
+        }
     }
 
 }

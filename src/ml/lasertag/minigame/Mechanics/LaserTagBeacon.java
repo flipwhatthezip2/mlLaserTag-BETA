@@ -25,8 +25,8 @@ public class LaserTagBeacon {
     private Arena arena;
     private TEAM team;
 
-    private int initialHealth = 20;
-    private int health = 20;
+    private int initialHealth = 50;
+    private double health = 50;
     private int life = 5;
     private Location beaconLocation;
     private EnderCrystal beacon;
@@ -116,18 +116,19 @@ public class LaserTagBeacon {
         this.setLife(5);
     }
 
-    public void dealDamage(int damage){
+    public void dealDamage(double damage){
         PacketSender.playParticle(EnumParticle.EXPLOSION_HUGE, beaconLocation.clone().add(0.5, 2, 0.5), 1);
         arena.getProperties().getWorld().playSound(beaconLocation, Sound.IRONGOLEM_HIT, 100, 1);
 
-        health = health - damage;
+        if (damage > health) health = 0;
+        else health = health - damage;
 
-        if (health >= 16) this.setLife(5);
-        else if (health >= 12) this.setLife(4);
-        else if (health >= 8) this.setLife(3);
-        else if (health >= 4) this.setLife(2);
+        if (health >= 40) this.setLife(5);
+        else if (health >= 30) this.setLife(4);
+        else if (health >= 20) this.setLife(3);
+        else if (health >= 10) this.setLife(2);
         else if (health > 0) this.setLife(1);
-        else if (health == 0) this.setLife(0);
+        else if (health <= 0) this.setLife(0);
 
         arena.getScoreboard().updateHealth(this);
 
@@ -152,7 +153,7 @@ public class LaserTagBeacon {
         return this.beacon;
     }
 
-    public int getHealth(){
+    public double getHealth(){
         return this.health;
     }
 

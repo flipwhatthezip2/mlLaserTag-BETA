@@ -85,7 +85,7 @@ public class LaserGun implements Listener {
         }
 
 
-        for (double a = 0; a < range; a+= 0.25){
+        for (double a = 0; a < range; a+= 0.5){
 
             double r = arena.getTeams().getTeam(player).getColor().getRed();
             double g = arena.getTeams().getTeam(player).getColor().getGreen();
@@ -97,7 +97,7 @@ public class LaserGun implements Listener {
 
             for (Player e : list){
                 if (!e.isDead() && e != player && e.getGameMode() == GameMode.ADVENTURE && Arena.getArena(core, e) != null){
-                    if (e.getLocation().toVector().distance(loc.toVector()) <= 1.5){
+                    if (e.getLocation().toVector().distance(loc.toVector()) <= 2){
                         damage(arena, e, player);
                     }
                 }
@@ -106,14 +106,14 @@ public class LaserGun implements Listener {
             for (EnderCrystal e : beacons){
                 for (Arena ar : core.getArenasFile().getArenas()){
                     if (arena.getTeams().getTeam(player) == TEAM.YELLOW){
-                        if (arena.getGreenBeacon().getBeacon() == e && e.getLocation().toVector().distance(loc.toVector()) <= 1.5){
-                            arena.getGreenBeacon().dealDamage(1);
+                        if (arena.getGreenBeacon().getBeacon() == e && e.getLocation().toVector().distance(loc.toVector()) <= 2){
+                            arena.getGreenBeacon().dealDamage(Gun.getGun(player).getCooldown() / 15);
                             Bukkit.getPluginManager().callEvent(new LaserDamageBeaconEvent(arena.getGreenBeacon(), player));
                             return;
                         }
                     }
                     else {
-                        if (arena.getYellowBeacon().getBeacon() == e && e.getLocation().toVector().distance(loc.toVector()) <= 1.5){
+                        if (arena.getYellowBeacon().getBeacon() == e && e.getLocation().toVector().distance(loc.toVector()) <= 2){
                             arena.getYellowBeacon().dealDamage(1);
                             Bukkit.getPluginManager().callEvent(new LaserDamageBeaconEvent(arena.getYellowBeacon(), player));
                             return;
@@ -141,7 +141,7 @@ public class LaserGun implements Listener {
 
         if (arena.getTeams().getTeam(player) == arena.getTeams().getTeam(killer)) return;
 
-        if (player.getHealth() <= 8) awardKill(arena, player, killer);
+        if (player.getHealth() <= Gun.getGun(killer).getDamage()) awardKill(arena, player, killer);
 
         player.damage(Gun.getGun(killer).getDamage());
         player.getWorld().playSound(player.getEyeLocation(), Sound.IRONGOLEM_HIT, 100L, 100L);
