@@ -48,6 +48,7 @@ public class PlayerJoin implements Listener {
         if (Arena.getArena(core, e.getPlayer()) != null){
             Arena.leaveArena(core, Arena.getArena(core, e.getPlayer()), e.getPlayer());
         }
+        e.setQuitMessage(Core.infoMessage + "§6" + e.getPlayer().getName() + " §7has left the server.");
     }
 
 }
