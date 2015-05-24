@@ -46,6 +46,7 @@ public class Gun {
     }
 
     public void addUser(Player player){
+        Gun.getGun(player).removeUser(player);
         users.add(player);
     }
 

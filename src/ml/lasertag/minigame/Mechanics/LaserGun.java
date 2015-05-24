@@ -153,9 +153,9 @@ public class LaserGun implements Listener {
 
         if (arena.getTeams().getTeam(player) == arena.getTeams().getTeam(killer)) return;
 
-        if (player.getHealth() <= Gun.getGun(killer).getDamage()) awardKill(arena, player, killer);
+        if (player.getHealth() <= Double.valueOf(Gun.getGun(killer).getDamage())) awardKill(arena, player, killer);
 
-        player.damage(Gun.getGun(killer).getDamage());
+        player.damage(Double.valueOf(Gun.getGun(killer).getDamage()));
         player.getWorld().playSound(player.getEyeLocation(), Sound.IRONGOLEM_HIT, 100L, 100L);
     }
 
@@ -165,6 +165,7 @@ public class LaserGun implements Listener {
         victim.setGameMode(GameMode.SPECTATOR);
         victim.setLevel(5);
         victim.removePotionEffect(PotionEffectType.SLOW);
+        PacketSender.sendSound(killer, "mob.pig.death", 100);
         Feature.sendTitle(victim, 5, 100, 5, "§4§lYOU DIED!", "§cRespawning in §l" + victim.getLevel() + " seconds§c...");
 
         final Firework fw = victim.getWorld().spawn(victim.getEyeLocation(), Firework.class);
