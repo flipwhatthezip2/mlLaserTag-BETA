@@ -12,6 +12,7 @@ import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
@@ -261,6 +262,7 @@ public class Arena {
 
    player.setWalkSpeed(0.2F);
    player.setHealth(20D);
+   player.removePotionEffect(PotionEffectType.SLOW);
 
    Gun.getGun(player).removeUser(player);
   }
