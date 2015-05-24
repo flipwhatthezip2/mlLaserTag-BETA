@@ -48,10 +48,10 @@ public class LaserGun implements Listener {
                 && !cantShoot.contains(player) && Arena.getArena(core, player) != null &&
                 Arena.getArena(core, e.getPlayer()).getArenaState() == Arena.ArenaState.IN_GAME &&
                 player.getGameMode() == GameMode.ADVENTURE){
-            shootLaser(player);
             cantShoot.add(player);
             player.getInventory().setItem(0, Feature.removeGlow(player.getInventory().getItem(0)));
             player.updateInventory();
+            shootLaser(player);
             new BukkitRunnable(){
 
                 @Override
