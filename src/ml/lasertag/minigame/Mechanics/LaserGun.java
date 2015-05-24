@@ -46,7 +46,7 @@ public class LaserGun implements Listener {
 
         if (e.getAction() == Action.RIGHT_CLICK_AIR && player.getItemInHand().getType() == Material.IRON_BARDING
                 && !cantShoot.contains(player) && Arena.getArena(core, player) != null &&
-                Arena.getArena(core, e.getPlayer()).isPvpEnabled()){
+                Arena.getArena(core, e.getPlayer()).getArenaState() == Arena.ArenaState.IN_GAME){
             shootLaser(player);
             cantShoot.add(player);
             player.getInventory().setItem(0, Feature.removeGlow(player.getInventory().getItem(0)));
@@ -56,6 +56,12 @@ public class LaserGun implements Listener {
                 @Override
                 public void run(){
                     cantShoot.remove(player);
+
+                    if (Arena.getArena(core, player) == null){
+                        this.cancel();
+                        return;
+                    }
+
                     player.getInventory().setItem(0, Feature.addGlow(player.getInventory().getItem(0)));
                     player.updateInventory();
                 }
