@@ -46,7 +46,8 @@ public class LaserGun implements Listener {
 
         if (e.getAction() == Action.RIGHT_CLICK_AIR && player.getItemInHand().getType() == Material.IRON_BARDING
                 && !cantShoot.contains(player) && Arena.getArena(core, player) != null &&
-                Arena.getArena(core, e.getPlayer()).getArenaState() == Arena.ArenaState.IN_GAME){
+                Arena.getArena(core, e.getPlayer()).getArenaState() == Arena.ArenaState.IN_GAME &&
+                player.getGameMode() == GameMode.ADVENTURE){
             shootLaser(player);
             cantShoot.add(player);
             player.getInventory().setItem(0, Feature.removeGlow(player.getInventory().getItem(0)));
@@ -177,7 +178,7 @@ public class LaserGun implements Listener {
     }
 
     public void awardKill(final Arena arena, final Player victim, Player killer){
-        Bukkit.getServer().broadcastMessage(Core.deathMessage + "§6" + victim.getName() + " §7has been shot by §6" + killer.getName() + "§7.");
+        arena.broadcastMessage(Core.deathMessage + "§6" + victim.getName() + " §7has been vaporized by §6" + killer.getName() + "§7.");
         victim.setGameMode(GameMode.SPECTATOR);
         victim.setLevel(5);
         Feature.sendTitle(victim, 5, 100, 5, "§4§lYOU DIED!", "§cRespawning in §l" + victim.getLevel() + " seconds§c...");

@@ -135,7 +135,8 @@ public class Feature extends JavaPlugin implements Listener {
         org.bukkit.inventory.ItemStack gun = new org.bukkit.inventory.ItemStack(Material.IRON_BARDING);
         ItemMeta meta = gun.getItemMeta();
 
-        meta.setDisplayName(item.getItemMeta().getDisplayName()); meta.setLore(item.getItemMeta().getLore());
+        meta.setDisplayName(item.getItemMeta().getDisplayName());
+        meta.setLore(item.getItemMeta().getLore());
         gun.setItemMeta(meta);
 
         return gun;
