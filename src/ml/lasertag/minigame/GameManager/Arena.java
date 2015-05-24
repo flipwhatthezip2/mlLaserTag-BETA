@@ -128,6 +128,7 @@ public class Arena {
   player.setGameMode(GameMode.ADVENTURE);
   player.setWalkSpeed(0.2F);
   player.setHealth(20D);
+  player.setLevel(0);
 
   Gun.getGun(player).removeUser(player);
 
@@ -319,6 +320,7 @@ public class Arena {
   arena.removePlayer(player);
   player.setWalkSpeed(0.2F);
   player.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
+  player.setLevel(0);
   player.teleport(Bukkit.getWorld("Lobby").getSpawnLocation());
   Bukkit.getPluginManager().callEvent(new ArenaInteractEvent(ArenaInteractEvent.ArenaAction.LEAVE, arena));
  }

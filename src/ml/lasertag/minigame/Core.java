@@ -26,6 +26,7 @@ import org.bukkit.entity.EnderCrystal;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.potion.PotionEffectType;
 
 public class Core extends JavaPlugin {
 
@@ -69,6 +70,12 @@ public class Core extends JavaPlugin {
         for (World world : Bukkit.getWorlds()){
             world.setGameRuleValue("keepInventory", "true");
             world.setGameRuleValue("naturalRegeneration", "false");
+        }
+
+        for (Player player : Bukkit.getOnlinePlayers()){
+            player.removePotionEffect(PotionEffectType.SLOW);
+            player.setLevel(0);
+            player.setPlayerListName(player.getName());
         }
 
 

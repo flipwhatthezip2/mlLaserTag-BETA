@@ -157,27 +157,6 @@ public class LaserGun implements Listener {
 
         player.damage(Gun.getGun(killer).getDamage());
         player.getWorld().playSound(player.getEyeLocation(), Sound.IRONGOLEM_HIT, 100L, 100L);
-
-        Location loc = player.getEyeLocation();
-
-        final Firework fw = player.getWorld().spawn(loc, Firework.class);
-        FireworkMeta fwm = fw.getFireworkMeta();
-
-        fwm.addEffect(FireworkEffect.builder().withColor(Color.fromRGB(
-                arena.getTeams().getTeam(player).getColor().getRed(),
-                arena.getTeams().getTeam(player).getColor().getGreen(),
-                arena.getTeams().getTeam(player).getColor().getBlue())).build());
-
-        fw.setFireworkMeta(fwm);
-
-        Bukkit.getScheduler().scheduleSyncDelayedTask(core, new Runnable(){
-
-            @Override
-            public void run(){
-                fw.detonate();
-            }
-
-        }, 2L);
     }
 
     public void awardKill(final Arena arena, final Player victim, Player killer){
@@ -187,6 +166,25 @@ public class LaserGun implements Listener {
         victim.setLevel(5);
         victim.removePotionEffect(PotionEffectType.SLOW);
         Feature.sendTitle(victim, 5, 100, 5, "§4§lYOU DIED!", "§cRespawning in §l" + victim.getLevel() + " seconds§c...");
+
+        final Firework fw = victim.getWorld().spawn(victim.getEyeLocation(), Firework.class);
+        FireworkMeta fwm = fw.getFireworkMeta();
+
+        fwm.addEffect(FireworkEffect.builder().withColor(Color.fromRGB(
+                arena.getTeams().getTeam(victim).getColor().getRed(),
+                arena.getTeams().getTeam(victim).getColor().getGreen(),
+                arena.getTeams().getTeam(victim).getColor().getBlue())).build());
+
+        fw.setFireworkMeta(fwm);
+
+        Bukkit.getScheduler().scheduleSyncDelayedTask(core, new Runnable() {
+
+            @Override
+            public void run() {
+                fw.detonate();
+            }
+
+        }, 2L);
 
         if (cantShoot.contains(victim)) cantShoot.remove(victim);
 

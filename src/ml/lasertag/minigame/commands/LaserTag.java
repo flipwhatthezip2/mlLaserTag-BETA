@@ -21,6 +21,7 @@ import ml.lasertag.minigame.mobCreator.ArenaSelectorVillager;
 import ml.lasertag.minigame.mobCreator.EntityTypes;
 import ml.lasertag.minigame.mobCreator.GunSelectorVillager;
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;

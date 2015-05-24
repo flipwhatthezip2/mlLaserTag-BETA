@@ -37,7 +37,7 @@ public class Gun {
 
         meta.setLore(Arrays.asList(ChatColor.translateAlternateColorCodes('&', "&cCooldown&f: " + ((double) cooldown / 20) + " second(s)"),
                 ChatColor.translateAlternateColorCodes('&', "&cRange&f: " + range + " block(s)"),
-                ChatColor.translateAlternateColorCodes('&', "&cDamage&f: " + ((double) damage / 2) + " Hearts"),
+                ChatColor.translateAlternateColorCodes('&', "&cDamage&f: " + ((double) damage / 2) + " Heart(s)"),
                 ChatColor.translateAlternateColorCodes('&', "&cZoom&f: " + zoom)));
 
         gun.setItemMeta(meta);

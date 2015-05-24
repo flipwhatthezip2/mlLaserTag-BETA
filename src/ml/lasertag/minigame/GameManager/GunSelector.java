@@ -6,6 +6,7 @@ import ml.lasertag.minigame.events.ArenaInteractEvent;
 import ml.lasertag.minigame.events.GunStatUpdate;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -67,7 +68,7 @@ public class GunSelector implements Listener{
         if (e.getWhoClicked() instanceof Player){
             Player player = (Player) e.getWhoClicked();
 
-            if (Arena.getArena(core, player) == null){
+            if ((Arena.getArena(core, player) == null) || (Arena.getArena(core, player) != null && player.getGameMode() == GameMode.SPECTATOR)){
 
                 ItemStack item = e.getCurrentItem();
 
