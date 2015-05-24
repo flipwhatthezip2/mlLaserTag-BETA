@@ -192,7 +192,7 @@ public class LaserTag implements CommandExecutor {
 
         if (args[1].equalsIgnoreCase("create")){
 
-            if (args.length != 6){
+            if (args.length != 7){
                 sender.sendMessage(Core.infoMessage + "Invaild argument ammount.");
                 return;
             }
@@ -206,12 +206,13 @@ public class LaserTag implements CommandExecutor {
                 Integer.parseInt(args[3]);
                 Integer.parseInt(args[4]);
                 Integer.parseInt(args[5]);
+                Integer.parseInt(args[6]);
             } catch (NumberFormatException e){
                 sender.sendMessage(Core.warning + "Some values are not valid integers");
                 return;
             }
 
-            core.getGunsFile().createGun(args[2], Integer.parseInt(args[3]), Integer.parseInt(args[4]), Integer.parseInt(args[5]));
+            core.getGunsFile().createGun(args[2], Integer.parseInt(args[3]), Integer.parseInt(args[4]), Integer.parseInt(args[5]), Integer.parseInt(args[6]));
             sender.sendMessage(Core.success + "Successfully created gun");
             Bukkit.getPluginManager().callEvent(new GunStatUpdate(Gun.getGun(args[2])));
         }
@@ -257,7 +258,7 @@ public class LaserTag implements CommandExecutor {
             }
 
             if (!isValidStat){
-                sender.sendMessage(Core.warning + "Invalid GunStat. GunStats are CoolDown, Range, and Damage");
+                sender.sendMessage(Core.warning + "Invalid GunStat. GunStats are CoolDown, Range, Damage, and Zoom");
                 return;
             }
 

@@ -17,10 +17,7 @@ import ml.lasertag.minigame.GameManager.ArenaSelector;
 import ml.lasertag.minigame.GameManager.ArenasFile;
 import ml.lasertag.minigame.GameManager.GunSelector;
 import ml.lasertag.minigame.GameManager.GunsFile;
-import ml.lasertag.minigame.Mechanics.LaserGun;
-import ml.lasertag.minigame.Mechanics.PlayerChat;
-import ml.lasertag.minigame.Mechanics.PlayerJoin;
-import ml.lasertag.minigame.Mechanics.Restrictions;
+import ml.lasertag.minigame.Mechanics.*;
 import ml.lasertag.minigame.api.Feature;
 import ml.lasertag.minigame.commands.LaserTag;
 import org.bukkit.Bukkit;
@@ -122,5 +119,6 @@ public class Core extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new ArenaSelector(this), this);
         Bukkit.getPluginManager().registerEvents(new GunSelector(this), this);
         Bukkit.getPluginManager().registerEvents(new Restrictions(), this);
+        Bukkit.getPluginManager().registerEvents(new AimDownSights(this), this);
     }
 }

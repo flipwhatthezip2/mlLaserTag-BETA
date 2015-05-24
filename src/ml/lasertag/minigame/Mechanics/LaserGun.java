@@ -50,12 +50,14 @@ public class LaserGun implements Listener {
             shootLaser(player);
             cantShoot.add(player);
             player.getInventory().setItem(0, Feature.removeGlow(player.getInventory().getItem(0)));
+            player.updateInventory();
             new BukkitRunnable(){
 
                 @Override
                 public void run(){
                     cantShoot.remove(player);
                     player.getInventory().setItem(0, Feature.addGlow(player.getInventory().getItem(0)));
+                    player.updateInventory();
                 }
 
             }.runTaskLater(core, Gun.getGun(player).getCooldown());
@@ -107,14 +109,14 @@ public class LaserGun implements Listener {
                 for (Arena ar : core.getArenasFile().getArenas()){
                     if (arena.getTeams().getTeam(player) == TEAM.YELLOW){
                         if (arena.getGreenBeacon().getBeacon() == e && e.getLocation().toVector().distance(loc.toVector()) <= 2){
-                            arena.getGreenBeacon().dealDamage(Gun.getGun(player).getCooldown() / 15);
+                            arena.getGreenBeacon().dealDamage(Gun.getGun(player).getCooldown() / 10);
                             Bukkit.getPluginManager().callEvent(new LaserDamageBeaconEvent(arena.getGreenBeacon(), player));
                             return;
                         }
                     }
                     else {
                         if (arena.getYellowBeacon().getBeacon() == e && e.getLocation().toVector().distance(loc.toVector()) <= 2){
-                            arena.getYellowBeacon().dealDamage(1);
+                            arena.getYellowBeacon().dealDamage(Gun.getGun(player).getCooldown() / 10);
                             Bukkit.getPluginManager().callEvent(new LaserDamageBeaconEvent(arena.getYellowBeacon(), player));
                             return;
                         }
@@ -195,10 +197,10 @@ public class LaserGun implements Listener {
                 }
 
                 if (victim.getLevel() <= 0){
-                    victim.setGameMode(GameMode.ADVENTURE);
                     victim.spigot().respawn();
-                    victim.setHealth(20D);
                     victim.teleport(Arena.getArena(core, victim).getSpawn(arena.getTeams().getTeam(victim)));
+                    victim.setGameMode(GameMode.ADVENTURE);
+                    victim.setHealth(20D);
                     Feature.sendTitle(victim, 5, 200, 5, "", "");
                     this.cancel();
                 }

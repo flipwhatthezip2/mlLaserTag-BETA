@@ -35,16 +35,17 @@ public class GunsFile {
         this.gunsFile = YamlConfiguration.loadConfiguration(file);
     }
 
-    public void createGun(String name, int cooldown, int range, int damage){
+    public void createGun(String name, int cooldown, int range, int damage, int zoom){
 
         name = name.toUpperCase();
 
-        guns.add(new Gun(core, this, name, cooldown, range, damage));
+        guns.add(new Gun(core, this, name, cooldown, range, damage, zoom));
         gunNames.add(name);
 
         gunsFile.set(name + ".CoolDown", cooldown);
         gunsFile.set(name + ".Range", range);
         gunsFile.set(name + ".Damage", damage);
+        gunsFile.set(name + ".Zoom", zoom);
 
         gunsFile.set("Guns", gunNames);
 
@@ -53,10 +54,13 @@ public class GunsFile {
 
     public void deleteGun(String name){
 
+        name = name.toUpperCase();
+
         guns.remove(Gun.getGun(name));
         gunNames.remove(name);
 
         gunsFile.set(name, null);
+        gunsFile.set("Guns", gunNames);
 
         this.save();
 
@@ -69,8 +73,9 @@ public class GunsFile {
             int cooldown = gunsFile.getInt(name + ".CoolDown");
             int range = gunsFile.getInt(name + ".Range");
             int damage = gunsFile.getInt(name + ".Damage");
+            int zoom = gunsFile.getInt(name + ".Zoom");
 
-            guns.add(new Gun(core, this, name, cooldown, range, damage));
+            guns.add(new Gun(core, this, name, cooldown, range, damage, zoom));
             gunNames.add(name);
         }
 
@@ -91,6 +96,7 @@ public class GunsFile {
         gunsFile.set(newName + ".CoolDown", gun.getCooldown());
         gunsFile.set(newName + ".Range", gun.getRange());
         gunsFile.set(newName + ".Damage", gun.getDamage());
+        gunsFile.set(newName + ".Zoom", gun.getZoom());
 
         gun.setName(newName);
 
@@ -114,6 +120,11 @@ public class GunsFile {
         else if (gunStat == GunStat.DAMAGE){
             gunsFile.set(name + ".Damage", newValue);
             gun.setDamage(newValue);
+        }
+
+        else if (gunStat == GunStat.ZOOM){
+            gunsFile.set(name + ".Zoom", newValue);
+            gun.setZoom(newValue);
         }
 
         this.save();
@@ -144,7 +155,7 @@ public class GunsFile {
     }
 
     public enum GunStat {
-        COOLDOWN, RANGE, DAMAGE;
+        COOLDOWN, RANGE, DAMAGE, ZOOM;
     }
 
 }
