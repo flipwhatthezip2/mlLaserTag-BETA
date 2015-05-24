@@ -94,7 +94,7 @@ public class Gun {
 
     public static Gun getGun(Player player){
         for (Gun gun : core.getGunsFile().getGuns()) if (gun.getUsers().contains(player)) return gun;
-        return null;
+        return core.getGunsFile().getGuns().get(0);
     }
 
 }

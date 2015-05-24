@@ -308,7 +308,6 @@ public class Arena {
  public static void joinArena(Core core, Arena arena, Player player){
   arena.addPlayer(player);
   arena.broadcastMessage(Core.joinMessage + "§6" + player.getName() + " §7has joined the game!");
-  if (Gun.getGun(player) == null) core.getGunsFile().getGuns().get(0).addUser(player);
   Bukkit.getPluginManager().callEvent(new ArenaInteractEvent(ArenaInteractEvent.ArenaAction.JOIN, arena));
  }
 
