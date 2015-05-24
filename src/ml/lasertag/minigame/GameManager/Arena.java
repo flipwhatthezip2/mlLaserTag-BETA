@@ -201,6 +201,7 @@ public class Arena {
   this.broadcastTitle(ChatColor.BLUE + "Draw", ChatColor.GRAY + "The game has ended!");
   this.arenaState = ArenaState.RESTARTING;
   this.teams.resetTeams();
+  this.handlePlayerLeave();
 
 
   new BukkitRunnable(){
@@ -208,7 +209,6 @@ public class Arena {
    @Override
    public void run(){
     resetBeacons();
-    handlePlayerLeave();
     for (Player p : players) p.teleport(Bukkit.getWorld("Lobby").getSpawnLocation());
     emptyArena();
     arenaState = ArenaState.WAITING;
@@ -226,6 +226,7 @@ public class Arena {
           ChatColor.GRAY + "The game has ended!");
   this.arenaState = ArenaState.RESTARTING;
   this.teams.resetTeams();
+  this.handlePlayerLeave();
 
 
   new BukkitRunnable(){
@@ -233,7 +234,6 @@ public class Arena {
    @Override
   public void run(){
     resetBeacons();
-    handlePlayerLeave();
     for (Player p : players) p.teleport(Bukkit.getWorld("Lobby").getSpawnLocation());
     emptyArena();
     arenaState = ArenaState.WAITING;
@@ -305,7 +305,7 @@ public class Arena {
   return null;
  }
 
- public static void joinArena(Core core, Arena arena, Player player){
+ public static void joinArena(Core core, Arena arena, Player player) {
   arena.addPlayer(player);
   arena.broadcastMessage(Core.joinMessage + "§6" + player.getName() + " §7has joined the game!");
   Bukkit.getPluginManager().callEvent(new ArenaInteractEvent(ArenaInteractEvent.ArenaAction.JOIN, arena));

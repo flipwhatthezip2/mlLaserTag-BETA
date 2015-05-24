@@ -4,6 +4,7 @@ package ml.lasertag.minigame.Mechanics;
 import ml.lasertag.minigame.Core;
 import ml.lasertag.minigame.GameManager.Arena;
 import ml.lasertag.minigame.GameManager.Gun;
+import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -27,7 +28,8 @@ public class AimDownSights implements Listener{
         Player player = e.getPlayer();
 
         if (Arena.getArena(core, player) != null) {
-            if (player.getItemInHand() != null && player.getItemInHand().getType() == Material.IRON_BARDING) {
+            if (player.getItemInHand() != null && player.getItemInHand().getType() == Material.IRON_BARDING &&
+                    Arena.getArena(core, player).getArenaState() == Arena.ArenaState.IN_GAME && player.getGameMode() == GameMode.ADVENTURE) {
                 if (!player.isSneaking()) {
                     player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 10000, Gun.getGun(player).getZoom()));
                 }
@@ -44,7 +46,8 @@ public class AimDownSights implements Listener{
 
         Player player = e.getPlayer();
 
-        if (Arena.getArena(core, player) != null && player.getInventory().contains(Material.IRON_BARDING) && Arena.getArena(core, player).getArenaState() == Arena.ArenaState.IN_GAME){
+        if (Arena.getArena(core, player) != null && player.getInventory().getItem(0) != null && player.getInventory().getItem(0).getType() == Material.IRON_BARDING
+            && Arena.getArena(core, player).getArenaState() == Arena.ArenaState.IN_GAME){
 
             if (e.getNewSlot() != 0){
                 player.removePotionEffect(PotionEffectType.SLOW);

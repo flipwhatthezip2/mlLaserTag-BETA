@@ -120,6 +120,9 @@ public class Feature extends JavaPlugin implements Listener {
 
     public static org.bukkit.inventory.ItemStack addGlow(org.bukkit.inventory.ItemStack item){
         net.minecraft.server.v1_8_R2.ItemStack nmsItem = CraftItemStack.asNMSCopy(item);
+
+        if (nmsItem == null) return item;
+
         NBTTagCompound tag = nmsItem.hasTag() ? nmsItem.getTag() : new NBTTagCompound();
 
         NBTTagList ench = new NBTTagList();

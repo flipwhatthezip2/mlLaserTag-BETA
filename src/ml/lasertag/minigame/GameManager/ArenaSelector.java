@@ -96,7 +96,7 @@ public class ArenaSelector implements Listener {
 
                 ItemStack item = e.getCurrentItem();
 
-                if (item.getType() == Material.SUGAR){
+                if (item != null && item.getType() == Material.SUGAR){
                     Bukkit.dispatchCommand(player, "lasertag join " + ChatColor.stripColor(item.getItemMeta().getDisplayName()));
                     e.setCancelled(true);
                 }

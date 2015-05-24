@@ -176,6 +176,8 @@ public class LaserGun implements Listener {
         victim.setLevel(5);
         Feature.sendTitle(victim, 5, 100, 5, "§4§lYOU DIED!", "§cRespawning in §l" + victim.getLevel() + " seconds§c...");
 
+        if (cantShoot.contains(victim)) cantShoot.remove(victim);
+
         new BukkitRunnable(){
 
             public void run(){
