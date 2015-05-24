@@ -263,6 +263,7 @@ public class Arena {
    player.setWalkSpeed(0.2F);
    player.setHealth(20D);
    player.removePotionEffect(PotionEffectType.SLOW);
+   teams.removePlayer(player);
 
    Gun.getGun(player).removeUser(player);
   }

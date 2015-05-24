@@ -66,6 +66,11 @@ public class Core extends JavaPlugin {
         this.arenasFile = new ArenasFile(this); this.arenasFile.loadArenas();
         this.gunsFile = new GunsFile(this); this.gunsFile.loadGuns();
 
+        for (World world : Bukkit.getWorlds()){
+            world.setGameRuleValue("keepInventory", "true");
+            world.setGameRuleValue("naturalRegeneration", "false");
+        }
+
 
         Bukkit.getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
             @Override

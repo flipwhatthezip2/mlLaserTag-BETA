@@ -21,6 +21,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 public class PlayerJoin implements Listener {
 
@@ -40,7 +42,8 @@ public class PlayerJoin implements Listener {
 
         Feature.sendTabTitle(p, "§cPlaying on §lLASERTAG! §8- §c§lLASERTAG!", "§eA §6§lMineLegends §eoriginal game!");
 
-        e.getPlayer().teleport(Bukkit.getWorld("Lobby").getSpawnLocation());
+        p.teleport(Bukkit.getWorld("Lobby").getSpawnLocation());
+        p.addPotionEffect(new PotionEffect(PotionEffectType.SATURATION, 5, 20));
     }
 
     @EventHandler

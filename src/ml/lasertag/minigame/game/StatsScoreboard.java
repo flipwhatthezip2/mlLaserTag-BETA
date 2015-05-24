@@ -18,6 +18,7 @@ public class StatsScoreboard {
     private Arena arena;
     private Scoreboard scoreboard;
     private Objective obj;
+    private Objective health;
 
     private double greenBeaconHealth;
     private double yellowBeaconHealth;
@@ -49,7 +50,11 @@ public class StatsScoreboard {
         obj.getScore(ChatColor.DARK_GREEN + "Green Beacon: ").setScore(6);
         obj.getScore(greenBeaconHealth + " ").setScore(5);
 
-        //TODO player health
+
+        this.health = scoreboard.registerNewObjective("showhealth", "health");
+        this.health.setDisplaySlot(DisplaySlot.BELOW_NAME);
+        this.health.setDisplayName(" / 20");
+
     }
 
     public void updateHealth(LaserTagBeacon beacon){

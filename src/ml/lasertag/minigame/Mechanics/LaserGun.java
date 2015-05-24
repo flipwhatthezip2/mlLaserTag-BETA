@@ -19,6 +19,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.meta.FireworkMeta;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
@@ -81,7 +82,7 @@ public class LaserGun implements Listener {
 
         arena = Arena.getArena(core, player);
 
-        arena.getProperties().getWorld().playSound(player.getLocation(), Sound.BAT_DEATH, 100, 100);
+        arena.getProperties().getWorld().playSound(player.getLocation(), Sound.ENDERMAN_TELEPORT, 20, 100);
 
         List<Player> list = player.getWorld().getPlayers();
         List<EnderCrystal> beacons = new ArrayList<EnderCrystal>();
@@ -180,9 +181,11 @@ public class LaserGun implements Listener {
     }
 
     public void awardKill(final Arena arena, final Player victim, Player killer){
-        arena.broadcastMessage(Core.deathMessage + "§6" + victim.getName() + " §7has been vaporized by §6" + killer.getName() + "§7.");
+        arena.broadcastMessage(Core.deathMessage + "§6" + victim.getName() + " §7has been vaporized by §6" +
+                                killer.getName() + "§7. " +"using §c" + Gun.getGun(killer).getName());
         victim.setGameMode(GameMode.SPECTATOR);
         victim.setLevel(5);
+        victim.removePotionEffect(PotionEffectType.SLOW);
         Feature.sendTitle(victim, 5, 100, 5, "§4§lYOU DIED!", "§cRespawning in §l" + victim.getLevel() + " seconds§c...");
 
         if (cantShoot.contains(victim)) cantShoot.remove(victim);
@@ -191,7 +194,6 @@ public class LaserGun implements Listener {
 
             public void run(){
                 Feature.sendSubtitle(victim, 5, 20, 5, "§cRespawning in §l" + victim.getLevel() + " seconds§c...");
-                victim.setLevel(victim.getLevel() - 1);
 
                 if (Arena.getArena(core, victim) == null){
                     victim.spigot().respawn();
@@ -215,6 +217,9 @@ public class LaserGun implements Listener {
                     Feature.sendTitle(victim, 5, 200, 5, "", "");
                     this.cancel();
                 }
+
+                victim.setLevel(victim.getLevel() - 1);
+
             }
 
         }.runTaskTimer(core, 0, 20);

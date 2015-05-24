@@ -37,7 +37,7 @@ public class LaserTagBeacon {
         this.arena = arena;
         this.team = team;
 
-        this.beaconLocation = core.getArenasFile().getBeacon(arena.getProperties().getArenaName(), team).getBlock().getLocation().add(0.5, 0, 0.5);
+        this.beaconLocation = core.getArenasFile().getBeacon(arena.getProperties().getArenaName(), team).add(0.5, 0, 0.5);
         this.beacon = (EnderCrystal) arena.getProperties().getWorld().spawnEntity(beaconLocation, EntityType.ENDER_CRYSTAL);
 
         this.establishIndicatorRing();

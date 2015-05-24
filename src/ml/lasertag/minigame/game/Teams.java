@@ -1,6 +1,7 @@
 package ml.lasertag.minigame.game;
 
 import ml.lasertag.minigame.GameManager.Arena;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -20,10 +21,12 @@ public class Teams {
 
     public void addPlayer(Player player, TEAM team){
         this.teams.put(player, team);
+        player.setPlayerListName((team == TEAM.YELLOW ? ChatColor.YELLOW : ChatColor.GREEN) + player.getName());
     }
 
     public void removePlayer(Player player){
         this.teams.remove(player);
+        player.setPlayerListName(player.getName());
     }
 
     public TEAM pickTeam(Player player){
