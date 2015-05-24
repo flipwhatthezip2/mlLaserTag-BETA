@@ -81,6 +81,8 @@ public class LaserGun implements Listener {
 
         arena = Arena.getArena(core, player);
 
+        arena.getProperties().getWorld().playSound(player.getLocation(), Sound.BAT_DEATH, 100, 100);
+
         List<Player> list = player.getWorld().getPlayers();
         List<EnderCrystal> beacons = new ArrayList<EnderCrystal>();
         Location l = player.getEyeLocation();

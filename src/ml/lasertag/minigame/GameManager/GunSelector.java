@@ -73,6 +73,7 @@ public class GunSelector implements Listener{
 
                 if (item != null && item.getType() == Material.IRON_BARDING){
                     Bukkit.dispatchCommand(player, "lasertag selectGun " + ChatColor.stripColor(item.getItemMeta().getDisplayName()));
+                    player.closeInventory();
                     e.setCancelled(true);
                 }
 
