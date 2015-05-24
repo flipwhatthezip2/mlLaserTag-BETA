@@ -44,7 +44,7 @@ public class LaserGun implements Listener {
 
         final Player player = e.getPlayer();
 
-        if (e.getAction() == Action.RIGHT_CLICK_AIR && player.getItemInHand().getType() == Material.IRON_BARDING
+        if (e.getAction().toString().contains("RIGHT") && player.getItemInHand().getType() == Material.IRON_BARDING
                 && !cantShoot.contains(player) && Arena.getArena(core, player) != null &&
                 Arena.getArena(core, e.getPlayer()).getArenaState() == Arena.ArenaState.IN_GAME &&
                 player.getGameMode() == GameMode.ADVENTURE){
@@ -102,7 +102,7 @@ public class LaserGun implements Listener {
 
             Location loc = l.clone().add(l.getDirection().multiply(a));
 
-            if (loc.getBlock().getType() != Material.AIR) return;
+            if (loc.getBlock().getType().isSolid()) return;
 
             for (Player e : list){
                 if (!e.isDead() && e != player && e.getGameMode() == GameMode.ADVENTURE && Arena.getArena(core, e) != null){
