@@ -59,29 +59,29 @@ public class LaserTag implements CommandExecutor {
     public void trySelectingGun(CommandSender sender, String[] args){
 
         if (args.length != 2){
-            sender.sendMessage(Core.warning + "invalid argument amount. /lasertag selectGun [gun]");
+            sender.sendMessage(Core.infoMessage + "invalid argument amount. /lasertag selectGun [gun]");
             return;
         }
 
         if (!(sender instanceof Player)) {
-            sender.sendMessage(Core.warning + "Only players can select guns");
+            sender.sendMessage(Core.infoMessage + "Only players can select guns");
             return;
         }
 
         Player player = (Player) sender;
 
         if (Arena.getArena(core, player) != null){
-            player.sendMessage(Core.warning + "You can't select a gun while in an arena");
+            player.sendMessage(Core.infoMessage + "You can't select a gun while in an arena");
             return;
         }
 
         if (!core.getGunsFile().contains(args[1])){
-            player.sendMessage(Core.warning + "Gun does not exist");
+            player.sendMessage(Core.infoMessage + "Gun does not exist");
             return;
         }
 
         Gun.getGun(args[1]).addUser(player);
-        player.sendMessage(Core.success + "Successfully chose gun §l" + Gun.getGun(args[1]).getName());
+        player.sendMessage(Core.infoMessage + "Successfully chose gun §l" + Gun.getGun(args[1]).getName());
         PacketSender.sendSound(player, "random.orb", 100F);
 
     }
@@ -178,11 +178,11 @@ public class LaserTag implements CommandExecutor {
         }
 
         if (args.length == 1) {
-            sender.sendMessage(Core.info + "Commands for §9§lLASERTAG GUNS§e:");
-            sender.sendMessage(Core.infoList + "/lasertag gun create [name] [cooldown] [range] [damage] §8- §7Creates gun.");
-            sender.sendMessage(Core.infoList + "/lasertag gun delete [gun] §8- §7Deletes gun.");
-            sender.sendMessage(Core.infoList + "/lasertag gun set [gun] [gunStat] [value] §8- §7Sets a stat.");
-            sender.sendMessage(Core.infoList + "/lasertag gun rename [gun] [newName] §8- §7Renames a gun.");
+            sender.sendMessage(Core.infoMessage + "Commands for §9§lLASERTAG GUNS§e:");
+            sender.sendMessage(Core.infoMessage + "/lasertag gun create [name] [cooldown] [range] [damage] §8- §7Creates gun.");
+            sender.sendMessage(Core.infoMessage + "/lasertag gun delete [gun] §8- §7Deletes gun.");
+            sender.sendMessage(Core.infoMessage + "/lasertag gun set [gun] [gunStat] [value] §8- §7Sets a stat.");
+            sender.sendMessage(Core.infoMessage + "/lasertag gun rename [gun] [newName] §8- §7Renames a gun.");
             return;
         }
 
@@ -199,7 +199,7 @@ public class LaserTag implements CommandExecutor {
             }
 
             if (core.getGunsFile().contains(args[2])){
-                sender.sendMessage(Core.warning + "Gun with this name already exists");
+                sender.sendMessage(Core.infoMessage + "Gun with this name already exists");
                 return;
             }
 
@@ -209,29 +209,29 @@ public class LaserTag implements CommandExecutor {
                 Integer.parseInt(args[5]);
                 Integer.parseInt(args[6]);
             } catch (NumberFormatException e){
-                sender.sendMessage(Core.warning + "Some values are not valid integers");
+                sender.sendMessage(Core.infoMessage + "Some values are not valid integers");
                 return;
             }
 
             core.getGunsFile().createGun(args[2], Integer.parseInt(args[3]), Integer.parseInt(args[4]), Integer.parseInt(args[5]), Integer.parseInt(args[6]));
-            sender.sendMessage(Core.success + "Successfully created gun");
+            sender.sendMessage(Core.infoMessage + "Successfully created gun");
             Bukkit.getPluginManager().callEvent(new GunStatUpdate(Gun.getGun(args[2])));
         }
 
         else if (args[1].equalsIgnoreCase("delete")){
 
             if (args.length != 3){
-                sender.sendMessage(Core.warning + "Invalid argument amount");
+                sender.sendMessage(Core.infoMessage + "Invalid argument amount");
                 return;
             }
 
             if (!core.getGunsFile().contains(args[2])){
-                sender.sendMessage(Core.warning + "Gun does not exist");
+                sender.sendMessage(Core.infoMessage + "Gun does not exist");
                 return;
             }
 
             core.getGunsFile().deleteGun(args[2]);
-            sender.sendMessage(Core.success + "Successfully deleted gun");
+            sender.sendMessage(Core.infoMessage + "Successfully deleted gun");
             Bukkit.getPluginManager().callEvent(new GunStatUpdate(Gun.getGun(args[2])));
 
         }
@@ -239,12 +239,12 @@ public class LaserTag implements CommandExecutor {
         else if (args[1].equalsIgnoreCase("set")){
 
             if (args.length != 5){
-                sender.sendMessage(Core.warning + "Invalid argument amount");
+                sender.sendMessage(Core.infoMessage + "Invalid argument amount");
                 return;
             }
 
             if (!core.getGunsFile().contains(args[2])){
-                sender.sendMessage(Core.warning + "Gun does not exist");
+                sender.sendMessage(Core.infoMessage + "Gun does not exist");
                 return;
             }
 
@@ -259,19 +259,19 @@ public class LaserTag implements CommandExecutor {
             }
 
             if (!isValidStat){
-                sender.sendMessage(Core.warning + "Invalid GunStat. GunStats are CoolDown, Range, Damage, and Zoom");
+                sender.sendMessage(Core.infoMessage + "Invalid GunStat. GunStats are CoolDown, Range, Damage, and Zoom");
                 return;
             }
 
             try {
                 Integer.parseInt(args[4]);
             } catch (NumberFormatException e){
-                sender.sendMessage(Core.warning + "4th argument is an invalid integer");
+                sender.sendMessage(Core.infoMessage + "4th argument is an invalid integer");
                 return;
             }
 
             core.getGunsFile().setGunStat(args[2], gunStat, Integer.parseInt(args[4]));
-            sender.sendMessage(Core.success + "Successfully set GunStat");
+            sender.sendMessage(Core.infoMessage + "Successfully set GunStat");
             Bukkit.getPluginManager().callEvent(new GunStatUpdate(Gun.getGun(args[2])));
 
         }
@@ -279,17 +279,17 @@ public class LaserTag implements CommandExecutor {
         else if (args[1].equalsIgnoreCase("rename")){
 
             if (args.length != 4){
-                sender.sendMessage(Core.warning + "Invalid argument amount");
+                sender.sendMessage(Core.infoMessage + "Invalid argument amount");
                 return;
             }
 
             if (!core.getGunsFile().contains(args[2])){
-                sender.sendMessage(Core.warning + "Gun does not exist");
+                sender.sendMessage(Core.infoMessage + "Gun does not exist");
                 return;
             }
 
             core.getGunsFile().setGunName(args[2], args[3]);
-            sender.sendMessage(Core.success + "Successfully renamed gun");
+            sender.sendMessage(Core.infoMessage + "Successfully renamed gun");
             Bukkit.getPluginManager().callEvent(new GunStatUpdate(Gun.getGun(args[2])));
 
         }
@@ -301,15 +301,15 @@ public class LaserTag implements CommandExecutor {
         Bukkit.getServer().broadcastMessage("§e" + sender.getName() + "§8: §f§lStarting a new round! §fCome join me!");
     }
     public void lasertag(CommandSender sender){
-        sender.sendMessage(Core.info + "Currently running §cLaser Tag §lBETA");
-        sender.sendMessage(Core.info + "Developed by: §cFlipwhatthezip2 §eand §cReadySetPawn");
-        sender.sendMessage(Core.info + "For a list of commands type: §c/lasertag §lhelp");
+        sender.sendMessage(Core.infoMessage + "Currently running §cLaser Tag §lBETA");
+        sender.sendMessage(Core.infoMessage + "Developed by: §cFlipwhatthezip2 §eand §cReadySetPawn");
+        sender.sendMessage(Core.infoMessage + "For a list of commands type: §c/lasertag §lhelp");
     }
     public void lasertagdebug(CommandSender sender){
-        sender.sendMessage(Core.info + "Displaying debug info:");
-        sender.sendMessage(Core.info + "Currently running build §c§lLS.b.01");
-        sender.sendMessage(Core.info + "Report reference #: §c1.b.a");
-        sender.sendMessage(Core.info + "Current game status: §c§lN/A");
+        sender.sendMessage(Core.infoMessage + "Displaying debug info:");
+        sender.sendMessage(Core.infoMessage + "Currently running build §c§lLS.b.01");
+        sender.sendMessage(Core.infoMessage + "Report reference #: §c1.b.a");
+        sender.sendMessage(Core.infoMessage + "Current game status: §c§lN/A");
     }
     public void lasertagarena(CommandSender sender, String[] args){
 
@@ -319,13 +319,13 @@ public class LaserTag implements CommandExecutor {
         }
 
         if (args.length == 1) {
-            sender.sendMessage(Core.info + "Commands for §c§lLASERTAG ARENAS§e:");
-            sender.sendMessage(Core.infoList + "/lasertag arena create [arena] [world] §8- §7Creates arena.");
-            sender.sendMessage(Core.infoList + "/lasertag arena delete [arena] §8- §7Deletes arena.");
-            sender.sendMessage(Core.infoList + "/lasertag arena maxPlayer [arena] [maxPlayers] §8- §7Sets max players.");
-            sender.sendMessage(Core.infoList + "/lasertag arena minPlayer [arena] [minPlayers] §8- §7Sets min players.");
-            sender.sendMessage(Core.infoList + "/lasertag arena setYellowSpawn [arena] §8- §7Sets spawn.");
-            sender.sendMessage(Core.infoList + "/lasertag arena setGreenSpawn [arena] §8- §7Sets spawn.");
+            sender.sendMessage(Core.infoMessage + "Commands for §c§lLASERTAG ARENAS§e:");
+            sender.sendMessage(Core.infoMessage + "/lasertag arena create [arena] [world] §8- §7Creates arena.");
+            sender.sendMessage(Core.infoMessage + "/lasertag arena delete [arena] §8- §7Deletes arena.");
+            sender.sendMessage(Core.infoMessage + "/lasertag arena maxPlayer [arena] [maxPlayers] §8- §7Sets max players.");
+            sender.sendMessage(Core.infoMessage + "/lasertag arena minPlayer [arena] [minPlayers] §8- §7Sets min players.");
+            sender.sendMessage(Core.infoMessage + "/lasertag arena setYellowSpawn [arena] §8- §7Sets spawn.");
+            sender.sendMessage(Core.infoMessage + "/lasertag arena setGreenSpawn [arena] §8- §7Sets spawn.");
             return;
         }
 
@@ -465,12 +465,12 @@ public class LaserTag implements CommandExecutor {
 
     }
     public void lasertaghelp(CommandSender sender){
-        sender.sendMessage(Core.info + "Commands for §c§lLASERTAG§e:");
-        sender.sendMessage(Core.infoList + "/lasertag debug §8- §7Displays the current builds debug info.");
-        sender.sendMessage(Core.infoList + "/lasertag info §8- §7Displays the plugin info.");
-        sender.sendMessage(Core.infoList + "/lasertag arena §8- §7Displays all arenas commands.");
-        sender.sendMessage(Core.infoList + "/lasertag game §8- §7Displays the current games info.");
-        sender.sendMessage(Core.infoList + "/lasertag start §8- §7Force starts the current game.");
-        sender.sendMessage(Core.infoList + "/lasertag stop §8- §7Force stops the current game.");
+        sender.sendMessage(Core.infoMessage + "Commands for §c§lLASERTAG§e:");
+        sender.sendMessage(Core.infoMessage + "/lasertag debug §8- §7Displays the current builds debug info.");
+        sender.sendMessage(Core.infoMessage + "/lasertag info §8- §7Displays the plugin info.");
+        sender.sendMessage(Core.infoMessage + "/lasertag arena §8- §7Displays all arenas commands.");
+        sender.sendMessage(Core.infoMessage + "/lasertag game §8- §7Displays the current games info.");
+        sender.sendMessage(Core.infoMessage + "/lasertag start §8- §7Force starts the current game.");
+        sender.sendMessage(Core.infoMessage + "/lasertag stop §8- §7Force stops the current game.");
     }
 }

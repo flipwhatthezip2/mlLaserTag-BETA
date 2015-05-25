@@ -92,7 +92,7 @@ public class GunSelector implements Listener{
         if (entity.getCustomName() != null && entity.getCustomName().equalsIgnoreCase(ChatColor.DARK_BLUE.toString() + org.bukkit.ChatColor.BOLD + "LASERTAG" + org.bukkit.ChatColor.BLUE +" - Select a Gun!")){
             if (p.getItemInHand() != null && p.getItemInHand().getType() == Material.BLAZE_ROD && p.isOp()){
                 entity.remove();
-                p.sendMessage(Core.success + "Removed GunSelector NPC");
+                p.sendMessage(Core.infoMessage + "Removed GunSelector NPC");
                 return;
             }
             p.openInventory(gunSelectorMenu);

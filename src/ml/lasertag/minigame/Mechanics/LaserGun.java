@@ -160,7 +160,7 @@ public class LaserGun implements Listener {
     }
 
     public void awardKill(final Arena arena, final Player victim, Player killer){
-        arena.broadcastMessage(Core.deathMessage + "§6" + victim.getName() + " §7has been vaporized by §6" +
+        arena.broadcastMessage(Core.combatMessage + "§6" + victim.getName() + " §7has been vaporized by §6" +
                                 killer.getName() + "§7. " +"using §c" + Gun.getGun(killer).getName());
         victim.setGameMode(GameMode.SPECTATOR);
         victim.setLevel(5);

@@ -156,7 +156,7 @@ public class Arena {
  public void startCountdown(){
   this.arenaState = ArenaState.COUNTDOWN;
   Bukkit.getPluginManager().callEvent(new ArenaInteractEvent(ArenaInteractEvent.ArenaAction.UPDATE_STAT, this));
-  this.broadcastMessage(Core.success + "The game will begin shortly!");
+  this.broadcastMessage(Core.infoMessage + "The game will begin shortly!");
 
   countDownRunnable = new BukkitRunnable(){
 
@@ -166,7 +166,7 @@ public class Arena {
      currentCountDownStage = 5; startGame(); this.cancel(); return;
     }
 
-    broadcastMessage(Core.warning + "Game starting in: §l" + currentCountDownStage);
+    broadcastMessage(Core.infoMessage + "Game starting in: §l" + currentCountDownStage);
     currentCountDownStage--;
    }
 
@@ -178,14 +178,14 @@ public class Arena {
   Bukkit.getScheduler().cancelTask(countDownRunnable.getTaskId());
   currentCountDownStage = countDownTime;
   this.arenaState = ArenaState.WAITING;
-  this.broadcastMessage(Core.warning + "Game countdown has been halted.");
+  this.broadcastMessage(Core.infoMessage + "Game countdown has been halted.");
   Bukkit.getPluginManager().callEvent(new ArenaInteractEvent(ArenaInteractEvent.ArenaAction.UPDATE_STAT, this));
  }
 
  public void startGame(){
   this.pvp = true;
   this.arenaState = ArenaState.IN_GAME;
-  this.broadcastMessage(Core.success + "The game has be§lgun§a!");
+  this.broadcastMessage(Core.infoMessage + "The game has be§lgun§a!");
   this.spawnPlayers();
   this.canJoin = false;
   this.scoreboard.showScoreboard();
