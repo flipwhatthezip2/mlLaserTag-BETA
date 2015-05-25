@@ -1,11 +1,8 @@
 package ml.lasertag.minigame.Mechanics;
 
-import ml.lasertag.minigame.Core;
 import ml.lasertag.minigame.api.Feature;
-import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
-import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -103,17 +100,17 @@ public class Restrictions implements Listener {
         if (inventory != null && inventory.getName() != null && inventory.getName().contains("LASERTAG")){
             if (e.getCurrentItem() != null){
                 if (e.getCurrentItem().getType() == Material.STAINED_GLASS_PANE){
-                    p.sendMessage(Core.warning + "How to play §lLASERTAG!§c:");
-                    p.sendMessage(Core.warningList + "§7When you first join a game you are put one of §c2 teams");
-                    p.sendMessage(Core.warningList + "§7Both teams have associated colors, §2§lGREEN §7and §e§lYELLOW");
-                    p.sendMessage(Core.warningList + "§7You spawn in with 1 essential item, your §claser gun");
-                    p.sendMessage(Core.warningList + "§7The object of the game is destroy the other teams §cbeacon");
-                    p.sendMessage(Core.warningList + "§7To destroy the beacon you must shoot at it with your laser");
-                    p.sendMessage(Core.warningList + "§7Every §c4 hits §7the beacon takes causes it to loose 1 health");
-                    p.sendMessage(Core.warningList + "§7Each teams beacon has §c5 lives");
-                    p.sendMessage(Core.warningList + "§7Kill other players to weaken their teams beacon.");
-                    p.sendMessage(Core.warningList + "§7First team to destroy the other teams beacon in §c5 min §7wins!");
-                    p.sendMessage(Core.warningList + "Camping spawns and beacons result in debuffs, beware!");
+                    p.sendMessage("§4§l>> §cHow to play §lLASERTAG!§c:");
+                    p.sendMessage("§4§l> §7When you first join a game you are put one of §c2 teams");
+                    p.sendMessage("§4§l> §7Both teams have associated colors, §2§lGREEN §7and §e§lYELLOW");
+                    p.sendMessage("§4§l> §7You spawn in with 1 essential item, your §claser gun");
+                    p.sendMessage("§4§l> §7The object of the game is destroy the other teams §cbeacon");
+                    p.sendMessage("§4§l> §7To destroy the beacon you must shoot at it with your laser");
+                    p.sendMessage("§4§l> §7Every §c4 hits §7the beacon takes causes it to loose 1 health");
+                    p.sendMessage("§4§l> §7Each teams beacon has §c5 lives");
+                    p.sendMessage("§4§l> §7Kill other players to weaken their teams beacon.");
+                    p.sendMessage("§4§l> §7First team to destroy the other teams beacon in §c5 min §7wins!");
+                    p.sendMessage("§4§l> Camping spawns and beacons result in debuffs, beware!");
                     e.setCancelled(true);
                 }
             }

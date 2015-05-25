@@ -34,29 +34,6 @@ public class Core extends JavaPlugin {
     public GunsFile gunsFile;
     public LaserGun laserGun;
 
-    public static String info = "§7§l>> §e";
-    public static String infoList = "§7§l> §e";
-    public static String success = "§2§l>> §a";
-    public static String successList = "§2§l> §a";
-    public static String warning = "§4§l>> §c";
-    public static String warningList = "§4§l> §c";
-
-    public static String joinMessage = "§3Join> §7";
-    public static String quitMessage = "§3Quit> §7";
-
-    public static String deathMessage = "§3Death> §7";
-    public static String killMessage = "§3Kill> §7";
-
-    public static String teamMessage = "§3Team> §7";
-    public static String gameMessage = "§3Game> §7";
-    public static String statusMessage = "§3Status> §7";
-    public static String rechargingMessage = "§3Recharging> §7";
-    public static String powerupMessage = "§3Powerup> §7";
-
-    public static String infoMessage = "§3Info> §7";
-    public static String serverMessage = "§3Server> §7";
-    public static String portalMessage = "§3Portal> §7";
-
     public void onEnable(){
 
         Bukkit.getServer().getLogger().info("Server> Successfully initialized the minigame 'LaserTag' on server: " + Bukkit.getServerName());
