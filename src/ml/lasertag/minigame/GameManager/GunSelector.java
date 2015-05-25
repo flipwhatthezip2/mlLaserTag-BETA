@@ -4,8 +4,8 @@ package ml.lasertag.minigame.GameManager;
 import ml.lasertag.minigame.Core;
 import ml.lasertag.minigame.events.ArenaInteractEvent;
 import ml.lasertag.minigame.events.GunStatUpdate;
-import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
@@ -14,6 +14,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -68,7 +69,7 @@ public class GunSelector implements Listener{
         if (e.getWhoClicked() instanceof Player){
             Player player = (Player) e.getWhoClicked();
 
-            if ((Arena.getArena(core, player) == null) || (Arena.getArena(core, player) != null && player.getGameMode() == GameMode.SPECTATOR)){
+            if ((Arena.getArena(core, player) == null) || (Arena.getArena(core, player) != null && player.getGameMode() == GameMode.CREATIVE)){
 
                 ItemStack item = e.getCurrentItem();
 
@@ -76,9 +77,24 @@ public class GunSelector implements Listener{
                     Bukkit.dispatchCommand(player, "lasertag selectGun " + ChatColor.stripColor(item.getItemMeta().getDisplayName()));
                     player.closeInventory();
                     e.setCancelled(true);
+
+                    if (Arena.getArena(core, player) != null){
+                        player.getInventory().setItem(0, Gun.getGun(player).getGun());
+                    }
+
                 }
 
             }
+        }
+    }
+
+    @EventHandler
+    public void onRightClick(PlayerInteractEvent e){
+        Player player = e.getPlayer();
+        ItemStack item = player.getItemInHand();
+
+        if (item != null && item.getType() == Material.NETHER_STAR){
+            player.openInventory(gunSelectorMenu);
         }
     }
 

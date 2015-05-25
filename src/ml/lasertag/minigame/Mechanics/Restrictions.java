@@ -33,42 +33,22 @@ public class Restrictions implements Listener {
 
     @EventHandler
     public void onInventoryClick(InventoryClickEvent e){
-        Player player = (Player) e.getWhoClicked();
-        if (player.getGameMode() == GameMode.CREATIVE && player.isOp()) return;
         e.setCancelled(true);
     }
 
     @EventHandler
     public void onInteract(PlayerInteractEvent e){
-        Player player = e.getPlayer();
-        if (player.getGameMode() == GameMode.CREATIVE){
-            e.setCancelled(false);
-            return;
-        } else {
-            e.setCancelled(true);
-        }
+        e.setCancelled(true);
     }
 
     @EventHandler
     public void onItemDrop(PlayerDropItemEvent e){
-        Player player = e.getPlayer();
-        if (player.getGameMode() == GameMode.CREATIVE){
-            e.setCancelled(false);
-            return;
-        } else {
-            e.setCancelled(true);
-        }
+        e.setCancelled(true);
     }
 
     @EventHandler
     public void onItemGrab(PlayerPickupItemEvent e){
-        Player player = e.getPlayer();
-        if (player.getGameMode() == GameMode.CREATIVE){
-            e.setCancelled(false);
-            return;
-        } else {
-            e.setCancelled(true);
-        }
+        e.setCancelled(true);
     }
 
     @EventHandler

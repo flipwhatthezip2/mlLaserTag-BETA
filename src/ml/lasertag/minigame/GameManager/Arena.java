@@ -156,7 +156,6 @@ public class Arena {
  public void startCountdown(){
   this.arenaState = ArenaState.COUNTDOWN;
   Bukkit.getPluginManager().callEvent(new ArenaInteractEvent(ArenaInteractEvent.ArenaAction.UPDATE_STAT, this));
-  this.broadcastMessage(Core.infoMessage + "The game will begin shortly!");
 
   countDownRunnable = new BukkitRunnable(){
 
@@ -166,7 +165,7 @@ public class Arena {
      currentCountDownStage = 5; startGame(); this.cancel(); return;
     }
 
-    broadcastMessage(Core.infoMessage + "Game starting in: §l" + currentCountDownStage);
+    broadcastMessage(Core.infoMessage + "Game starting in: §6§l" + currentCountDownStage);
     currentCountDownStage--;
    }
 
@@ -185,7 +184,7 @@ public class Arena {
  public void startGame(){
   this.pvp = true;
   this.arenaState = ArenaState.IN_GAME;
-  this.broadcastMessage(Core.infoMessage + "The game has be§lgun§a!");
+  this.broadcastMessage(Core.infoMessage + "The game has §6be§lgun§7!");
   this.spawnPlayers();
   this.canJoin = false;
   this.scoreboard.showScoreboard();
@@ -311,12 +310,12 @@ public class Arena {
 
  public static void joinArena(Core core, Arena arena, Player player) {
   arena.addPlayer(player);
-  arena.broadcastMessage(Core.joinMessage + "§6" + player.getName() + " §7has joined the game!");
+  arena.broadcastMessage(Core.joinMessage + "§2" + player.getName() + " §7has joined the game!");
   Bukkit.getPluginManager().callEvent(new ArenaInteractEvent(ArenaInteractEvent.ArenaAction.JOIN, arena));
  }
 
  public static void leaveArena(Core core, Arena arena, Player player){
-  arena.broadcastMessage(Core.quitMessage + "§6" + player.getName() + " §7has left the game!");
+  arena.broadcastMessage(Core.quitMessage + "§c" + player.getName() + " §7has left the game!");
   arena.removePlayer(player);
   player.setWalkSpeed(0.2F);
   player.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());

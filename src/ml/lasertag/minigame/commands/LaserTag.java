@@ -70,8 +70,8 @@ public class LaserTag implements CommandExecutor {
 
         Player player = (Player) sender;
 
-        if (Arena.getArena(core, player) != null){
-            player.sendMessage(Core.infoMessage + "You can't select a gun while in an arena");
+        if (Arena.getArena(core, player) != null && player.getGameMode() != GameMode.CREATIVE){
+            player.sendMessage(Core.infoMessage + "You can't select a gun while in a game");
             return;
         }
 
@@ -81,7 +81,7 @@ public class LaserTag implements CommandExecutor {
         }
 
         Gun.getGun(args[1]).addUser(player);
-        player.sendMessage(Core.infoMessage + "Successfully chose gun §l" + Gun.getGun(args[1]).getName());
+        player.sendMessage(Core.infoMessage + "Successfully chose gun §c§l" + Gun.getGun(args[1]).getName());
         PacketSender.sendSound(player, "random.orb", 100F);
 
     }
@@ -302,7 +302,7 @@ public class LaserTag implements CommandExecutor {
     }
     public void lasertag(CommandSender sender){
         sender.sendMessage(Core.infoMessage + "Currently running §cLaser Tag §lBETA");
-        sender.sendMessage(Core.infoMessage + "Developed by: §cFlipwhatthezip2 §eand §cReadySetPawn");
+        sender.sendMessage(Core.infoMessage + "Developed by: §cFlipwhatthezip2 §7and §cReadySetPawn");
         sender.sendMessage(Core.infoMessage + "For a list of commands type: §c/lasertag §lhelp");
     }
     public void lasertagdebug(CommandSender sender){

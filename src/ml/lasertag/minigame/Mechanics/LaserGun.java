@@ -18,7 +18,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.FireworkMeta;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -109,7 +111,7 @@ public class LaserGun implements Listener {
 
             for (Player e : list){
                 if (!e.isDead() && e != player && e.getGameMode() == GameMode.ADVENTURE && Arena.getArena(core, e) != null){
-                    if (e.getLocation().toVector().distance(loc.toVector()) <= 2){
+                    if (e.getLocation().getBlock().getLocation().toVector().distance(loc.getBlock().getLocation().toVector()) <= 1){
                         damage(arena, e, player);
                     }
                 }
@@ -161,10 +163,10 @@ public class LaserGun implements Listener {
 
     public void awardKill(final Arena arena, final Player victim, Player killer){
         arena.broadcastMessage(Core.combatMessage + "§6" + victim.getName() + " §7has been vaporized by §6" +
-                                killer.getName() + "§7. " +"using §c" + Gun.getGun(killer).getName());
-        victim.setGameMode(GameMode.SPECTATOR);
-        victim.setLevel(5);
+                killer.getName() + "§7 " + "using §c" + Gun.getGun(killer).getName());
+        victim.setLevel(6);
         victim.removePotionEffect(PotionEffectType.SLOW);
+        this.setSpectator(victim);
         PacketSender.sendSound(killer, "mob.pig.death", 100);
         Feature.sendTitle(victim, 5, 100, 5, "§4§lYOU DIED!", "§cRespawning in §l" + victim.getLevel() + " seconds§c...");
 
@@ -196,7 +198,7 @@ public class LaserGun implements Listener {
 
                 if (Arena.getArena(core, victim) == null){
                     victim.spigot().respawn();
-                    victim.setGameMode(GameMode.ADVENTURE);
+                    removeSpectator(victim);
                     Feature.sendTitle(victim, 5, 100, 5, "", "");
                     this.cancel();
                     return;
@@ -204,14 +206,14 @@ public class LaserGun implements Listener {
 
                 if (Arena.getArena(core, victim).getArenaState() == Arena.ArenaState.RESTARTING){
                     victim.spigot().respawn();
-                    victim.setGameMode(GameMode.ADVENTURE);
+                    removeSpectator(victim);
                     this.cancel();
                 }
 
                 if (victim.getLevel() <= 0){
                     victim.spigot().respawn();
                     victim.teleport(Arena.getArena(core, victim).getSpawn(arena.getTeams().getTeam(victim)));
-                    victim.setGameMode(GameMode.ADVENTURE);
+                    removeSpectator(victim);
                     victim.setHealth(20D);
                     Feature.sendTitle(victim, 5, 200, 5, "", "");
                     this.cancel();
@@ -222,6 +224,38 @@ public class LaserGun implements Listener {
             }
 
         }.runTaskTimer(core, 0, 20);
+    }
+
+    public void setSpectator(Player player){
+
+        ItemStack gunSelector = new ItemStack(Material.NETHER_STAR);
+        ItemMeta meta = gunSelector.getItemMeta();
+
+        meta.setDisplayName("§a§lGun Selector");
+
+        gunSelector.setItemMeta(meta);
+
+        player.setGameMode(GameMode.CREATIVE);
+        player.setFlying(true);
+        player.teleport(player.getLocation().add(0, 0.5, 0));
+        player.getInventory().setItem(8, gunSelector);
+        player.updateInventory();
+
+        for (Player p : player.getWorld().getPlayers()){
+            p.hidePlayer(player);
+        }
+    }
+
+    public void removeSpectator(Player player){
+        player.setGameMode(GameMode.ADVENTURE);
+        player.setFlying(false);
+        player.closeInventory();
+        player.getInventory().setItem(8, null);
+        player.updateInventory();
+
+        for (Player p : player.getWorld().getPlayers()){
+            p.showPlayer(player);
+        }
     }
 
 }
