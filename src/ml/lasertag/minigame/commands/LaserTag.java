@@ -58,7 +58,7 @@ public class LaserTag implements CommandExecutor {
     public void trySelectingGun(CommandSender sender, String[] args){
 
         if (args.length != 2){
-            sender.sendMessage(GameAPI.infoMessage + "invalid argument amount. /lasertag selectGun [gun]");
+            sender.sendMessage(GameAPI.infoMessage + "Invalid argument amount. /lasertag selectGun [gun]");
             return;
         }
 
@@ -80,7 +80,7 @@ public class LaserTag implements CommandExecutor {
         }
 
         Gun.getGun(args[1]).addUser(player);
-        player.sendMessage(GameAPI.infoMessage + "Successfully chose gun §l" + Gun.getGun(args[1]).getName());
+        player.sendMessage(GameAPI.kitMessage + "Successfully chose gun §a" + Gun.getGun(args[1]).getName());
         PacketSender.sendSound(player, "random.orb", 100F);
 
     }
@@ -98,6 +98,7 @@ public class LaserTag implements CommandExecutor {
         Player player = (Player) sender;
 
         EntityTypes.spawnEntity(new GunSelectorVillager(player.getWorld()), player.getLocation());
+        player.sendMessage(GameAPI.gameMessage + "You have spawned §aGun Selector");
     }
 
     public void trySpawningArenaSelector(CommandSender sender, String[] args){
@@ -113,6 +114,7 @@ public class LaserTag implements CommandExecutor {
         Player player = (Player) sender;
 
         EntityTypes.spawnEntity(new ArenaSelectorVillager(player.getWorld()), player.getLocation());
+        player.sendMessage(GameAPI.gameMessage + "You have spawned §aArena Selector");
     }
 
     public void tryJoining(CommandSender sender, String[] args){
@@ -143,6 +145,7 @@ public class LaserTag implements CommandExecutor {
         }
 
         Arena.joinArena(core, Arena.getArena(core, args[1]), (Player) sender);
+        sender.sendMessage(GameAPI.gameMessage + "You have joined arena §a" + args[1]);
 
     }
 
@@ -166,6 +169,7 @@ public class LaserTag implements CommandExecutor {
         }
 
         Arena.leaveArena(core, Arena.getArena(core, player), player);
+        sender.sendMessage(GameAPI.gameMessage + "You have left arena §a" + args[1]);
 
     }
 
@@ -178,7 +182,7 @@ public class LaserTag implements CommandExecutor {
 
         if (args.length == 1) {
             sender.sendMessage(GameAPI.infoMessage + "Commands for §9§lLASERTAG GUNS§e:");
-            sender.sendMessage(GameAPI.infoMessage + "/lasertag gun create [name] [cooldown] [range] [damage] §8- §7Creates gun.");
+            sender.sendMessage(GameAPI.infoMessage + "/lasertag gun create [name] [cooldown] [range] [damage] [zoom] §8- §7Creates gun.");
             sender.sendMessage(GameAPI.infoMessage + "/lasertag gun delete [gun] §8- §7Deletes gun.");
             sender.sendMessage(GameAPI.infoMessage + "/lasertag gun set [gun] [gunStat] [value] §8- §7Sets a stat.");
             sender.sendMessage(GameAPI.infoMessage + "/lasertag gun rename [gun] [newName] §8- §7Renames a gun.");
@@ -353,8 +357,8 @@ public class LaserTag implements CommandExecutor {
             Arena arena = new Arena(core, ap, core.getLaserGun());
             core.getArenasFile().addArena(arena);
 
-            sender.sendMessage(GameAPI.infoMessage + "Successfully created the arena: §a§l" + args[2] + "§7!");
-            sender.sendMessage(GameAPI.infoMessage + "To make the arena valid please configure!");
+            sender.sendMessage(GameAPI.gameMessage + "Successfully created the arena: §a§l" + args[2] + "§7!");
+            sender.sendMessage(GameAPI.gameMessage + "To make the arena valid please configure!");
         }
 
         else if (args[1].equalsIgnoreCase("delete")){
