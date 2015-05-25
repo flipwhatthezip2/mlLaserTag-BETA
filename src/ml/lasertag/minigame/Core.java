@@ -50,6 +50,7 @@ public class Core extends JavaPlugin {
     public static String infoMessage = "§6§lInfo §8➤ §7";
     public static String serverMessage = "§6§lServer §8➤ §7";
 
+
     public void onEnable(){
 
         Bukkit.getServer().getLogger().info("Server> Successfully initialized the minigame 'LaserTag' on server: " + Bukkit.getServerName());
