@@ -1,7 +1,7 @@
 <component name="libraryTable">
   <library name="GameAPI">
     <CLASSES>
-      <root url="jar://$USER_HOME$/Desktop/GameAPI.jar!/" />
+      <root url="jar://$USER_HOME$/Desktop/Camerons Testing Server/plugins/mlLaserTag/lib/GameAPI.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />
