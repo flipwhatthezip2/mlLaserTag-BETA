@@ -1,6 +1,5 @@
 package ml.lasertag.minigame.Mechanics;
 
-import gameAPI.Flipwhatthezip2.GameAPI;
 import ml.lasertag.minigame.Core;
 import ml.lasertag.minigame.GameManager.Arena;
 import ml.lasertag.minigame.GameManager.Gun;
@@ -17,6 +16,7 @@ import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.potion.PotionEffectType;
@@ -160,8 +160,8 @@ public class LaserGun implements Listener {
     }
 
     public void awardKill(final Arena arena, final Player victim, Player killer){
-        arena.broadcastMessage(GameAPI.combatMessage + "§6" + victim.getName() + " §7has been vaporized by §6" +
-                killer.getName() + "§7. " + "using §c" + Gun.getGun(killer).getName());
+        arena.broadcastMessage(Core.deathMessage + "§6" + victim.getName() + " §7has been vaporized by §6" +
+                                killer.getName() + "§7. " +"using §c" + Gun.getGun(killer).getName());
         victim.setGameMode(GameMode.SPECTATOR);
         victim.setLevel(5);
         victim.removePotionEffect(PotionEffectType.SLOW);

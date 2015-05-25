@@ -1,6 +1,5 @@
 package ml.lasertag.minigame.GameManager;
 
-import gameAPI.Flipwhatthezip2.GameAPI;
 import ml.lasertag.minigame.Core;
 import ml.lasertag.minigame.Mechanics.LaserGun;
 import ml.lasertag.minigame.Mechanics.LaserTagBeacon;
@@ -9,16 +8,16 @@ import ml.lasertag.minigame.events.ArenaInteractEvent;
 import ml.lasertag.minigame.game.StatsScoreboard;
 import ml.lasertag.minigame.game.TEAM;
 import ml.lasertag.minigame.game.Teams;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.GameMode;
-import org.bukkit.Location;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Arena {
 
@@ -157,7 +156,7 @@ public class Arena {
  public void startCountdown(){
   this.arenaState = ArenaState.COUNTDOWN;
   Bukkit.getPluginManager().callEvent(new ArenaInteractEvent(ArenaInteractEvent.ArenaAction.UPDATE_STAT, this));
-     this.broadcastMessage(GameAPI.gameMessage + "The game will begin shortly!");
+  this.broadcastMessage(Core.success + "The game will begin shortly!");
 
   countDownRunnable = new BukkitRunnable(){
 
@@ -167,7 +166,7 @@ public class Arena {
      currentCountDownStage = 5; startGame(); this.cancel(); return;
     }
 
-       broadcastMessage(GameAPI.gameMessage + "Game starting in: §l" + currentCountDownStage);
+    broadcastMessage(Core.warning + "Game starting in: §l" + currentCountDownStage);
     currentCountDownStage--;
    }
 
@@ -179,14 +178,14 @@ public class Arena {
   Bukkit.getScheduler().cancelTask(countDownRunnable.getTaskId());
   currentCountDownStage = countDownTime;
   this.arenaState = ArenaState.WAITING;
-     this.broadcastMessage(GameAPI.gameMessage + "Game countdown has been halted.");
+  this.broadcastMessage(Core.warning + "Game countdown has been halted.");
   Bukkit.getPluginManager().callEvent(new ArenaInteractEvent(ArenaInteractEvent.ArenaAction.UPDATE_STAT, this));
  }
 
  public void startGame(){
   this.pvp = true;
   this.arenaState = ArenaState.IN_GAME;
-     this.broadcastMessage(GameAPI.gameMessage + "The game has be§lgun§a!");
+  this.broadcastMessage(Core.success + "The game has be§lgun§a!");
   this.spawnPlayers();
   this.canJoin = false;
   this.scoreboard.showScoreboard();
@@ -312,13 +311,12 @@ public class Arena {
 
  public static void joinArena(Core core, Arena arena, Player player) {
   arena.addPlayer(player);
-     arena.broadcastMessage(GameAPI.joinMessage + "§6" + player.getName() + " §7has joined the game!");
-     arena.broadcastMessage(GameAPI.joinMessage + "§6" + player.getName() + " §7has joined the game!");
+  arena.broadcastMessage(Core.joinMessage + "§6" + player.getName() + " §7has joined the game!");
   Bukkit.getPluginManager().callEvent(new ArenaInteractEvent(ArenaInteractEvent.ArenaAction.JOIN, arena));
  }
 
  public static void leaveArena(Core core, Arena arena, Player player){
-     arena.broadcastMessage(GameAPI.quitMessage + "§6" + player.getName() + " §7has left the game!");
+  arena.broadcastMessage(Core.quitMessage + "§6" + player.getName() + " §7has left the game!");
   arena.removePlayer(player);
   player.setWalkSpeed(0.2F);
   player.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
@@ -328,6 +326,6 @@ public class Arena {
  }
 
  public enum ArenaState {
-     WAITING, COUNTDOWN, IN_GAME, RESTARTING
+  WAITING, COUNTDOWN, IN_GAME, RESTARTING;
  }
 }

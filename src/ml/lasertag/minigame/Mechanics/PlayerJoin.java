@@ -11,7 +11,7 @@ package ml.lasertag.minigame.Mechanics;
  -
  */
 
-import gameAPI.Flipwhatthezip2.GameAPI;
+
 import ml.lasertag.minigame.Core;
 import ml.lasertag.minigame.GameManager.Arena;
 import ml.lasertag.minigame.api.Feature;
@@ -36,7 +36,7 @@ public class PlayerJoin implements Listener {
     public void PlayerJoin(PlayerJoinEvent e){
         final Player p = e.getPlayer();
 
-        e.setJoinMessage(GameAPI.joinMessage + "§6" + p.getName() + " §7has joined the server.");
+        e.setJoinMessage(Core.infoMessage + "§6" + p.getName() + " §7has joined the server.");
 
         Feature.sendTitle(p, 20, 200, 20, "§eWelcome to §c§lLASER TAG!", "§eA §6§lMineLegends §ecustom game!");
 
@@ -51,7 +51,7 @@ public class PlayerJoin implements Listener {
         if (Arena.getArena(core, e.getPlayer()) != null){
             Arena.leaveArena(core, Arena.getArena(core, e.getPlayer()), e.getPlayer());
         }
-        e.setQuitMessage(GameAPI.quitMessage + "§6" + e.getPlayer().getName() + " §7has left the server.");
+        e.setQuitMessage(Core.infoMessage + "§6" + e.getPlayer().getName() + " §7has left the server.");
     }
 
 }

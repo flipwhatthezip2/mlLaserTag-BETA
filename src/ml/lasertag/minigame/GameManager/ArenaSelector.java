@@ -1,6 +1,5 @@
 package ml.lasertag.minigame.GameManager;
 
-import gameAPI.Flipwhatthezip2.GameAPI;
 import ml.lasertag.minigame.Core;
 import ml.lasertag.minigame.events.ArenaInteractEvent;
 import net.md_5.bungee.api.ChatColor;
@@ -117,7 +116,7 @@ public class ArenaSelector implements Listener {
         if (entity.getCustomName() != null && entity.getCustomName().equalsIgnoreCase("§4§lLASERTAG §8- §cSelect an arena!")){
             if (p.getItemInHand() != null && p.getItemInHand().getType() == Material.BLAZE_ROD && p.isOp()){
                 entity.remove();
-                p.sendMessage(GameAPI.infoMessage + "Removed ArenaSelector NPC");
+                p.sendMessage(Core.success + "Removed ArenaSelector NPC");
                 return;
             }
             p.openInventory(arenaSelectorMenu);

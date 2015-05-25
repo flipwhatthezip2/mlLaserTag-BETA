@@ -1,8 +1,8 @@
 package ml.lasertag.minigame.GameManager;
 
 
-import gameAPI.Flipwhatthezip2.GameAPI;
 import ml.lasertag.minigame.Core;
+import ml.lasertag.minigame.events.ArenaInteractEvent;
 import ml.lasertag.minigame.events.GunStatUpdate;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
@@ -92,7 +92,7 @@ public class GunSelector implements Listener{
         if (entity.getCustomName() != null && entity.getCustomName().equalsIgnoreCase(ChatColor.DARK_BLUE.toString() + org.bukkit.ChatColor.BOLD + "LASERTAG" + org.bukkit.ChatColor.BLUE +" - Select a Gun!")){
             if (p.getItemInHand() != null && p.getItemInHand().getType() == Material.BLAZE_ROD && p.isOp()){
                 entity.remove();
-                p.sendMessage(GameAPI.infoMessage + "Removed GunSelector NPC");
+                p.sendMessage(Core.success + "Removed GunSelector NPC");
                 return;
             }
             p.openInventory(gunSelectorMenu);
