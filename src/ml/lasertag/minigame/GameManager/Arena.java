@@ -329,6 +329,7 @@ public class Arena {
   arena.broadcastMessage(Core.quitMessage + "§c" + player.getName() + " §7has left the game!");
   arena.removePlayer(player);
   player.setWalkSpeed(0.2F);
+  player.setHealth(20D);
   player.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
   player.setLevel(0);
   player.teleport(Bukkit.getWorld("Lobby").getSpawnLocation());

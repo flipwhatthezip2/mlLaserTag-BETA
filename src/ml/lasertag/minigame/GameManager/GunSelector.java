@@ -62,6 +62,18 @@ public class GunSelector implements Listener{
     @EventHandler
     public void onGunStatUpdate(GunStatUpdate e){
         this.displayGuns();
+
+        for (Player p : Bukkit.getOnlinePlayers()){
+            if (Arena.getArena(core, p) != null){
+                if (Gun.getGun(p) == e.getGun()){
+                    if (p.getInventory().getItem(0).getType() == Material.IRON_BARDING){
+                        p.getInventory().getItem(0).getItemMeta().setDisplayName(e.getGun().getGun().getItemMeta().getDisplayName());
+                        p.getInventory().getItem(0).getItemMeta().setLore(e.getGun().getGun().getItemMeta().getLore());
+                        p.updateInventory();
+                    }
+                }
+            }
+        }
     }
 
     @EventHandler
