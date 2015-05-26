@@ -16,8 +16,7 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.*;
 
 public class Arena {
 
@@ -112,8 +111,7 @@ public class Arena {
 
  public void addPlayer(Player player){
   players.add(player);
-  teams.addPlayer(player, teams.pickTeam(player));
-  player.teleport(getSpawn(this.teams.getTeam(player)));
+  player.teleport(properties.getWorld().getSpawnLocation());
   if (players.size() == properties.getMaximumPlayers()) this.canJoin = false;
   if (players.size() == properties.getMinimumPlayers()) this.startCountdown();
  }
@@ -134,7 +132,7 @@ public class Arena {
 
   if (arenaState == ArenaState.WAITING || arenaState == ArenaState.COUNTDOWN) this.canJoin = true;
   if (players.size() < properties.getMinimumPlayers() && arenaState == ArenaState.COUNTDOWN) this.cancelCountdown();
-  if (players.size() < properties.getMinimumPlayers() && arenaState == ArenaState.IN_GAME) this.endGameAsDraw();
+  if (players.size() < 2 && arenaState == ArenaState.IN_GAME) this.endGameAsDraw();
 
  }
 
@@ -149,7 +147,7 @@ public class Arena {
 
  public void spawnPlayers(){
   for (Player p : players){
-   p.teleport(Arena.getArena(core, p).getSpawn(this.teams.getTeam(p)));
+   p.teleport(getSpawn(this.teams.getTeam(p)));
   }
  }
 
@@ -185,6 +183,7 @@ public class Arena {
   this.pvp = true;
   this.arenaState = ArenaState.IN_GAME;
   this.broadcastMessage(Core.infoMessage + "The game has §6be§lgun§7!");
+  this.selectTeams();
   this.spawnPlayers();
   this.canJoin = false;
   this.scoreboard.showScoreboard();
@@ -276,6 +275,17 @@ public class Arena {
    TEAM.setUniform(core, p);
    p.getInventory().setItem(0, Gun.getGun(p).getGun());
    p.updateInventory();
+  }
+ }
+
+ public void selectTeams(){
+
+  List<Player> teamless = players;
+  Collections.shuffle(teamless);
+
+  for (int a = 0; a < teamless.size(); a++){
+   if (a % 2 == 0) teams.addPlayer(teamless.get(a), TEAM.YELLOW);
+   else teams.addPlayer(teamless.get(a), TEAM.GREEN);
   }
  }
 

@@ -16,7 +16,6 @@ import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.FireworkMeta;
@@ -111,7 +110,7 @@ public class LaserGun implements Listener {
 
             for (Player e : list){
                 if (!e.isDead() && e != player && e.getGameMode() == GameMode.ADVENTURE && Arena.getArena(core, e) != null){
-                    if (e.getLocation().getBlock().getLocation().toVector().distance(loc.getBlock().getLocation().toVector()) <= 1){
+                    if (e.getLocation().getBlock().getLocation().toVector().distance(loc.getBlock().getLocation().toVector()) <= 2){
                         damage(arena, e, player);
                     }
                 }
@@ -155,9 +154,11 @@ public class LaserGun implements Listener {
 
         if (arena.getTeams().getTeam(player) == arena.getTeams().getTeam(killer)) return;
 
-        if (player.getHealth() <= Double.valueOf(Gun.getGun(killer).getDamage())) awardKill(arena, player, killer);
+        double damage = BeaconProtect.isInEnemyTerritory(killer) ? Gun.getGun(killer).getDamage() / 2 : Gun.getGun(killer).getDamage();
 
-        player.damage(Double.valueOf(Gun.getGun(killer).getDamage()));
+        if (player.getHealth() <= damage) awardKill(arena, player, killer);
+
+        player.damage(damage);
         player.getWorld().playSound(player.getEyeLocation(), Sound.IRONGOLEM_HIT, 100L, 100L);
     }
 
@@ -255,6 +256,15 @@ public class LaserGun implements Listener {
 
         for (Player p : player.getWorld().getPlayers()){
             p.showPlayer(player);
+        }
+
+        if (Arena.getArena(core, player) == null){
+            player.setPlayerListName(player.getName());
+            return;
+        }
+        else {
+            TEAM team = Arena.getArena(core, player).getTeams().getTeam(player);
+            player.setPlayerListName((team == TEAM.YELLOW ? ChatColor.YELLOW : ChatColor.GREEN) + player.getName());
         }
     }
 

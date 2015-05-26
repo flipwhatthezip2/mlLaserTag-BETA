@@ -98,6 +98,7 @@ public class Core extends JavaPlugin {
             p.getInventory().clear();
             p.getInventory().setArmorContents(null);
             p.updateInventory();
+            p.setWalkSpeed(0.2F);
 
             p.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
             p.teleport(Bukkit.getWorld("Lobby").getSpawnLocation());
@@ -126,5 +127,6 @@ public class Core extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new GunSelector(this), this);
         Bukkit.getPluginManager().registerEvents(new Restrictions(), this);
         Bukkit.getPluginManager().registerEvents(new AimDownSights(this), this);
+        Bukkit.getPluginManager().registerEvents(new BeaconProtect(this), this);
     }
 }

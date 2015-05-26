@@ -1,5 +1,6 @@
 package ml.lasertag.minigame.game;
 
+import ml.lasertag.minigame.Core;
 import ml.lasertag.minigame.GameManager.Arena;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -22,20 +23,13 @@ public class Teams {
     public void addPlayer(Player player, TEAM team){
         this.teams.put(player, team);
         player.setPlayerListName((team == TEAM.YELLOW ? ChatColor.YELLOW : ChatColor.GREEN) + player.getName());
+        player.sendMessage(Core.infoMessage + "You have joined" + ChatColor.translateAlternateColorCodes('&',(
+                team == TEAM.YELLOW ? " &eYELLOW" : " &aGREEN") + " &7team!"));
     }
 
     public void removePlayer(Player player){
         this.teams.remove(player);
         player.setPlayerListName(player.getName());
-    }
-
-    public TEAM pickTeam(Player player){
-        if (this.yellowTeamCount > this.greenTeamCount){
-            greenTeamCount++;
-            return TEAM.GREEN;
-        }
-        yellowTeamCount++;
-        return TEAM.YELLOW;
     }
 
     public void resetTeams(){

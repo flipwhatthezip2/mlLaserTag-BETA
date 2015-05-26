@@ -141,6 +141,10 @@ public class LaserTagBeacon {
         }
     }
 
+    public Location getLocation(){
+        return this.beaconLocation;
+    }
+
     public Arena getArena(){
         return this.arena;
     }
