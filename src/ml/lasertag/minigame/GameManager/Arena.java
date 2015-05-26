@@ -193,6 +193,7 @@ public class Arena {
   for (Player p : players){
    p.setGameMode(GameMode.ADVENTURE);
    p.setWalkSpeed(0.28F);
+   p.setHealth(20D);
   }
  }
 

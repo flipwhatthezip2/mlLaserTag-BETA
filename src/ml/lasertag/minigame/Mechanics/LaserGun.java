@@ -112,6 +112,7 @@ public class LaserGun implements Listener {
                 if (!e.isDead() && e != player && e.getGameMode() == GameMode.ADVENTURE && Arena.getArena(core, e) != null){
                     if (e.getLocation().getBlock().getLocation().toVector().distance(loc.getBlock().getLocation().toVector()) <= 2){
                         damage(arena, e, player);
+                        return;
                     }
                 }
             }
