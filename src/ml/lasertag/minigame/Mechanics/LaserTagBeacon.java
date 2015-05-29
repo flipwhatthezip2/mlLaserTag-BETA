@@ -4,17 +4,16 @@ package ml.lasertag.minigame.Mechanics;
 import ml.lasertag.minigame.Core;
 import ml.lasertag.minigame.GameManager.Arena;
 import ml.lasertag.minigame.api.PacketSender;
+import ml.lasertag.minigame.events.LaserDamageBeaconEvent;
 import ml.lasertag.minigame.game.TEAM;
 import net.md_5.bungee.api.ChatColor;
 import net.minecraft.server.v1_8_R2.EnumParticle;
-import org.bukkit.Effect;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.Sound;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.EnderCrystal;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 
@@ -26,7 +25,7 @@ public class LaserTagBeacon {
     private TEAM team;
 
     private int initialHealth = 50;
-    private double health = 50;
+    private int health = 50;
     private int life = 5;
     private Location beaconLocation;
     private EnderCrystal beacon;
@@ -106,7 +105,7 @@ public class LaserTagBeacon {
 
     public void death(){
         arena.getProperties().getWorld().playEffect(beaconLocation, Effect.EXPLOSION_LARGE, 20, 20);
-        PacketSender.broadcastSound("mob.enderdragon.end", arena.getProperties().getWorld(), 100);
+        PacketSender.broadcastSound("mob.enderdragon.end", arena.getProperties().getWorld(), 10);
 
         arena.endGame();
     }
@@ -116,7 +115,10 @@ public class LaserTagBeacon {
         this.setLife(5);
     }
 
-    public void dealDamage(double damage){
+    public void dealDamage(Player player, int damage){
+
+        Bukkit.getPluginManager().callEvent(new LaserDamageBeaconEvent(this, player, damage));
+
         PacketSender.playParticle(EnumParticle.EXPLOSION_HUGE, beaconLocation.clone().add(0.5, 2, 0.5), 1);
         arena.getProperties().getWorld().playSound(beaconLocation, Sound.IRONGOLEM_HIT, 100, 1);
 

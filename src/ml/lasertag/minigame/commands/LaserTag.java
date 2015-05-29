@@ -20,6 +20,7 @@ import ml.lasertag.minigame.events.GunStatUpdate;
 import ml.lasertag.minigame.mobCreator.ArenaSelectorVillager;
 import ml.lasertag.minigame.mobCreator.EntityTypes;
 import ml.lasertag.minigame.mobCreator.GunSelectorVillager;
+import ml.lasertag.minigame.stats.StatKeeper;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.World;
@@ -53,7 +54,31 @@ public class LaserTag implements CommandExecutor {
         else if (args[0].equalsIgnoreCase("selectGun")) trySelectingGun(sender, args);
         else if (args[0].equalsIgnoreCase("spawnArenaSelector")) trySpawningArenaSelector(sender, args);
         else if (args[0].equalsIgnoreCase("spawnGunSelector")) trySpawningGunSelector(sender, args);
+        else if (args[0].equalsIgnoreCase("stats")) tryPrintingStats(sender, args);
         return false;
+    }
+
+    public void tryPrintingStats(CommandSender sender, String[] args){
+
+        if (!(sender instanceof Player)){
+            sender.sendMessage(Core.infoMessage + "You must be in-game to view stats");
+            return;
+        }
+
+        Player player = (Player) sender;
+        StatKeeper sk = core.getStatKeeperFor(player);
+
+        player.sendMessage(Core.infoMessage + "Kills: §c" + sk.getKills());
+        player.sendMessage(Core.infoMessage + "Deaths: §c" + sk.getDeaths());
+        player.sendMessage(Core.infoMessage + "KDR: §c" + (sk.getDeaths() == 0 ? sk.getKills() : sk.getKills() / sk.getDeaths()));
+        player.sendMessage(Core.infoMessage + "Wins: §c" + sk.getWins());
+        player.sendMessage(Core.infoMessage + "Losses: §c" + sk.getLosses());
+        player.sendMessage(Core.infoMessage + "Draws: §c" + sk.getDraws());
+        player.sendMessage(Core.infoMessage + "WLR: §c" + (sk.getLosses() == 0 ? sk.getWins() : sk.getWins() / sk.getLosses()));
+        player.sendMessage(Core.infoMessage + "DamageDealt: §c" + sk.getDamageDealt());
+        player.sendMessage(Core.infoMessage + "DamageTaken: §c" + sk.getDamageTaken());
+        player.sendMessage(Core.infoMessage + "BeaconDamageDealt: §c" + sk.getBeaconDamageDealt());
+
     }
 
     public void trySelectingGun(CommandSender sender, String[] args){

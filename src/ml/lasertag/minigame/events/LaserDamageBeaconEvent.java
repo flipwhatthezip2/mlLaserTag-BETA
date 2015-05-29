@@ -12,10 +12,15 @@ public class LaserDamageBeaconEvent extends Event{
 
     private LaserTagBeacon beacon;
     private Player damager;
+    private int damage;
 
-    public LaserDamageBeaconEvent(LaserTagBeacon beacon, Player damager){
+    public LaserDamageBeaconEvent(LaserTagBeacon beacon, Player damager, int damage){
         this.beacon = beacon;
         this.damager = damager;
+    }
+
+    public int getDamage(){
+        return this.damage;
     }
 
     public LaserTagBeacon getBeacon(){

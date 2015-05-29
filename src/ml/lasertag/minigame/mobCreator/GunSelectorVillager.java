@@ -12,7 +12,7 @@ public class GunSelectorVillager extends EntityVillager {
 
     public GunSelectorVillager(org.bukkit.World world){
         super(((CraftWorld) world).getHandle());
-        this.setCustomName(ChatColor.DARK_BLUE.toString() + ChatColor.BOLD + "LASERTAG" + ChatColor.BLUE +" - Select a Gun!");
+        this.setCustomName(ChatColor.BLUE + "Select a Gun!");
         this.setCustomNameVisible(true);
     }
 

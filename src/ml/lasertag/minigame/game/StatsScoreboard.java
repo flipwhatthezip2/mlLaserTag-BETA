@@ -38,7 +38,7 @@ public class StatsScoreboard {
         this.obj = scoreboard.registerNewObjective("Gameboard", "dummy");
 
         obj.setDisplaySlot(DisplaySlot.SIDEBAR);
-        obj.setDisplayName(ChatColor.RED.toString() + ChatColor.BOLD + "LASERTAG");
+        obj.setDisplayName(ChatColor.RED.toString() + ChatColor.BOLD + arena.getProperties().getArenaName());
 
         obj.getScore("  ").setScore(10);
 

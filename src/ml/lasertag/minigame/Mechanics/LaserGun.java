@@ -7,6 +7,7 @@ import ml.lasertag.minigame.api.Feature;
 import ml.lasertag.minigame.api.PacketSender;
 import ml.lasertag.minigame.events.LaserDamageBeaconEvent;
 import ml.lasertag.minigame.game.TEAM;
+import ml.lasertag.minigame.stats.StatKeeper;
 import net.minecraft.server.v1_8_R2.EnumParticle;
 import net.minecraft.server.v1_8_R2.PacketPlayOutWorldParticles;
 import org.bukkit.*;
@@ -17,6 +18,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerToggleFlightEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -31,14 +33,47 @@ public class LaserGun implements Listener {
     Core core;
 
     public ArrayList<Player> cantShoot = new ArrayList<Player>();
-    public int livesRemaining;
+    public ArrayList<Player> cantJump = new ArrayList<Player>();
 
     public LaserGun(Core core){
         this.core = core;
     }
 
-    public void resetCooldowns(){
-        cantShoot.clear();
+    public void resetCooldowns(Arena arena){
+        for (Player p : arena.getPlayers()){
+            if (cantShoot.contains(p)) cantShoot.remove(p);
+        }
+    }
+
+    public void resetJumps(Arena arena){
+        for (Player p : arena.getPlayers()){
+            if (cantJump.contains(p)) cantJump.remove(p);
+        }
+    }
+
+    @EventHandler
+    public void onBeaconDamage(LaserDamageBeaconEvent e){
+        StatKeeper sk = core.getStatKeeperFor(e.getDamager());
+
+        sk.addBeaconDamageDealt(e.getDamage());
+    }
+
+    @EventHandler
+    public void onJump(PlayerToggleFlightEvent e){
+
+        Player player = e.getPlayer();
+
+        if (player.getGameMode() != GameMode.CREATIVE){
+            e.setCancelled(true);
+        }
+
+        if ((!cantJump.contains(player)) && Arena.getArena(core, player) != null && Arena.getArena(core, player).getArenaState() == Arena.ArenaState.IN_GAME &&
+                player.getGameMode() == GameMode.ADVENTURE && !player.isFlying()){
+            player.setAllowFlight(false);
+            player.setFlying(false);
+            player.setVelocity(player.getLocation().getDirection().multiply(4).setY(2));
+            cantJump.add(player);
+        }
     }
 
     @EventHandler
@@ -83,7 +118,7 @@ public class LaserGun implements Listener {
 
         arena = Arena.getArena(core, player);
 
-        arena.getProperties().getWorld().playSound(player.getLocation(), Sound.ENDERMAN_TELEPORT, 20, 100);
+        arena.getProperties().getWorld().playSound(player.getLocation(), Sound.ENDERMAN_TELEPORT, 20, 60);
 
         List<Player> list = player.getWorld().getPlayers();
         List<EnderCrystal> beacons = new ArrayList<EnderCrystal>();
@@ -121,15 +156,15 @@ public class LaserGun implements Listener {
                 for (Arena ar : core.getArenasFile().getArenas()){
                     if (arena.getTeams().getTeam(player) == TEAM.YELLOW){
                         if (arena.getGreenBeacon().getBeacon() == e && e.getLocation().toVector().distance(loc.toVector()) <= 2){
-                            arena.getGreenBeacon().dealDamage(Gun.getGun(player).getCooldown() / 10);
-                            Bukkit.getPluginManager().callEvent(new LaserDamageBeaconEvent(arena.getGreenBeacon(), player));
+                            arena.getGreenBeacon().dealDamage(player, Gun.getGun(player).getCooldown() / 10);
+                            Bukkit.getPluginManager().callEvent(new LaserDamageBeaconEvent(arena.getGreenBeacon(), player, Gun.getGun(player).getCooldown() / 10));
                             return;
                         }
                     }
                     else {
                         if (arena.getYellowBeacon().getBeacon() == e && e.getLocation().toVector().distance(loc.toVector()) <= 2){
-                            arena.getYellowBeacon().dealDamage(Gun.getGun(player).getCooldown() / 10);
-                            Bukkit.getPluginManager().callEvent(new LaserDamageBeaconEvent(arena.getYellowBeacon(), player));
+                            arena.getYellowBeacon().dealDamage(player, Gun.getGun(player).getCooldown() / 10);
+                            Bukkit.getPluginManager().callEvent(new LaserDamageBeaconEvent(arena.getYellowBeacon(), player, Gun.getGun(player).getCooldown() / 10));
                             return;
                         }
                     }
@@ -155,21 +190,29 @@ public class LaserGun implements Listener {
 
         if (arena.getTeams().getTeam(player) == arena.getTeams().getTeam(killer)) return;
 
-        double damage = BeaconProtect.isInEnemyTerritory(killer) ? Gun.getGun(killer).getDamage() / 2 : Gun.getGun(killer).getDamage();
+        int damage = BeaconProtect.isInEnemyTerritory(killer) ? Gun.getGun(killer).getDamage() / 2 : Gun.getGun(killer).getDamage();
+
+        core.getStatKeeperFor(killer).addDamageDealt(damage);
+        core.getStatKeeperFor(player).addDamageTaken(damage);
 
         if (player.getHealth() <= damage) awardKill(arena, player, killer);
 
+        long shotDistance = Math.round(player.getLocation().distance(killer.getLocation()));
+
         player.damage(damage);
-        player.getWorld().playSound(player.getEyeLocation(), Sound.IRONGOLEM_HIT, 100L, 100L);
+        this.hitIndicator(killer);
     }
 
     public void awardKill(final Arena arena, final Player victim, Player killer){
+
+        core.getStatKeeperFor(victim).addDeaths(1);
+        core.getStatKeeperFor(killer).addKills(1);
+
         arena.broadcastMessage(Core.combatMessage + "§6" + victim.getName() + " §7has been vaporized by §6" +
-                killer.getName() + "§7 " + "using §c" + Gun.getGun(killer).getName());
+                killer.getName() + "§7 " + "using §c§l" + Gun.getGun(killer).getName());
         victim.setLevel(6);
         victim.removePotionEffect(PotionEffectType.SLOW);
         this.setSpectator(victim);
-        PacketSender.sendSound(killer, "mob.pig.death", 100);
         Feature.sendTitle(victim, 5, 100, 5, "§4§lYOU DIED!", "§cRespawning in §l" + victim.getLevel() + " seconds§c...");
 
         final Firework fw = victim.getWorld().spawn(victim.getEyeLocation(), Firework.class);
@@ -254,6 +297,8 @@ public class LaserGun implements Listener {
         player.closeInventory();
         player.getInventory().setItem(8, null);
         player.updateInventory();
+        player.setAllowFlight(true);
+        cantJump.remove(player);
 
         for (Player p : player.getWorld().getPlayers()){
             p.showPlayer(player);
@@ -267,6 +312,10 @@ public class LaserGun implements Listener {
             TEAM team = Arena.getArena(core, player).getTeams().getTeam(player);
             player.setPlayerListName((team == TEAM.YELLOW ? ChatColor.YELLOW : ChatColor.GREEN) + player.getName());
         }
+    }
+
+    public void hitIndicator(Player player){
+        PacketSender.sendSound(player, "random.break", 40);
     }
 
 }

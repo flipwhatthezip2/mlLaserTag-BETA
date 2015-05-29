@@ -8,6 +8,7 @@ import ml.lasertag.minigame.events.ArenaInteractEvent;
 import ml.lasertag.minigame.game.StatsScoreboard;
 import ml.lasertag.minigame.game.TEAM;
 import ml.lasertag.minigame.game.Teams;
+import ml.lasertag.minigame.stats.StatKeeper;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -32,6 +33,7 @@ public class Arena {
  private Teams teams;
  private BukkitTask countDownRunnable;
  private boolean canJoin = true;
+ private TEAM winner;
 
  private int countDownTime = 5;
  private int countDown = 100;
@@ -112,6 +114,7 @@ public class Arena {
  public void addPlayer(Player player){
   players.add(player);
   player.teleport(properties.getWorld().getSpawnLocation());
+  player.setAllowFlight(true);
   if (players.size() == properties.getMaximumPlayers()) this.canJoin = false;
   if (players.size() == properties.getMinimumPlayers()) this.startCountdown();
  }
@@ -127,6 +130,8 @@ public class Arena {
   player.setWalkSpeed(0.2F);
   player.setHealth(20D);
   player.setLevel(0);
+  player.setAllowFlight(false);
+  player.setScoreboard(core.getStatsFile().getScoreboardStatKeeperFor(player).getScoreboard());
 
   Gun.getGun(player).removeUser(player);
 
@@ -194,12 +199,21 @@ public class Arena {
    p.setGameMode(GameMode.ADVENTURE);
    p.setWalkSpeed(0.28F);
    p.setHealth(20D);
+   p.setAllowFlight(true);
   }
  }
 
  public void endGameAsDraw(){
   this.pvp = false;
   this.broadcastTitle(ChatColor.BLUE + "Draw", ChatColor.GRAY + "The game has ended!");
+
+  for (Player p : getPlayers()){
+   StatKeeper sk = core.getStatKeeperFor(p);
+   if (getWinner() == teams.getTeam(p)) sk.addWins(1); else sk.addLosses(1);
+  }
+
+  this.laserGun.resetCooldowns(this);
+  this.laserGun.resetJumps(this);
   this.arenaState = ArenaState.RESTARTING;
   this.teams.resetTeams();
   this.handlePlayerLeave();
@@ -210,7 +224,10 @@ public class Arena {
    @Override
    public void run(){
     resetBeacons();
-    for (Player p : players) p.teleport(Bukkit.getWorld("Lobby").getSpawnLocation());
+    for (Player p : players){
+     p.teleport(Bukkit.getWorld("Lobby").getSpawnLocation());
+     core.getStatKeeperFor(p).addDraws(1);
+    }
     emptyArena();
     arenaState = ArenaState.WAITING;
     canJoin = true;
@@ -223,8 +240,15 @@ public class Arena {
 
  public void endGame(){
   this.pvp = false;
-  this.broadcastTitle((greenBeacon.getHealth() > yellowBeacon.getHealth() ? ChatColor.DARK_GREEN + "Green " : ChatColor.YELLOW + "Yellow ") + "Team Won!",
-          ChatColor.GRAY + "The game has ended!");
+  this.broadcastTitle((this.getWinner() == TEAM.GREEN ? ChatColor.DARK_GREEN + "Green " : ChatColor.YELLOW + "Yellow ") + "Team Won!", ChatColor.GRAY + "The game has ended!");
+
+  for (Player p : getPlayers()){
+   StatKeeper sk = core.getStatKeeperFor(p);
+   if (getWinner() == teams.getTeam(p)) sk.addWins(1); else sk.addLosses(1);
+  }
+
+  this.laserGun.resetCooldowns(this);
+  this.laserGun.resetJumps(this);
   this.arenaState = ArenaState.RESTARTING;
   this.teams.resetTeams();
   this.handlePlayerLeave();
@@ -235,7 +259,10 @@ public class Arena {
    @Override
   public void run(){
     resetBeacons();
-    for (Player p : players) p.teleport(Bukkit.getWorld("Lobby").getSpawnLocation());
+    for (Player p : players){
+     p.teleport(Bukkit.getWorld("Lobby").getSpawnLocation());
+     StatKeeper sk = core.getStatKeeperFor(p);
+    }
     emptyArena();
     arenaState = ArenaState.WAITING;
     canJoin = true;
@@ -248,9 +275,6 @@ public class Arena {
  }
 
  public void emptyArena() {
-  for (Player player : players) {
-   player.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
-  }
   players.clear();
  }
 
@@ -263,6 +287,7 @@ public class Arena {
    player.setWalkSpeed(0.2F);
    player.setHealth(20D);
    player.removePotionEffect(PotionEffectType.SLOW);
+   player.setScoreboard(core.getStatsFile().getScoreboardStatKeeperFor(player).getScoreboard());
    teams.removePlayer(player);
 
    Gun.getGun(player).removeUser(player);
@@ -288,6 +313,11 @@ public class Arena {
    if (a % 2 == 0) teams.addPlayer(teamless.get(a), TEAM.YELLOW);
    else teams.addPlayer(teamless.get(a), TEAM.GREEN);
   }
+ }
+
+ public TEAM getWinner(){
+  if (greenBeacon.getHealth() > yellowBeacon.getHealth()) return TEAM.GREEN;
+  return TEAM.YELLOW;
  }
 
  public void broadcastMessage(String message){
@@ -325,12 +355,11 @@ public class Arena {
   Bukkit.getPluginManager().callEvent(new ArenaInteractEvent(ArenaInteractEvent.ArenaAction.JOIN, arena));
  }
 
- public static void leaveArena(Core core, Arena arena, Player player){
+ public static void leaveArena(Core core, Arena arena, Player player) {
   arena.broadcastMessage(Core.quitMessage + "§c" + player.getName() + " §7has left the game!");
   arena.removePlayer(player);
   player.setWalkSpeed(0.2F);
   player.setHealth(20D);
-  player.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
   player.setLevel(0);
   player.teleport(Bukkit.getWorld("Lobby").getSpawnLocation());
   Bukkit.getPluginManager().callEvent(new ArenaInteractEvent(ArenaInteractEvent.ArenaAction.LEAVE, arena));

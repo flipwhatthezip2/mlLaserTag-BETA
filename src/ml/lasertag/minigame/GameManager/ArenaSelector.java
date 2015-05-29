@@ -14,6 +14,7 @@ import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,7 +41,6 @@ public class ArenaSelector implements Listener {
 
     public ArenaSelector(Core core){
         this.core = core;
-        this.displayArenas();
 
         ItemStack itemStack = new ItemStack(Material.STAINED_GLASS_PANE);
         ItemMeta itemMeta = itemStack.getItemMeta();
@@ -50,6 +50,15 @@ public class ArenaSelector implements Listener {
         itemMeta.setLore(lore);
         itemStack.setItemMeta(itemMeta);
         arenaSelectorMenu.setItem(26, itemStack);
+
+        new BukkitRunnable(){
+
+            @Override
+            public void run(){
+                displayArenas();
+            }
+
+        }.runTaskLater(core, 10L);
     }
 
     public void displayArenas(){

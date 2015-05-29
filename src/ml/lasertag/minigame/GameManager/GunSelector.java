@@ -18,6 +18,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +31,6 @@ public class GunSelector implements Listener{
 
     public GunSelector(Core core){
         this.core = core;
-        this.displayGuns();
 
         ItemStack itemStack = new ItemStack(Material.STAINED_GLASS_PANE);
         ItemMeta itemMeta = itemStack.getItemMeta();
@@ -40,6 +40,15 @@ public class GunSelector implements Listener{
         itemMeta.setLore(lore);
         itemStack.setItemMeta(itemMeta);
         gunSelectorMenu.setItem(26, itemStack);
+
+        new BukkitRunnable(){
+
+            @Override
+            public void run(){
+                displayGuns();
+            }
+
+        }.runTaskLater(core, 10L);
     }
 
     public void displayGuns(){
@@ -67,8 +76,13 @@ public class GunSelector implements Listener{
             if (Arena.getArena(core, p) != null){
                 if (Gun.getGun(p) == e.getGun()){
                     if (p.getInventory().getItem(0).getType() == Material.IRON_BARDING){
-                        p.getInventory().getItem(0).getItemMeta().setDisplayName(e.getGun().getGun().getItemMeta().getDisplayName());
-                        p.getInventory().getItem(0).getItemMeta().setLore(e.getGun().getGun().getItemMeta().getLore());
+                        ItemMeta meta = p.getInventory().getItem(0).getItemMeta();
+
+                        meta.setDisplayName(e.getGun().getGun().getItemMeta().getDisplayName());
+                        meta.setLore(e.getGun().getGun().getItemMeta().getLore());
+
+                        p.getInventory().getItem(0).setItemMeta(meta);
+
                         p.updateInventory();
                     }
                 }

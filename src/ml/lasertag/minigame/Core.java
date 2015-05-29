@@ -20,6 +20,9 @@ import ml.lasertag.minigame.GameManager.GunsFile;
 import ml.lasertag.minigame.Mechanics.*;
 import ml.lasertag.minigame.api.Feature;
 import ml.lasertag.minigame.commands.LaserTag;
+import ml.lasertag.minigame.stats.ScoreboardStatKeeper;
+import ml.lasertag.minigame.stats.StatKeeper;
+import ml.lasertag.minigame.stats.StatsFile;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.entity.EnderCrystal;
@@ -27,12 +30,16 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scheduler.BukkitRunnable;
 
 public class Core extends JavaPlugin {
 
-    public ArenasFile arenasFile;
-    public GunsFile gunsFile;
-    public LaserGun laserGun;
+    Core core;
+
+    private ArenasFile arenasFile;
+    private GunsFile gunsFile;
+    private StatsFile statsFile;
+    private LaserGun laserGun;
 
     public static String joinMessage = "§2§lJoin §8➤ §7";
     public static String quitMessage = "§c§lQuit §8➤ §7";
@@ -53,45 +60,23 @@ public class Core extends JavaPlugin {
 
     public void onEnable(){
 
+        this.core = this;
+
         Bukkit.getServer().getLogger().info("Server> Successfully initialized the minigame 'LaserTag' on server: " + Bukkit.getServerName());
 
 
         if (!getDataFolder().exists()) getDataFolder().mkdir();
 
+        registerEvents();
+
         this.arenasFile = new ArenasFile(this); this.arenasFile.loadArenas();
         this.gunsFile = new GunsFile(this); this.gunsFile.loadGuns();
+        this.statsFile = new StatsFile(this); this.statsFile.loadStats();
+
 
         for (World world : Bukkit.getWorlds()){
             world.setGameRuleValue("keepInventory", "true");
             world.setGameRuleValue("naturalRegeneration", "false");
-        }
-
-        for (Player player : Bukkit.getOnlinePlayers()){
-            player.removePotionEffect(PotionEffectType.SLOW);
-            player.setLevel(0);
-            player.setPlayerListName(player.getName());
-        }
-
-
-        Bukkit.getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
-            @Override
-            public void run() {
-                for (Player all : Bukkit.getServer().getOnlinePlayers()){
-                    Feature.sendActionBar(all, "§cPlaying §lLASERTAG §con §6§lMineLegends§c!");
-                }
-            }
-        }, 20, 20);
-
-        registerEvents();
-
-        getCommand("lasertag").setExecutor(new LaserTag(this, arenasFile));
-    }
-
-    public void onDisable(){
-        for (World w : Bukkit.getWorlds()) {
-            for (Entity e : w.getEntities()){
-                if (e instanceof EnderCrystal) e.remove();
-            }
         }
 
         for (Player p : Bukkit.getOnlinePlayers()){
@@ -99,12 +84,40 @@ public class Core extends JavaPlugin {
             p.getInventory().setArmorContents(null);
             p.updateInventory();
             p.setWalkSpeed(0.2F);
-
-            p.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
+            p.setFoodLevel(20);
+            p.setAllowFlight(false);
+            p.setPlayerListName(p.getName());
+            p.setLevel(0);
+            p.setHealth(20D);
+            p.removePotionEffect(PotionEffectType.SLOW);
             p.teleport(Bukkit.getWorld("Lobby").getSpawnLocation());
         }
 
+        new BukkitRunnable(){
 
+            @Override
+            public void run(){
+                for (Player p : Bukkit.getOnlinePlayers()){
+                    statsFile.loadStats(p);
+                    statsFile.addScoreboardStatKeeper(new ScoreboardStatKeeper(core, p));
+                    p.setScoreboard(statsFile.getScoreboardStatKeeperFor(p).getScoreboard());
+                }
+            }
+
+        }.runTaskLater(this, 10L);
+
+        getCommand("lasertag").setExecutor(new LaserTag(this, arenasFile));
+    }
+
+    public void onDisable(){
+
+        statsFile.saveStatsToConfig();
+
+        for (World w : Bukkit.getWorlds()) {
+            for (Entity e : w.getEntities()){
+                if (e instanceof EnderCrystal) e.remove();
+            }
+        }
     }
 
     public ArenasFile getArenasFile(){
@@ -113,6 +126,10 @@ public class Core extends JavaPlugin {
 
     public GunsFile getGunsFile(){
         return this.gunsFile;
+    }
+
+    public StatsFile getStatsFile(){
+        return this.statsFile;
     }
 
     public LaserGun getLaserGun(){
@@ -128,5 +145,17 @@ public class Core extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new Restrictions(), this);
         Bukkit.getPluginManager().registerEvents(new AimDownSights(this), this);
         Bukkit.getPluginManager().registerEvents(new BeaconProtect(this), this);
+    }
+
+    public StatKeeper getStatKeeperFor(Player player){
+        return statsFile.getStatKeeperFor(player);
+    }
+
+    public Player getPlayerFromUUID(String uuid){
+
+        for (Player p :Bukkit.getOnlinePlayers()){
+            if (p.getUniqueId().toString().equalsIgnoreCase(uuid)) return p;
+        }
+        return null;
     }
 }

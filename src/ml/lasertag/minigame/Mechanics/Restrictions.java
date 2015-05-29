@@ -22,8 +22,13 @@ public class Restrictions implements Listener {
 
 
     @EventHandler
-    public void onFoodDrain(FoodLevelChangeEvent e){
-        e.setCancelled(true);
+    public void onFoodChange(FoodLevelChangeEvent e){
+        if(e.getEntity() instanceof Player){
+            e.setCancelled(true);
+            Player p = (Player)e.getEntity();
+            p.setFoodLevel(20);
+            p.setSaturation(20F);
+        }
     }
 
     @EventHandler
@@ -53,12 +58,12 @@ public class Restrictions implements Listener {
 
     @EventHandler
     public void onPlayerDamage(EntityDamageEvent e){
-        if (e.getCause() == EntityDamageEvent.DamageCause.FALL) e.setCancelled(true);
+        if (e.getCause() != EntityDamageEvent.DamageCause.VOID) e.setCancelled(true);
     }
 
     @EventHandler
     public void weatherChange (WeatherChangeEvent e){
-        e.getWorld().setThundering(false);
+        e.setCancelled(true);
     }
 
     @EventHandler
