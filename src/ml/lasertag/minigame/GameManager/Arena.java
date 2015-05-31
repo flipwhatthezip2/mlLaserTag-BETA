@@ -137,7 +137,7 @@ public class Arena {
 
   if (arenaState == ArenaState.WAITING || arenaState == ArenaState.COUNTDOWN) this.canJoin = true;
   if (players.size() < properties.getMinimumPlayers() && arenaState == ArenaState.COUNTDOWN) this.cancelCountdown();
-  if (players.size() < 2 && arenaState == ArenaState.IN_GAME) this.endGameAsDraw();
+  if ((teams.isGreenTeamEmpty() || teams.isYellowTeamEmpty()) && arenaState == ArenaState.IN_GAME) this.endGameAsDraw();
 
  }
 
