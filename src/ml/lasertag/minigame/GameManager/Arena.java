@@ -114,7 +114,7 @@ public class Arena {
  public void addPlayer(Player player){
   players.add(player);
   player.teleport(properties.getWorld().getSpawnLocation());
-  player.setAllowFlight(true);
+  player.setAllowFlight(false);
   if (players.size() == properties.getMaximumPlayers()) this.canJoin = false;
   if (players.size() == properties.getMinimumPlayers()) this.startCountdown();
  }
