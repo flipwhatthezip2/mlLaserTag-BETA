@@ -9,7 +9,7 @@ public class ArenaSelectorVillager extends EntityVillager{
 
     public ArenaSelectorVillager(org.bukkit.World world){
         super(((CraftWorld) world).getHandle());
-        this.setCustomName("§cSelect an arena!");
+        this.setCustomName("§cSelect an Arena!");
         this.setCustomNameVisible(true);
     }
 

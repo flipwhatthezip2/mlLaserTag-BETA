@@ -25,6 +25,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -61,7 +62,7 @@ public class LaserGun implements Listener {
     @EventHandler
     public void onJump(PlayerToggleFlightEvent e){
 
-        Player player = e.getPlayer();
+        final Player player = e.getPlayer();
 
         if (player.getGameMode() != GameMode.CREATIVE){
             e.setCancelled(true);
@@ -73,6 +74,22 @@ public class LaserGun implements Listener {
             player.setFlying(false);
             player.setVelocity(player.getLocation().getDirection().multiply(4).setY(2));
             cantJump.add(player);
+
+            new BukkitRunnable(){
+
+                @Override
+                public void run(){
+
+                    if (!cantJump.contains(player) || player.getGameMode() != GameMode.ADVENTURE || Arena.getArena(core, player) == null){
+                        return;
+                    }
+
+                    cantJump.remove(player);
+                    player.sendMessage(Core.infoMessage + "You can now double jump");
+                    player.setAllowFlight(true);
+                }
+
+            }.runTaskLater(core, 200);
         }
     }
 
@@ -157,14 +174,12 @@ public class LaserGun implements Listener {
                     if (arena.getTeams().getTeam(player) == TEAM.YELLOW){
                         if (arena.getGreenBeacon().getBeacon() == e && e.getLocation().toVector().distance(loc.toVector()) <= 2){
                             arena.getGreenBeacon().dealDamage(player, Gun.getGun(player).getCooldown() / 10);
-                            Bukkit.getPluginManager().callEvent(new LaserDamageBeaconEvent(arena.getGreenBeacon(), player, Gun.getGun(player).getCooldown() / 10));
                             return;
                         }
                     }
                     else {
                         if (arena.getYellowBeacon().getBeacon() == e && e.getLocation().toVector().distance(loc.toVector()) <= 2){
                             arena.getYellowBeacon().dealDamage(player, Gun.getGun(player).getCooldown() / 10);
-                            Bukkit.getPluginManager().callEvent(new LaserDamageBeaconEvent(arena.getYellowBeacon(), player, Gun.getGun(player).getCooldown() / 10));
                             return;
                         }
                     }
@@ -197,10 +212,8 @@ public class LaserGun implements Listener {
 
         if (player.getHealth() <= damage) awardKill(arena, player, killer);
 
-        long shotDistance = Math.round(player.getLocation().distance(killer.getLocation()));
-
         player.damage(damage);
-        this.hitIndicator(killer);
+        this.hitIndicator(killer, player);
     }
 
     public void awardKill(final Arena arena, final Player victim, Player killer){
@@ -285,6 +298,7 @@ public class LaserGun implements Listener {
         player.teleport(player.getLocation().add(0, 0.5, 0));
         player.getInventory().setItem(8, gunSelector);
         player.updateInventory();
+        cantJump.remove(player);
 
         for (Player p : player.getWorld().getPlayers()){
             p.hidePlayer(player);
@@ -298,7 +312,6 @@ public class LaserGun implements Listener {
         player.getInventory().setItem(8, null);
         player.updateInventory();
         player.setAllowFlight(true);
-        cantJump.remove(player);
 
         for (Player p : player.getWorld().getPlayers()){
             p.showPlayer(player);
@@ -314,8 +327,15 @@ public class LaserGun implements Listener {
         }
     }
 
-    public void hitIndicator(Player player){
+    public void hitIndicator(Player player, Player victim){
+
+        DecimalFormat df = new DecimalFormat("#.#");
+
+        double shotDistance = Double.valueOf(df.format(player.getLocation().distance(victim.getLocation())));
+
         PacketSender.sendSound(player, "random.break", 40);
+
+        Feature.sendActionBar(player, ChatColor.translateAlternateColorCodes('&', "Shot &c&l" + victim.getName() + "&f from &c&l" + shotDistance + "&f blocks away"));
     }
 
 }

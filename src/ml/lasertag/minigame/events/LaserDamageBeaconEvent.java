@@ -6,7 +6,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-public class LaserDamageBeaconEvent extends Event{
+public class LaserDamageBeaconEvent extends Event {
 
     public static final HandlerList handlers = new HandlerList();
 
@@ -17,6 +17,7 @@ public class LaserDamageBeaconEvent extends Event{
     public LaserDamageBeaconEvent(LaserTagBeacon beacon, Player damager, int damage){
         this.beacon = beacon;
         this.damager = damager;
+        this.damage = damage;
     }
 
     public int getDamage(){

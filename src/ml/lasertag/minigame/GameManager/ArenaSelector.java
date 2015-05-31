@@ -36,7 +36,7 @@ my (Cameron Fletcher)'s permission.
 public class ArenaSelector implements Listener {
 
     Core core;
-    public Inventory arenaSelectorMenu = Bukkit.createInventory(null, 27, "§4§lLASERTAG! §8Pick an Arena");
+    public Inventory arenaSelectorMenu = Bukkit.createInventory(null, 27, "§4§lLASERTAG! §cPick an Arena");
 
 
     public ArenaSelector(Core core){
@@ -114,7 +114,6 @@ public class ArenaSelector implements Listener {
         }
     }
 
-    // READY's Area:
     @EventHandler
     public void onRightClick(PlayerInteractEntityEvent e){
         Player p = e.getPlayer();
@@ -122,7 +121,7 @@ public class ArenaSelector implements Listener {
 
         e.setCancelled(true);
 
-        if (entity.getCustomName() != null && entity.getCustomName().equalsIgnoreCase("§4§lLASERTAG §8- §cSelect an arena!")){
+        if (entity.getCustomName() != null && entity.getCustomName().equalsIgnoreCase("§cSelect an arena!")){
             if (p.getItemInHand() != null && p.getItemInHand().getType() == Material.BLAZE_ROD && p.isOp()){
                 entity.remove();
                 p.sendMessage(Core.infoMessage + "Removed ArenaSelector NPC");
